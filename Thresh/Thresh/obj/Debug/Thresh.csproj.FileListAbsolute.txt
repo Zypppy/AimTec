@@ -1,0 +1,10 @@
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Thresh.exe.config
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Thresh.exe
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Thresh.pdb
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Aimtec.dll
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\obj\Debug\Thresh.csprojResolveAssemblyReference.cache
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\obj\Debug\Thresh.exe
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\obj\Debug\Thresh.pdb
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Aimtec.SDK.dll
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\NLog.dll
+c:\users\toshiba\documents\visual studio 2017\Projects\Thresh\Thresh\bin\Debug\Newtonsoft.Json.dll

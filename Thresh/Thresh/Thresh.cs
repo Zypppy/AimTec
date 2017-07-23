@@ -159,6 +159,7 @@ namespace Zypppy_Thresh
 
                 if (target != null)
                 {
+                    Console.WriteLine("meow");
                     Q.Cast(target);
                 }
             }

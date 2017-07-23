@@ -35,7 +35,7 @@ namespace Zypppy_Thresh
 
         {
             //  Q = new Spell(SpellSlot.Q, 1150);
-                Q = new Spell(SpellSlot.Q, 500000;
+                Q = new Spell(SpellSlot.Q, 500000);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 100);
             R = new Spell(SpellSlot.R, 450);

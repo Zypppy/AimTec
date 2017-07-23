@@ -34,9 +34,10 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1150);
+            //  Q = new Spell(SpellSlot.Q, 1150);
+                Q = new Spell(SpellSlot.Q, 500000;
             W = new Spell(SpellSlot.W, 1000);
-            E = new Spell(SpellSlot.E, 400);
+            E = new Spell(SpellSlot.E, 100);
             R = new Spell(SpellSlot.R, 450);
             Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.High);
             E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);

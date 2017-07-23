@@ -137,7 +137,7 @@ namespace Zypppy_Thresh
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            var target = GetBestEnemyHeroTargetInRange(E.Range);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
             {

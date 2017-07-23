@@ -34,7 +34,7 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1200);
+            Q = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
@@ -55,13 +55,13 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
             Menu.Add(ComboMenu);
-            var DrawMenu = new Menu("drawings", "Drawings");
-            {
-                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-                DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
-                DrawMenu.Add(new MenuBool("drawtoggle", "Draw Toggle"));
-            }
-            Menu.Add(DrawMenu);
+            //var DrawMenu = new Menu("drawings", "Drawings");
+            //{
+            //    DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+             //   DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
+            //    DrawMenu.Add(new MenuBool("drawtoggle", "Draw Toggle"));
+           // }
+           // Menu.Add(DrawMenu);
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));

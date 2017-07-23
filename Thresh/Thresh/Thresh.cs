@@ -91,20 +91,20 @@ namespace Zypppy_Thresh
 
             }
 
-            if (Menu["misc"]["autoq"].Enabled)
-            {
-                foreach (var target in GameObjects.EnemyHeroes.Where(
-                    t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
-                          t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
-                          t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
-                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) &&
-                         !Invulnerable.Check(t, DamageType.Magical)))
-                {
+            //if (Menu["misc"]["autoq"].Enabled)
+            //{
+              //  foreach (var target in GameObjects.EnemyHeroes.Where(
+             //       t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
+             //             t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
+            //              t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
+             //             t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) &&
+             //            !Invulnerable.Check(t, DamageType.Magical)))
+            //    {
+            //
+            //        Q.Cast(target);
+            //    }
 
-                    Q.Cast(target);
-                }
-
-            }
+          //  }
 
         }
 

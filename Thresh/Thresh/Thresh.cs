@@ -60,6 +60,15 @@ namespace Zypppy_Thresh
                 DrawMenu.Add(new MenuBool("drawtoggle", "Draw Toggle"));
             }
             Menu.Add(DrawMenu);
+            var HarassMenu = new Menu("harass", "Harass");
+            {
+                HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
+                HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
+                HarassMenu.Add(new MenuBool("usew", "Use W to Harass"));
+                HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
+
+            }
+            Menu.Add(HarassMenu);
             Menu.Attach();
 
 

@@ -29,15 +29,17 @@ namespace Zypppy_Thresh
 
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
 
-        public static Spell Q, E;
+        public static Spell Q, W, E, R;
 
         public void LoadSpells()
 
         {
             Q = new Spell(SpellSlot.Q, 1200);
+            W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
-            Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, true, HitChance.High);
-            E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, true, HitChance.Medium);
+            R = new Spell(SpellSlot.R, 450);
+            Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.High);
+            E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
 
@@ -159,7 +161,7 @@ namespace Zypppy_Thresh
 
                 if (target != null)
                 {
-                    Console.WriteLine("meow");
+                    //Console.WriteLine("meow");
                     Q.Cast(target);
                 }
             }

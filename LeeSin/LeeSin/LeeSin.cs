@@ -274,7 +274,7 @@
 
                 if (target != null)
                 {
-                    DelayAction.Queue(3000, () =>
+                    DelayAction.Queue(2000, () =>
                     {
                         W2.Cast();
                     });
@@ -293,7 +293,7 @@
 
                 if (target != null)
                 {
-                    DelayAction.Queue(3000, () =>
+                    DelayAction.Queue(1500, () =>
                     {
                         E2.Cast();
                     });

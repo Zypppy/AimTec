@@ -54,7 +54,7 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
-                ComboMenu.Add(new MenuBool("useq", "Use W"));
+                ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usew2", "Use Second W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("useed", "Use Second E"));

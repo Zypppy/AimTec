@@ -255,10 +255,9 @@
 
                 if (target != null)
                 {
-                    DelayAction.Queue(3000, () =>
                     {
                         Q2.Cast();
-                    });
+                    }
                 }
             }
             if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne" && target.IsValidTarget(W.Range))
@@ -274,10 +273,9 @@
 
                 if (target != null)
                 {
-                    DelayAction.Queue(2000, () =>
                     {
                         W2.Cast();
-                    });
+                    }
                 }
             }
             if (E.Ready && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkEOne" && target.IsValidTarget(E.Range))
@@ -293,10 +291,9 @@
 
                 if (target != null)
                 {
-                    DelayAction.Queue(3000, () =>
                     {
                         E2.Cast();
-                    });
+                    }
                 }
             }
 

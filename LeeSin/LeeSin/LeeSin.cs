@@ -143,7 +143,7 @@
                     
                         if (Player.GetSpellDamage(enemies, SpellSlot.R) > GetR(enemies))
                         {
-                            R.Cast();
+                            R.Cast(enemies);
                         }
                     }
                     
@@ -200,15 +200,6 @@
                     Q.Cast(target);
                 }
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range))
-            {
-
-                if (target != null)
-                {
-                    //Console.WriteLine("meow");
-                    Q.Cast();
-                }
-            }
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
 
@@ -225,14 +216,7 @@
                     E.Cast();
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E2.Range))
-            {
-
-                if (target != null)
-                {
-                    E.Cast();
-                }
-            }
+            
         }
         
     }

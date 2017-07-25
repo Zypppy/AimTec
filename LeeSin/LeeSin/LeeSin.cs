@@ -56,12 +56,14 @@
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
+                ComboMenu.Add(new MenuBool("usee2", "Use Second E"));
             }
 
 
             Menu.Add(ComboMenu);
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
+                KSMenu.Add(new MenuBool("kq", "Killsteal with Q "));
                 KSMenu.Add(new MenuBool("kr", "Killsteal with R "));
             }
             Menu.Add(KSMenu);
@@ -72,7 +74,7 @@
             LoadSpells();
             Console.WriteLine("Lee Sin by Zypppy - Loaded");
         }
-        
+
 
 
         static double GetR(Obj_AI_Base target)
@@ -96,6 +98,39 @@
             double damage = Player.CalculateDamage(target, DamageType.Physical, full);
             return damage;
         }
+
+        static double GetQ(Obj_AI_Base target)
+        {
+            double meow = 0;
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 1)
+            {
+                meow = 50;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 2)
+            {
+                meow = 80;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 3)
+            {
+                meow = 110;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 4)
+            {
+                meow = 140;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 5)
+            {
+                meow = 170;
+            }
+
+            double calc = (Player.TotalAttackDamage - Player.BaseAttackDamage) * 0.9;
+            double full = calc + meow;
+            double damage = Player.CalculateDamage(target, DamageType.Physical, full);
+            return damage;
+        }
+        
+
+        
 
         private void Game_OnUpdate()
         {
@@ -141,16 +176,26 @@
 
                 if (GetR(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.R) > enemies.Health)
                 {
-                    
-                        if (Player.GetSpellDamage(enemies, SpellSlot.R) > GetR(enemies))
-                        {
-                            R.Cast(enemies);
-                        }
+
+                    if (Player.GetSpellDamage(enemies, SpellSlot.R) > GetR(enemies))
+                    {
+                        R.Cast(enemies);
                     }
-                    
 
                 }
+                if (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health)
+                {
+
+                    if (Player.GetSpellDamage(enemies, SpellSlot.Q) > GetQ(enemies))
+                    {
+                        Q.Cast(enemies);
+                    }
+                }
+
+
             }
+
+        }
         
 
 
@@ -185,6 +230,7 @@
             bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useE2 = Menu["combo"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -227,7 +273,15 @@
                     E.Cast();
                 }
             }
-            
+            if (E2.Ready && useE2 && target.IsValidTarget(E2.Range))
+            {
+
+                if (target != null)
+                {
+                    E2.Cast();
+                }
+            }
+
         }
         
     }

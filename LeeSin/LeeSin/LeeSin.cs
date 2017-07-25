@@ -261,7 +261,7 @@
                     });
                 }
             }
-            if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne" && target.IsValidTarget(W.Range))
+            if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
 
                 if (target != null)

@@ -55,7 +55,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("usew2", "Use Second W"));
+                ComboMenu.Add(new MenuBool("useww", "Use Second W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("useed", "Use Second E"));
             }
@@ -231,7 +231,7 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
-            bool useW2 = Menu["combo"]["usew2"].Enabled;
+            bool useWD = Menu["combo"]["useww"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useED = Menu["combo"]["useed"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
@@ -261,7 +261,7 @@
                     });
                 }
             }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
+            if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne" && target.IsValidTarget(W.Range))
             {
 
                 if (target != null)
@@ -269,7 +269,7 @@
                     W.CastOnUnit(Player);
                 }
             }
-            if (W2.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo" && target.IsValidTarget(W2.Range))
+            if (W2.Ready && useWD && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo" && target.IsValidTarget(W2.Range))
             {
 
                 if (target != null)

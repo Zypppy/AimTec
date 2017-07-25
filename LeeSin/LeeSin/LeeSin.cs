@@ -53,6 +53,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
@@ -181,6 +182,7 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
@@ -198,6 +200,15 @@
                 {
                     //Console.WriteLine("meow");
                     Q.Cast(target);
+                }
+            }
+            if (Q.Ready && useQ2 && target.IsValidTarget(Q2.Range))
+            {
+
+                if (target != null)
+                {
+                    //Console.WriteLine("meow");
+                    Q.Cast();
                 }
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))

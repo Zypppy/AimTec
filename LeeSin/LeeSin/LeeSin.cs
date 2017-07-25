@@ -37,7 +37,7 @@
             Q2 = new Spell(SpellSlot.Q, 1300);
             W = new Spell(SpellSlot.W, 700);
             W2 = new Spell(SpellSlot.W, 700);
-            E = new Spell(SpellSlot.E, 350);
+            E = new Spell(SpellSlot.E, 300);
             E2 = new Spell(SpellSlot.E, 500);
             R = new Spell(SpellSlot.R, 375);
             Q.SetSkillshot(0.25f, 60f, 1800f, true, SkillshotType.Line, false, HitChance.High);
@@ -54,7 +54,6 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
-                ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("usee2", "Use Second E"));
             }
@@ -173,8 +172,8 @@
             var enemies = GetBestKillableHero(Q, DamageType.Physical, false);
             if (enemies != null)
             {
-
-                if (GetR(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.R) > enemies.Health)
+                bool useRK = Menu["killsteal"]["kr"].Enabled;
+                if (useRK && (GetR(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.R) > enemies.Health))
                 {
 
                     if (Player.GetSpellDamage(enemies, SpellSlot.R) > GetR(enemies))
@@ -183,7 +182,8 @@
                     }
 
                 }
-                if (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health)
+                bool useQK = Menu["killsteal"]["kq"].Enabled;
+                if (useQK && (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health))
                 {
 
                     if (Player.GetSpellDamage(enemies, SpellSlot.Q) > GetQ(enemies))
@@ -230,7 +230,7 @@
             bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useE2 = Menu["combo"]["usee"].Enabled;
+            bool useE2 = Menu["combo"]["usee2"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -255,14 +255,6 @@
                 {
                     //Console.WriteLine("meow");
                     Q2.Cast();
-                }
-            }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
-            {
-
-                if (target != null)
-                {
-                    W.Cast();
                 }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))

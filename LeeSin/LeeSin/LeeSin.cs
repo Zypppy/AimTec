@@ -185,7 +185,7 @@
 
                 }
                 bool useQK = Menu["killsteal"]["kq"].Enabled;
-                if (useQK && (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health))
+                if (useQK && (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne"))
                 {
 
                     if (Player.GetSpellDamage(enemies, SpellSlot.Q) > GetQ(enemies))
@@ -242,7 +242,7 @@
             }
 
 
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && target.IsValidTarget(Q.Range))
             {
 
                 if (target != null)
@@ -250,15 +250,18 @@
                     Q.Cast(target);
                 }
             }
-            if (Q2.Ready && useQ2 && target.IsValidTarget(Q2.Range))
+            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.IsValidTarget(Q2.Range))
             {
 
                 if (target != null)
                 {
-                    Q2.Cast();
+                    DelayAction.Queue(3000, () =>
+                    {
+                        Q2.Cast();
+                    });
                 }
             }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
+            if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne" && target.IsValidTarget(W.Range))
             {
 
                 if (target != null)
@@ -266,15 +269,18 @@
                     W.CastOnUnit(Player);
                 }
             }
-            if (W2.Ready && useW2 && target.IsValidTarget(W2.Range))
+            if (W2.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo" && target.IsValidTarget(W2.Range))
             {
 
                 if (target != null)
                 {
-                    W2.CastOnUnit(Player);
+                    DelayAction.Queue(3000, () =>
+                    {
+                        W2.Cast();
+                    });
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkEOne" && target.IsValidTarget(E.Range))
             {
 
                 if (target != null)
@@ -282,12 +288,15 @@
                     E.Cast();
                 }
             }
-            if (E2.Ready && useED && target.IsValidTarget(E2.Range))
+            if (E2.Ready && useED && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkETwo" && target.IsValidTarget(E2.Range))
             {
 
                 if (target != null)
                 {
-                    E2.Cast();
+                    DelayAction.Queue(3000, () =>
+                    {
+                        E2.Cast();
+                    });
                 }
             }
 

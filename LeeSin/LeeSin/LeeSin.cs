@@ -250,7 +250,7 @@
                     Q.Cast(target);
                 }
             }
-            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.IsValidTarget(Q2.Range))
+            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.HasBuff("BlindMonkQOne") && target.IsValidTarget(Q2.Range))
             {
 
                 if (target != null)
@@ -288,12 +288,12 @@
                     E.Cast();
                 }
             }
-            if (E2.Ready && useED && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkETwo" && target.IsValidTarget(E2.Range))
+            if (E2.Ready && useED && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkETwo" && target.HasBuff("BlindMonkEOne") && target.IsValidTarget(E2.Range))
             {
 
                 if (target != null)
                 {
-                    DelayAction.Queue(1500, () =>
+                    DelayAction.Queue(3000, () =>
                     {
                         E2.Cast();
                     });

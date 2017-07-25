@@ -202,13 +202,13 @@
                     Q.Cast(target);
                 }
             }
-            if (Q.Ready && useQ2 && target.IsValidTarget(Q2.Range))
+            if (Q2.Ready && useQ2 && target.IsValidTarget(Q2.Range))
             {
 
                 if (target != null)
                 {
                     //Console.WriteLine("meow");
-                    Q.Cast();
+                    Q2.Cast();
                 }
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))

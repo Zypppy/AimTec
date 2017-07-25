@@ -228,7 +228,6 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useq2"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useE2 = Menu["combo"]["usee2"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);

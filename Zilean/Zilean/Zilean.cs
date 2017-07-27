@@ -19,7 +19,7 @@
 
     using Spell = Aimtec.SDK.Spell;
 
-    internal class LeeSin
+    internal class Zilean
     {
 
         public static Menu Menu = new Menu("Lee Sin By Zypppy", "Lee Sin By Zypppy", true);
@@ -35,14 +35,14 @@
         {
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 700);
-            Q.SetSkillshot(0.25f, 60f, 1800f, true, SkillshotType.Circular, false, HitChance.High);
+            Q.SetSkillshot(0.25f, 60f, 1800f, true, SkillshotType.Circle, false, HitChance.High);
 
 
 
         }
 
 
-        public LeeSin()
+        public Zilean()
         {
             Orbwalker.Attach(Menu);
             var ComboMenu = new Menu("combo", "Combo");

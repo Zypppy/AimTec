@@ -13,10 +13,10 @@
 
         private static void GameEvents_GameStart()
         {
-            if (ObjectManager.GetLocalPlayer().ChampionName != "Thresh")
+            if (ObjectManager.GetLocalPlayer().ChampionName != "Zilean")
                 return;
 
-            var Thresh = new Thresh();
+            var Zilean = new Zilean();
         }
     }
 }

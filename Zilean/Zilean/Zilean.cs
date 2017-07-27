@@ -37,7 +37,6 @@
             Q.SetSkillshot(0.650f, 150f, 1800f, false, SkillshotType.Circle, false, HitChance.High);
 
 
-
         }
 
 

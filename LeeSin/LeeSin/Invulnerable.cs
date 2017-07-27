@@ -1,4 +1,7 @@
-﻿namespace LeeSin
+﻿// ReSharper disable ArrangeAccessorOwnerBody
+// ReSharper disable ArrangeConstructorOrDestructorBody
+
+namespace LeeSin 
 
 {
     using System;

@@ -53,7 +53,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
+                ComboMenu.Add(new MenuBool("useqq", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("useww", "Use Second W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
@@ -229,11 +229,11 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useq2"].Enabled;
+            bool useQ2 = Menu["combo"]["useqq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
-            bool useWD = Menu["combo"]["useww"].Enabled;
+            bool useW2 = Menu["combo"]["useww"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useED = Menu["combo"]["useed"].Enabled;
+            bool useE2 = Menu["combo"]["useed"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -241,6 +241,7 @@
                 return;
             }
 
+             
 
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && target.IsValidTarget(Q.Range))
             {
@@ -250,14 +251,15 @@
                     Q.Cast(target);
                 }
             }
-            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.HasBuff("BlindMonkQOne") && target.IsValidTarget(Q2.Range))
+            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.IsValidTarget(Q2.Range) && target.HasBuff("BlindMonkQOne"))
             {
 
                 if (target != null)
                 {
-                    {
+                        DelayAction.Queue(3000, () =>
+                        { 
                         Q2.Cast();
-                    }
+                        });
                 }
             }
             if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne" && target.IsValidTarget(W.Range))
@@ -268,7 +270,7 @@
                     W.CastOnUnit(Player);
                 }
             }
-            if (W2.Ready && useWD && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo" && target.IsValidTarget(W2.Range))
+            if (W2.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo" && target.IsValidTarget(W2.Range))
             {
 
                 if (target != null)
@@ -286,14 +288,16 @@
                     E.Cast();
                 }
             }
-            if (E2.Ready && useED && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkETwo" && target.HasBuff("BlindMonkEOne") && target.IsValidTarget(E2.Range))
+            if (E2.Ready && useE2 && Player.SpellBook.GetSpell(SpellSlot.E).Name == "BlindMonkETwo" && target.IsValidTarget(E2.Range) && target.HasBuff("BlindMonkEOne"))
             {
 
                 if (target != null)
+
                 {
+                    DelayAction.Queue(2500, () =>
                     {
                         E2.Cast();
-                    }
+                    });
                 }
             }
 

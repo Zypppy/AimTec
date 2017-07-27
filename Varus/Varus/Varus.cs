@@ -34,7 +34,7 @@
 
         {
             Q = new Spell(SpellSlot.Q, 850);
-            Q.SetCharged("VARUSQ", "VARUSQLAUNCH", 925, 1625, 4000);
+            Q.SetCharged("VARUSQ", "VARUSQLAUNCH", 925, 1625, 4.0f);
             Q.SetSkillshot(0f, 75f, 1900f, false, SkillshotType.Line, false, HitChance.High);
             E = new Spell(SpellSlot.Q, 850);
             E.SetSkillshot(0.650f, 150f, 1800f, false, SkillshotType.Circle, false, HitChance.High);
@@ -136,7 +136,7 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
 
             if (!target.IsValidTarget())
             {

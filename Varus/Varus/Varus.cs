@@ -33,13 +33,13 @@
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 850);
-            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1525, 4.0f);
+            Q = new Spell(SpellSlot.Q, 1600);
+            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1625, 4.0f);
             Q.SetSkillshot(0.25f, 75f, 1900f, false, SkillshotType.Line, false, HitChance.High);
-            E = new Spell(SpellSlot.E, 850);
-            E.SetSkillshot(0.650f, 150f, 1800f, false, SkillshotType.Circle, false, HitChance.High);
-            R = new Spell(SpellSlot.R, 850);
-            R.SetSkillshot(0.650f, 150f, 1800f, false, SkillshotType.Line, false, HitChance.High);
+            E = new Spell(SpellSlot.E, 925);
+            E.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Circle, false, HitChance.High);
+            R = new Spell(SpellSlot.R, 1200);
+            R.SetSkillshot(0.25f, 120f, 1950f, false, SkillshotType.Line, false, HitChance.High);
 
 
         }
@@ -51,10 +51,20 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
-
-
             Menu.Add(ComboMenu);
+
+
+            //var miscmenu = new Menu("misc", "Misc");
+            //{
+                
+             //   miscmenu.Add(new MenuKeyBind("key", "Manual R:", KeyCode.T, KeybindType.Press));
+
+          //  }
+           // Menu.Add(miscmenu);
+
+
 
             Menu.Attach();
 
@@ -65,7 +75,7 @@
         }
 
 
-
+       
 
 
 
@@ -91,7 +101,10 @@
 
             }
 
-
+           // if (Menu["misc"]["key"].Enabled)
+           // {
+           //     ManualR();
+           // }
 
         }
 
@@ -136,6 +149,7 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useE = Menu["combo"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
 
             if (!target.IsValidTarget())
@@ -145,12 +159,20 @@
 
 
 
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && target.IsValidTarget(Q.ChargedMaxRange))
             {
 
                 if (target != null)
                 {
                     Q.Cast(target);
+                }
+            }
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            {
+
+                if (target != null)
+                {
+                    E.Cast(target);
                 }
             }
 

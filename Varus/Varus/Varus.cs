@@ -159,7 +159,7 @@
 
 
 
-            if (Q.Ready && useQ && target.IsValidTarget(Q.ChargedMaxRange))
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
 
                 if (target != null)

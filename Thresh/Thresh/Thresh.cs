@@ -52,16 +52,11 @@ namespace Zypppy_Thresh
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
             Menu.Add(ComboMenu);
-            //var DrawMenu = new Menu("drawings", "Drawings");
-            //{
-            //    DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-             //   DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
-            //    DrawMenu.Add(new MenuBool("drawtoggle", "Draw Toggle"));
-           // }
-           // Menu.Add(DrawMenu);
+      
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
@@ -131,6 +126,7 @@ namespace Zypppy_Thresh
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
@@ -141,6 +137,14 @@ namespace Zypppy_Thresh
 
 
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
+            {
+
+                if (target != null)
+                {
+                    Q.Cast(target);
+                }
+            }
+            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ" && target.IsValidTarget(Q.Range))
             {
 
                 if (target != null)

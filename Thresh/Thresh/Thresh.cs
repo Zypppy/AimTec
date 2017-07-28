@@ -150,7 +150,7 @@ namespace Zypppy_Thresh
 
                 if (target != null)
                 {
-                    Q.Cast(target);
+                    Q.Cast();
                 }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))

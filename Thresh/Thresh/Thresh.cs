@@ -29,12 +29,13 @@ namespace Zypppy_Thresh
 
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
 
-        public static Spell Q, W, E, R;
+        public static Spell Q, Q2, W, E, R;
 
         public void LoadSpells()
 
         {
             Q = new Spell(SpellSlot.Q, 1150);
+            Q2 = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
@@ -144,7 +145,7 @@ namespace Zypppy_Thresh
                     Q.Cast(target);
                 }
             }
-            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ" && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ" && target.IsValidTarget(Q.Range))
             {
 
                 if (target != null)

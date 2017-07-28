@@ -34,8 +34,7 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-              Q = new Spell(SpellSlot.Q, 1150);
-            //    Q = new Spell(SpellSlot.Q, 500000);
+            Q = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
@@ -67,7 +66,6 @@ namespace Zypppy_Thresh
             {
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
                 HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
-                HarassMenu.Add(new MenuBool("usew", "Use W to Harass"));
                 HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
 
             }
@@ -102,21 +100,6 @@ namespace Zypppy_Thresh
                     break;
 
             }
-
-            //if (Menu["misc"]["autoq"].Enabled)
-            //{
-              //  foreach (var target in GameObjects.EnemyHeroes.Where(
-             //       t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
-             //             t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
-            //              t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
-             //             t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) &&
-             //            !Invulnerable.Check(t, DamageType.Magical)))
-            //    {
-            //
-            //        Q.Cast(target);
-            //    }
-
-          //  }
 
         }
 
@@ -157,12 +140,11 @@ namespace Zypppy_Thresh
             }
 
 
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
             {
 
                 if (target != null)
                 {
-                    //Console.WriteLine("meow");
                     Q.Cast(target);
                 }
             }
@@ -197,7 +179,7 @@ namespace Zypppy_Thresh
                         E.Cast(target);
                     }
                 }
-                if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+                if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
                 {
 
                     if (target != null)

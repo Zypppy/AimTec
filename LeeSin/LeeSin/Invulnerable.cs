@@ -1,8 +1,7 @@
 ﻿// ReSharper disable ArrangeAccessorOwnerBody
 // ReSharper disable ArrangeConstructorOrDestructorBody
 
-namespace LeeSin 
-
+namespace LeeSin
 {
     using System;
     using System.Collections.Generic;

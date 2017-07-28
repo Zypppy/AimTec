@@ -2,7 +2,6 @@
 // ReSharper disable ArrangeConstructorOrDestructorBody
 
 namespace Zypppy_Thresh
-
 {
     using System;
     using System.Collections.Generic;

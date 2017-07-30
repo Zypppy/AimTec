@@ -34,7 +34,7 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1115);
+            Q = new Spell(SpellSlot.Q, 1100);
             Q2 = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
@@ -56,8 +56,7 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
-            Menu.Add(ComboMenu);
-      
+            Menu.Add(ComboMenu);     
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
@@ -66,20 +65,17 @@ namespace Zypppy_Thresh
 
             }
             Menu.Add(HarassMenu);
+            var miscmenu = new Menu("misc", "Misc.");
+            {
+                miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
+            }
+            Menu.Add(miscmenu);
+            var DrawMenu = new Menu("drawings", "Drawings");
+            {
+                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+            }
+            Menu.Add(DrawMenu);
 
-           // var DrawingsMenu = new Menu("drawings", "Drawings");
-           // {
-
-
-
-           // }
-
-            //var MiscMenu = new Menu("misc", "Misc");
-            //{
-             //   MiscMenu.Add(new MenuBool("useaq", "Use Auto Q on Immobile"));
-
-            //}
-            //Menu.Add(MiscMenu);
             Menu.Attach();
 
 
@@ -89,9 +85,22 @@ namespace Zypppy_Thresh
         }
 
 
+        private void Render_OnPresent()
+        {
+            Vector2 maybeworks;
+            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            var xaOffset = (int)maybeworks.X;
+            var yaOffset = (int)maybeworks.Y;
+
+            if (Menu["drawings"]["drawq"].Enabled)
+            {
+                Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
+            }
+
+        }
 
 
-        private void Game_OnUpdate()
+                private void Game_OnUpdate()
         {
 
             if (Player.IsDead || MenuGUI.IsChatOpen())
@@ -110,21 +119,21 @@ namespace Zypppy_Thresh
                     break;
 
             }
-          //  if (Menu["misc"]["useeq"].Enabled)
-          //  {
-          //      foreach (var target in GameObjects.EnemyHeroes.Where(
-           //         t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
-           ////               t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
-           //               t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
-           //               t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" &&
-            //             !Invulnerable.Check(t, DamageType.Magical)))
-           //     {
-           //
-           //         Q.Cast(target);
-            //    }
-        //
+            if (Menu["misc"]["autoq"].Enabled)
+            {
+                foreach (var target in GameObjects.EnemyHeroes.Where(
+                    t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
+                          t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
+                          t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
+                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) &&
+                         !Invulnerable.Check(t, DamageType.Magical)))
+                {
 
-          //  }
+                    Q.Cast(target);
+                }
+
+
+            }
         }
 
             public static Obj_AI_Hero GetBestEnemyHeroTarget()

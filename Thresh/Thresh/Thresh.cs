@@ -66,12 +66,20 @@ namespace Zypppy_Thresh
 
             }
             Menu.Add(HarassMenu);
+
+           // var DrawingsMenu = new Menu("drawings", "Drawings");
+           // {
+
+
+
+           // }
+
             var MiscMenu = new Menu("misc", "Misc");
             {
                 MiscMenu.Add(new MenuBool("useaq", "Use Auto Q on Immobile"));
 
             }
-            Menu.Add(HarassMenu);
+            Menu.Add(MiscMenu);
             Menu.Attach();
 
 

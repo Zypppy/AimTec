@@ -74,12 +74,12 @@ namespace Zypppy_Thresh
 
            // }
 
-            var MiscMenu = new Menu("misc", "Misc");
-            {
-                MiscMenu.Add(new MenuBool("useaq", "Use Auto Q on Immobile"));
+            //var MiscMenu = new Menu("misc", "Misc");
+            //{
+             //   MiscMenu.Add(new MenuBool("useaq", "Use Auto Q on Immobile"));
 
-            }
-            Menu.Add(MiscMenu);
+            //}
+            //Menu.Add(MiscMenu);
             Menu.Attach();
 
 
@@ -110,21 +110,21 @@ namespace Zypppy_Thresh
                     break;
 
             }
-            if (Menu["misc"]["useeq"].Enabled)
-            {
-                foreach (var target in GameObjects.EnemyHeroes.Where(
-                    t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
-                          t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
-                          t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
-                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" &&
-                         !Invulnerable.Check(t, DamageType.Magical)))
-                {
+          //  if (Menu["misc"]["useeq"].Enabled)
+          //  {
+          //      foreach (var target in GameObjects.EnemyHeroes.Where(
+           //         t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
+           ////               t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
+           //               t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
+           //               t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" &&
+            //             !Invulnerable.Check(t, DamageType.Magical)))
+           //     {
+           //
+           //         Q.Cast(target);
+            //    }
+        //
 
-                    Q.Cast(target);
-                }
-
-
-            }
+          //  }
         }
 
             public static Obj_AI_Hero GetBestEnemyHeroTarget()

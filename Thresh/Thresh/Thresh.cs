@@ -94,7 +94,7 @@ namespace Zypppy_Thresh
 
             if (Menu["drawings"]["drawq"].Enabled)
             {
-                Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
+                Render.Circle(Player.Position, 1100, 40, Color.CornflowerBlue);
             }
 
         }

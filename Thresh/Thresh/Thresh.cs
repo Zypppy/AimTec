@@ -39,7 +39,7 @@ namespace Zypppy_Thresh
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
-            Q.SetSkillshot(0.5f, 60f, 1850f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.High);
             E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -70,11 +70,7 @@ namespace Zypppy_Thresh
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
             }
             Menu.Add(miscmenu);
-            var DrawMenu = new Menu("drawings", "Drawings");
-            {
-                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-            }
-            Menu.Add(DrawMenu);
+           
 
             Menu.Attach();
 
@@ -84,20 +80,6 @@ namespace Zypppy_Thresh
             Console.WriteLine("Zypppy Thresh - Loaded");
         }
 
-
-        private void Render_OnPresent()
-        {
-            Vector2 maybeworks;
-            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var xaOffset = (int)maybeworks.X;
-            var yaOffset = (int)maybeworks.Y;
-
-            if (Menu["drawings"]["drawq"].Enabled)
-            {
-                Render.Circle(Player.Position, 1100, 40, Color.CornflowerBlue);
-            }
-
-        }
 
 
                 private void Game_OnUpdate()

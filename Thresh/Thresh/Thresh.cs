@@ -34,7 +34,7 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1150);
+            Q = new Spell(SpellSlot.Q, 1125);
             Q2 = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);

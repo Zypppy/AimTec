@@ -34,12 +34,12 @@ namespace Zypppy_Thresh
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1125);
+            Q = new Spell(SpellSlot.Q, 1115);
             Q2 = new Spell(SpellSlot.Q, 1150);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
-            Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.5f, 60f, 1850f, true, SkillshotType.Line, false, HitChance.High);
             E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -63,6 +63,12 @@ namespace Zypppy_Thresh
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
                 HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
                 HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
+
+            }
+            Menu.Add(HarassMenu);
+            var MiscMenu = new Menu("misc", "Misc");
+            {
+                MiscMenu.Add(new MenuBool("useaq", "Use Auto Q on Immobile"));
 
             }
             Menu.Add(HarassMenu);
@@ -96,10 +102,24 @@ namespace Zypppy_Thresh
                     break;
 
             }
+            if (Menu["misc"]["useeq"].Enabled)
+            {
+                foreach (var target in GameObjects.EnemyHeroes.Where(
+                    t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
+                          t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
+                          t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
+                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" &&
+                         !Invulnerable.Check(t, DamageType.Magical)))
+                {
 
+                    Q.Cast(target);
+                }
+
+
+            }
         }
 
-        public static Obj_AI_Hero GetBestEnemyHeroTarget()
+            public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
         }

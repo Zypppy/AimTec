@@ -261,7 +261,7 @@
                     foreach (var ally in Allies.Where(
                         a => Player.CountAllyHeroesInRange(FOTM.Range) >= 0 &&
                              a.Health <= a.MaxHealth / 100 *
-                             Menu["fotmslider"].Value))
+                             Menu["supportitems"]["fotmslider"].As<MenuSlider>().Value))
                     {
                         FOTM.Cast(ally);
                     }

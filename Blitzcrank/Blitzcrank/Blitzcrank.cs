@@ -54,9 +54,9 @@
 
             var SupportItemsMenu = new Menu("supportitems", "Support Items");
             {
-                SupportItemsMenu.Add(new MenuBool("usefotm", "Use Face of the Mountain", true));
+                SupportItemsMenu.Add(new MenuBool("usefotm", "Use Face of the Mountain"));
                 SupportItemsMenu.Add(new MenuSlider("fotmslider", "and HP% is less than:", 40, 0, 100));
-                SupportItemsMenu.Add(new MenuBool("usesolari", "Use Solari", true));
+                SupportItemsMenu.Add(new MenuBool("usesolari", "Use Solari"));
                 SupportItemsMenu.Add(new MenuSlider("solarislider", "Use Solari when allies in range >=", 3, 1, 5));
                 SupportItemsMenu.Add(new MenuSlider("solarislider2", "and HP% is less than:", 40, 0, 100));
 
@@ -204,6 +204,8 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useFOTM = Menu["supportitems"]["usefotm"].Enabled;
+            bool useSOLARI = Menu["supportitems"]["usesolari"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -231,7 +233,7 @@
             if (ItemSolari != null)
             {
                 Spell Solari = new Spell(ItemSolari.Slot, 600);
-                if (Menu["usesolari"].Enabled && Solari.Ready)
+                if (useSOLARI && Solari.Ready)
                 {
                     var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(Solari.Range, true));
                     foreach (var ally in Allies.Where(
@@ -253,7 +255,7 @@
             if (ItemFaceOfTheMountain != null)
             {
                 Spell FOTM = new Spell(ItemFaceOfTheMountain.Slot, 700);
-                if (Menu["usefotm"].Enabled && FOTM.Ready)
+                if (useFOTM && FOTM.Ready)
                 {
                     var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(FOTM.Range, true) && !t.IsMe);
                     foreach (var ally in Allies.Where(

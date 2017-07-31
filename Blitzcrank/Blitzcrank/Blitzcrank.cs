@@ -21,7 +21,7 @@
 
     internal class Blitzcrank
     {
-        public static Menu Menu = new Menu("Blitzcrank by Zypppy", "Blitzcrank by Zypppy");
+        public static Menu Menu = new Menu("Blitzcrank by Zypppy", "Blitzcrank by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, W, E, R;

@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Aimtec;
+    using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Menu;
@@ -42,20 +43,31 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
             }
-
-
             Menu.Add(ComboMenu);
+
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
-                KSMenu.Add(new MenuBool("kq", "Killsteal with Q "));
-                KSMenu.Add(new MenuBool("kr", "Killsteal with R "));
+                KSMenu.Add(new MenuBool("kq", "Killsteal with Q"));
+                KSMenu.Add(new MenuBool("kr", "Killsteal with R"));
             }
             Menu.Add(KSMenu);
-            var miscmenu = new Menu("misc", "Misc.");
+
+            var SupportItemsMenu = new Menu("supportitems", "Support Items");
+            {
+                SupportItemsMenu.Add(new MenuBool("usefotm", "Use Face of the Mountain", true));
+                SupportItemsMenu.Add(new MenuSlider("fotmslider", "and HP% is less than:", 40, 0, 100));
+                SupportItemsMenu.Add(new MenuBool("usesolari", "Use Solari", true));
+                SupportItemsMenu.Add(new MenuSlider("solarislider", "Use Solari when allies in range >=", 3, 1, 5));
+                SupportItemsMenu.Add(new MenuSlider("solarislider2", "and HP% is less than:", 40, 0, 100));
+
+            }
+            
+            var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
             }
             Menu.Add(miscmenu);
+
             var DrawMenu = new Menu("drawings", "Drawings");
             {
                 DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
@@ -198,8 +210,6 @@
                 return;
             }
 
-
-
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
 
@@ -216,7 +226,49 @@
                     E.Cast();
                 }
             }
-            
+            var ItemSolari = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "IronStylus");
+            if (ItemSolari != null)
+            {
+                Spell Solari = new Spell(ItemSolari.Slot, 600);
+                if (Menu["usesolari"].Enabled && Solari.Ready)
+                {
+                    var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(Solari.Range, true));
+                    foreach (var ally in Allies.Where(
+                        a => Player.CountAllyHeroesInRange(Solari.Range) >=
+                             Menu["solarislider"].Value &&
+                             a.Health <= a.MaxHealth / 100 *
+                             Menu["solarislider2"].Value))
+                    {
+                        Solari.Cast();
+                    }
+                    if (HealthPrediction.Implementation.GetPrediction(Player, 250 + Game.Ping) <= Player.MaxHealth * 0)
+                    {
+                        Solari.Cast();
+                    }
+                }
+            }
+
+            var ItemFaceOfTheMountain = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "HealthBomb");
+            if (ItemFaceOfTheMountain != null)
+            {
+                Spell FOTM = new Spell(ItemFaceOfTheMountain.Slot, 700);
+                if (Menu["usefotm"].Enabled && FOTM.Ready)
+                {
+                    var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(FOTM.Range, true) && !t.IsMe);
+                    foreach (var ally in Allies.Where(
+                        a => Player.CountAllyHeroesInRange(FOTM.Range) >= 0 &&
+                             a.Health <= a.MaxHealth / 100 *
+                             Menu["fotmslider"].Value))
+                    {
+                        FOTM.Cast(ally);
+                    }
+                    if (HealthPrediction.Implementation.GetPrediction(Player, 250 + Game.Ping) <= Player.MaxHealth * 0)
+                    {
+                        FOTM.Cast(Player);
+                    }
+                }
+            }
+
 
         }
 

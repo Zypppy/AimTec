@@ -56,16 +56,40 @@
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
             }
             Menu.Add(miscmenu);
+            var DrawMenu = new Menu("drawings", "Drawings");
+            {
+                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
+            }
+
+            Menu.Add(DrawMenu);
             Menu.Attach();
 
+            Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
             Console.WriteLine("Blitzcrank by Zypppy - Loaded");
         }
 
-      
+        private void Render_OnPresent()
+        {
+            Vector2 maybeworks;
+            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            var xaOffset = (int)maybeworks.X;
+            var yaOffset = (int)maybeworks.Y;
 
+            if (Menu["drawings"]["drawq"].Enabled)
+            {
+                Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
+            }
+
+            if (Menu["drawings"]["drawr"].Enabled)
+            {
+                Render.Circle(Player.Position, R.Range, 40, Color.CornflowerBlue);
+            }
+        }
+            
         private void Game_OnUpdate()
         {
 

@@ -61,61 +61,10 @@
             Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
-            Console.WriteLine("Lee Sin by Zypppy - Loaded");
+            Console.WriteLine("Blitzcrank by Zypppy - Loaded");
         }
 
-        static double GetR(Obj_AI_Base target)
-        {
-            double meow = 0;
-            if (Player.SpellBook.GetSpell(SpellSlot.R).Level == 1)
-            {
-                meow = 250;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.R).Level == 2)
-            {
-                meow = 375;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.R).Level == 3)
-            {
-                meow = 500;
-            }
-
-            double calc = (Player.TotalAbilityDamage) * 1.0;
-            double full = calc + meow;
-            double damage = Player.CalculateDamage(target, DamageType.Magical, full);
-            return damage;
-        }
-
-        static double GetQ(Obj_AI_Base target)
-        {
-            double meow = 0;
-            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 1)
-            {
-                meow = 80;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 2)
-            {
-                meow = 135;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 3)
-            {
-                meow = 190;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 4)
-            {
-                meow = 245;
-            }
-            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 5)
-            {
-                meow = 300;
-            }
-
-            double calc = (Player.TotalAbilityDamage - Player.BaseAbilityDamage) * 1.0;
-            double full = calc + meow;
-            double damage = Player.CalculateDamage(target, DamageType.Magical, full);
-            return damage;
-        }
-       
+      
 
         private void Game_OnUpdate()
         {
@@ -165,30 +114,27 @@
 
         private void Killsteal()
         {
-            var enemies = GetBestKillableHero(Q, DamageType.Physical, false);
-            if (enemies != null)
+            if (Q.Ready &&
+                Menu["killsteal"]["ksq"].Enabled)
             {
-                bool useRK = Menu["killsteal"]["kr"].Enabled;
-                if (useRK && (GetR(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.R) > enemies.Health))
+                var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
+                if (bestTarget != null &&
+                    Player.GetSpellDamage(bestTarget, SpellSlot.Q) >= bestTarget.Health &&
+                    bestTarget.IsValidTarget(Q.Range))
                 {
-
-                    if (Player.GetSpellDamage(enemies, SpellSlot.R) > GetR(enemies))
-                    {
-                        R.Cast();
-                    }
-
+                    Q.Cast(bestTarget);
                 }
-                bool useQK = Menu["killsteal"]["kq"].Enabled;
-                if (useQK && (GetQ(enemies) > enemies.Health || Player.GetSpellDamage(enemies, SpellSlot.Q) > enemies.Health))
+            }
+            if (R.Ready &&
+                Menu["killsteal"]["ksr"].Enabled)
+            {
+                var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
+                if (bestTarget != null &&
+                    Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
+                    bestTarget.IsValidTarget(R.Range))
                 {
-
-                    if (Player.GetSpellDamage(enemies, SpellSlot.Q) > GetQ(enemies))
-                    {
-                        Q.Cast(enemies);
-                    }
+                    R.Cast();
                 }
-
-
             }
 
         }

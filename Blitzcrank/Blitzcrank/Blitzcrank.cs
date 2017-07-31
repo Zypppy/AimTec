@@ -61,6 +61,7 @@
                 SupportItemsMenu.Add(new MenuSlider("solarislider2", "and HP% is less than:", 40, 0, 100));
 
             }
+            Menu.Add(SupportItemsMenu);
             
             var miscmenu = new Menu("misc", "Misc");
             {

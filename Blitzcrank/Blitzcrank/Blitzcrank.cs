@@ -37,8 +37,14 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuBool("useqq", "Use Second Q"));
+                ComboMenu.Add(new MenuBool("usew", "Use W"));
+                ComboMenu.Add(new MenuBool("useww", "Use Second W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
+                ComboMenu.Add(new MenuBool("useed", "Use Second E"));
             }
+
+
             Menu.Add(ComboMenu);
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
@@ -46,25 +52,12 @@
                 KSMenu.Add(new MenuBool("kr", "Killsteal with R "));
             }
             Menu.Add(KSMenu);
-            var miscmenu = new Menu("misc", "Misc.");
-            {
-                miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
-            }
-            Menu.Add(miscmenu);
-            var DrawMenu = new Menu("drawings", "Drawings");
-            {
-                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-                DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
-                DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
-            }
-            Menu.Add(DrawMenu);
             Menu.Attach();
 
-            Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
-            Console.WriteLine("Blitzcrank by Zypppy - Loaded");
+            Console.WriteLine("Lee Sin by Zypppy - Loaded");
         }
 
         static double GetR(Obj_AI_Base target)
@@ -88,6 +81,7 @@
             double damage = Player.CalculateDamage(target, DamageType.Magical, full);
             return damage;
         }
+
         static double GetQ(Obj_AI_Base target)
         {
             double meow = 0;

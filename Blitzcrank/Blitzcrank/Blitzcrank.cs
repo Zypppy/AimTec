@@ -24,10 +24,11 @@
         public static Menu Menu = new Menu("Blitzcrank by Zypppy", "Blitzcrank by Zypppy");
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, E, R;
+        public static Spell Q, W, E, R;
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 1100);
+            W = new Spell(SpellSlot.E, 125);
             E = new Spell(SpellSlot.E, 125);
             R = new Spell(SpellSlot.R, 600);
             Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line, false, HitChance.High);

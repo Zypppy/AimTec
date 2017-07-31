@@ -80,7 +80,7 @@
                 meow = 500;
             }
 
-            double calc = (Player.TotalAbilityDamage - Player.BaseAbilityDamage) * 1.0;
+            double calc = (Player.TotalAbilityDamage) * 1.0;
             double full = calc + meow;
             double damage = Player.CalculateDamage(target, DamageType.Magical, full);
             return damage;

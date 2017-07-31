@@ -208,7 +208,7 @@
                     Q.Cast(target);
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && useE && target.IsValidTarget(300))
             {
 
                 if (target != null)

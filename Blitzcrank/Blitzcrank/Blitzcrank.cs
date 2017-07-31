@@ -27,11 +27,11 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 900);
+            Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 125);
             R = new Spell(SpellSlot.R, 600);
-            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.25f, 70f, 1700f, true, SkillshotType.Line, false, HitChance.High);
         }
 
         public Blitzcrank()
@@ -81,7 +81,7 @@
 
             if (Menu["drawings"]["drawq"].Enabled)
             {
-                Render.Circle(Player.Position, 900, 40, Color.CornflowerBlue);
+                Render.Circle(Player.Position, 1000, 40, Color.CornflowerBlue);
             }
 
             if (Menu["drawings"]["drawr"].Enabled)

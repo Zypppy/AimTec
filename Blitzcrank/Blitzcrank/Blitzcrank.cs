@@ -115,7 +115,7 @@
         private void Killsteal()
         {
             if (Q.Ready &&
-                Menu["killsteal"]["ksq"].Enabled)
+                Menu["killsteal"]["kq"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
                 if (bestTarget != null &&
@@ -126,7 +126,7 @@
                 }
             }
             if (R.Ready &&
-                Menu["killsteal"]["ksr"].Enabled)
+                Menu["killsteal"]["kr"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
                 if (bestTarget != null &&

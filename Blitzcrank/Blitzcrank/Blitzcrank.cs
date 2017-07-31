@@ -238,9 +238,9 @@
                     var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(Solari.Range, true));
                     foreach (var ally in Allies.Where(
                         a => Player.CountAllyHeroesInRange(Solari.Range) >=
-                             Menu["solarislider"].Value &&
+                             Menu["supportitems"]["solarislider"].As<MenuSlider>().Value &&
                              a.Health <= a.MaxHealth / 100 *
-                             Menu["solarislider2"].Value))
+                             Menu["supportitems"]["solarislider2"].As<MenuSlider>().Value))
                     {
                         Solari.Cast();
                     }

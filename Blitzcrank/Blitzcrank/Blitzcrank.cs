@@ -27,7 +27,7 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1000);
+            Q = new Spell(SpellSlot.Q, 950);
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 125);
             R = new Spell(SpellSlot.R, 600);
@@ -81,7 +81,7 @@
 
             if (Menu["drawings"]["drawq"].Enabled)
             {
-                Render.Circle(Player.Position, 1000, 40, Color.CornflowerBlue);
+                Render.Circle(Player.Position, 950, 40, Color.CornflowerBlue);
             }
 
             if (Menu["drawings"]["drawr"].Enabled)

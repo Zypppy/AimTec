@@ -39,11 +39,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useqq", "Use Second Q"));
-                ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("useww", "Use Second W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useed", "Use Second E"));
             }
 
 
@@ -114,23 +110,6 @@
             return damage;
         }
        
-       // private void Render_OnPresent()
-       // {
-
-        //    if (Menu["drawings"]["drawq"].Enabled)
-        //    {
-       //         Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
-        //    }
-       //     if (Menu["drawings"]["drawe"].Enabled)
-       //     {
-       //         Render.Circle(Player.Position, E.Range, 40, Color.CornflowerBlue);
-       //     }
-       //     if (Menu["drawings"]["drawr"].Enabled)
-       //     {
-        //        Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
-        //    }
-            
-      //  }
 
         private void Game_OnUpdate()
         {

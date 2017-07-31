@@ -28,7 +28,7 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 1100);
-            W = new Spell(SpellSlot.E, 125);
+            W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 125);
             R = new Spell(SpellSlot.R, 600);
             Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.Line, false, HitChance.High);
@@ -152,7 +152,7 @@
             if (R.Ready &&
                 Menu["killsteal"]["kr"].Enabled)
             {
-                var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
+                var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
                 if (bestTarget != null &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(R.Range))

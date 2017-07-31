@@ -114,23 +114,23 @@
             return damage;
         }
        
-        private void Render_OnPresent()
-        {
+       // private void Render_OnPresent()
+       // {
 
-            if (Menu["drawings"]["drawq"].Enabled)
-            {
-                Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
-            }
-            if (Menu["drawings"]["drawe"].Enabled)
-            {
-                Render.Circle(Player.Position, E.Range, 40, Color.CornflowerBlue);
-            }
-            if (Menu["drawings"]["drawr"].Enabled)
-            {
-                Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
-            }
+        //    if (Menu["drawings"]["drawq"].Enabled)
+        //    {
+       //         Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
+        //    }
+       //     if (Menu["drawings"]["drawe"].Enabled)
+       //     {
+       //         Render.Circle(Player.Position, E.Range, 40, Color.CornflowerBlue);
+       //     }
+       //     if (Menu["drawings"]["drawr"].Enabled)
+       //     {
+        //        Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
+        //    }
             
-        }
+      //  }
 
         private void Game_OnUpdate()
         {

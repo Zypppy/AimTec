@@ -50,6 +50,11 @@
                 KSMenu.Add(new MenuBool("kr", "Killsteal with R "));
             }
             Menu.Add(KSMenu);
+            var miscmenu = new Menu("misc", "Misc.");
+            {
+                miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
+            }
+            Menu.Add(miscmenu);
             Menu.Attach();
 
             Game.OnUpdate += Game_OnUpdate;
@@ -246,5 +251,3 @@
 
     }
 }
-
-       

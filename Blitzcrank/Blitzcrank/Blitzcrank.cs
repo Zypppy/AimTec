@@ -35,29 +35,99 @@
         {
             Orbwalker.Attach(Menu);
             var ComboMenu = new Menu("combo", "Combo");
+            var QSet = new Menu("qset", "Q Settings");
             {
-                ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useqq", "Use Second Q"));
-                ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("useww", "Use Second W"));
-                ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useed", "Use Second E"));
+                QSet.Add(new MenuBool("useq", "Use Q in Combo"));
+
             }
+            var WSet = new Menu("wset", "W Settings");
+            {
+                WSet.Add(new MenuBool("usew", "Use W in Combo"));
+                WSet.Add(new MenuList("wmode", "W Mode", new[] { "Always", "Only on Slowed/CC/Immobile" }, 1));
 
+            }
+            var ESet = new Menu("eset", "E Settings");
+            {
+                ESet.Add(new MenuBool("usee", "Use E in Combo"));
+            }
+            var RSet = new Menu("rset", "R Settings");
+            {
+                RSet.Add(new MenuBool("user", "Use R in Combo"));
+                RSet.Add(new MenuList("rmode", "R Mode", new[] { "Always", "If Killable" }, 0));
+                RSet.Add(new MenuSlider("rtick", "Include X R Ticks", 1, 1, 4));
+                RSet.Add(new MenuSlider("hitr", "Use R only if Hits X", 1, 1, 5));
+                RSet.Add(new MenuSlider("waster", "Don't waste R if Enemy HP lower than", 100, 0, 500));
+                RSet.Add(new MenuBool("follow", "Auto R Follow", true));
 
+                RSet.Add(new MenuBool("forcer", "Force R in TeamFights", true));
+                RSet.Add(new MenuSlider("forcehit", "^- Min. Enemies", 3, 2, 5));
+
+            }
             Menu.Add(ComboMenu);
+            ComboMenu.Add(QSet);
+            ComboMenu.Add(WSet);
+            ComboMenu.Add(ESet);
+            ComboMenu.Add(RSet);
+
+            var HarassMenu = new Menu("harass", "Harass");
+            {
+                HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
+                HarassMenu.Add(new MenuBool("useq", "Use  Q to Harass"));
+                HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
+
+            }
+            Menu.Add(HarassMenu);
+            var FarmMenu = new Menu("farming", "Farming");
+            var LaneClear = new Menu("lane", "Lane Clear");
+            {
+                LaneClear.Add(new MenuSlider("mana", "Mana Manager", 50));
+                LaneClear.Add(new MenuBool("useq", "Use Q to Farm"));
+                LaneClear.Add(new MenuBool("lastq", "^- Use for Last Hit"));
+                LaneClear.Add(new MenuBool("usee", "Use E to Farm"));
+                LaneClear.Add(new MenuSlider("hite", "^- if Hits", 3, 1, 6));
+            }
+            var JungleClear = new Menu("jungle", "Jungle Clear");
+            {
+                JungleClear.Add(new MenuSlider("mana", "Mana Manager", 50));
+                JungleClear.Add(new MenuBool("useq", "Use Q to Farm"));
+                JungleClear.Add(new MenuBool("usee", "Use E to Farm"));
+
+            }
+            Menu.Add(FarmMenu);
+            FarmMenu.Add(LaneClear);
+            FarmMenu.Add(JungleClear);
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
-                KSMenu.Add(new MenuBool("kq", "Killsteal with Q "));
-                KSMenu.Add(new MenuBool("kr", "Killsteal with R "));
+                KSMenu.Add(new MenuBool("ksq", "Killsteal with Q"));
+                KSMenu.Add(new MenuBool("kse", "Killsteal with E"));
             }
             Menu.Add(KSMenu);
+            var miscmenu = new Menu("misc", "Misc.");
+            {
+                miscmenu.Add(new MenuBool("autow", "Auto W on CC"));
+            }
+            Menu.Add(miscmenu);
+            var DrawMenu = new Menu("drawings", "Drawings");
+            {
+                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
+                DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
+                DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
+                DrawMenu.Add(new MenuBool("drawdamage", "Draw Damage"));
+            }
+            Menu.Add(DrawMenu);
+            var FleeMenu = new Menu("flee", "Flee");
+            {
+                FleeMenu.Add(new MenuBool("useq", "Use Q to Flee"));
+                FleeMenu.Add(new MenuKeyBind("key", "Flee Key:", KeyCode.G, KeybindType.Press));
+            }
+            Menu.Add(FleeMenu);
             Menu.Attach();
 
+            Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
-
             LoadSpells();
-            Console.WriteLine("Lee Sin by Zypppy - Loaded");
+            Console.WriteLine("Blitzcrank - Loaded");
         }
 
         static double GetR(Obj_AI_Base target)

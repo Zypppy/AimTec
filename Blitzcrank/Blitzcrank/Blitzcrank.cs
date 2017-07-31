@@ -52,17 +52,6 @@
             }
             Menu.Add(KSMenu);
 
-            var SupportItemsMenu = new Menu("supportitems", "Support Items");
-            {
-                SupportItemsMenu.Add(new MenuBool("usefotm", "Use Face of the Mountain"));
-                SupportItemsMenu.Add(new MenuSlider("fotmslider", "and HP% is less than:", 40, 0, 100));
-                SupportItemsMenu.Add(new MenuBool("usesolari", "Use Solari"));
-                SupportItemsMenu.Add(new MenuSlider("solarislider", "Use Solari when allies in range >=", 3, 1, 5));
-                SupportItemsMenu.Add(new MenuSlider("solarislider2", "and HP% is less than:", 40, 0, 100));
-
-            }
-            Menu.Add(SupportItemsMenu);
-            
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
@@ -85,6 +74,8 @@
             Console.WriteLine("Blitzcrank by Zypppy - Loaded");
         }
 
+        
+
         private void Render_OnPresent()
         {
             Vector2 maybeworks;
@@ -102,7 +93,7 @@
                 Render.Circle(Player.Position, R.Range, 40, Color.CornflowerBlue);
             }
         }
-            
+
         private void Game_OnUpdate()
         {
 
@@ -139,8 +130,7 @@
             }
         }
 
-
-
+        
 
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
@@ -204,8 +194,8 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useFOTM = Menu["supportitems"]["usefotm"].Enabled;
-            bool useSOLARI = Menu["supportitems"]["usesolari"].Enabled;
+            //bool useFOTM = Menu["supportitems"]["usefotm"].Enabled;
+            //bool useSOLARI = Menu["supportitems"]["usesolari"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -229,49 +219,7 @@
                     E.Cast();
                 }
             }
-            var ItemSolari = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "IronStylus");
-            if (ItemSolari != null)
-            {
-                Spell Solari = new Spell(ItemSolari.Slot, 600);
-                if (useSOLARI && Solari.Ready)
-                {
-                    var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(Solari.Range, true));
-                    foreach (var ally in Allies.Where(
-                        a => Player.CountAllyHeroesInRange(Solari.Range) >=
-                             Menu["supportitems"]["solarislider"].As<MenuSlider>().Value &&
-                             a.Health <= a.MaxHealth / 100 *
-                             Menu["supportitems"]["solarislider2"].As<MenuSlider>().Value))
-                    {
-                        Solari.Cast();
-                    }
-                    if (HealthPrediction.Implementation.GetPrediction(Player, 250 + Game.Ping) <= Player.MaxHealth * 0)
-                    {
-                        Solari.Cast();
-                    }
-                }
-            }
-
-            var ItemFaceOfTheMountain = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "HealthBomb");
-            if (ItemFaceOfTheMountain != null)
-            {
-                Spell FOTM = new Spell(ItemFaceOfTheMountain.Slot, 700);
-                if (useFOTM && FOTM.Ready)
-                {
-                    var Allies = GameObjects.AllyHeroes.Where(t => t.IsValidTarget(FOTM.Range, true) && !t.IsMe);
-                    foreach (var ally in Allies.Where(
-                        a => Player.CountAllyHeroesInRange(FOTM.Range) >= 0 &&
-                             a.Health <= a.MaxHealth / 100 *
-                             Menu["supportitems"]["fotmslider"].As<MenuSlider>().Value))
-                    {
-                        FOTM.Cast(ally);
-                    }
-                    if (HealthPrediction.Implementation.GetPrediction(Player, 250 + Game.Ping) <= Player.MaxHealth * 0)
-                    {
-                        FOTM.Cast(Player);
-                    }
-                }
-            }
-
+          
 
         }
 

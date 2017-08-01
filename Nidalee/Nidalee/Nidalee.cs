@@ -60,6 +60,13 @@
             }
             Menu.Add(ComboMenu);
 
+            var HarassMenu = new Menu("harass", "Harass");
+            {
+                HarassMenu.Add(new MenuBool("useq", "Use Human Q to Harass"));
+                HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
+            }
+            Menu.Add(HarassMenu);
+        
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Human Q"));
@@ -147,6 +154,7 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
                     break;
@@ -295,6 +303,28 @@
             }
 
         }
+        private void OnHarass()
+        {
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            float manapercent = Menu["harass"]["mana"].As<MenuSlider>().Value;
+            if (manapercent < Player.ManaPercent())
+            {
+                if (!target.IsValidTarget())
+                {
+                    return;
+                }
+                
+                if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
+                {
 
+                    if (target != null)
+                    {
+                        Q.Cast(target);
+                    }
+                }
+
+            }
+        }
     }
 }

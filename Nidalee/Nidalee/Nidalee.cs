@@ -48,6 +48,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Human Q"));
+                //ComboMenu.Add(new MenuList("hitchance", "Human Q Hit Chance", new[] { "Low", "Medium", "High", "VeryHigh", "Immobile", "Dashing" }, 0));
                 ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use Human W"));
                 ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));

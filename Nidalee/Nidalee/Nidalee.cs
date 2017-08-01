@@ -33,9 +33,9 @@
             W = new Spell(SpellSlot.W, 900);
             W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
             W2 = new Spell(SpellSlot.W, 375);
-            W2.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false, HitChance.Medium);
+            W2.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false, HitChance.Low);
             W3 = new Spell(SpellSlot.W, 750);
-            W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false, HitChance.Medium);
+            W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false, HitChance.Low);
             E = new Spell(SpellSlot.E, 600);
             E2 = new Spell(SpellSlot.E, 300);
             E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false, HitChance.Medium);

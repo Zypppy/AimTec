@@ -42,7 +42,6 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("usewcc", "Use W On CC"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "Min enemies to hit with R", 1, 1, 5));
 

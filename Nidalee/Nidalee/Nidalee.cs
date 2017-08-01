@@ -51,9 +51,9 @@
                 ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use Human W"));
                 ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));
-                ComboMenu.Add(new MenuBool("usee", "NOT WORKING Use Human E"));
-                ComboMenu.Add(new MenuSlider("useeh", "Min HP To Use E", 30, 0, 100));
-                ComboMenu.Add(new MenuSlider("useehm", "Min Mana To Use E", 30, 0, 100));
+                //ComboMenu.Add(new MenuBool("usee", "NOT WORKING Use Human E"));
+                //ComboMenu.Add(new MenuSlider("useeh", "Min HP To Use E", 30, 0, 100));
+                //ComboMenu.Add(new MenuSlider("useehm", "Min Mana To Use E", 30, 0, 100));
                 ComboMenu.Add(new MenuBool("usece", "Use Cougar E"));
                 ComboMenu.Add(new MenuBool("user", "Use R To Switch Forms"));
 
@@ -280,7 +280,7 @@
                     E2.Cast(target);
                 }
             }
-            if (R.Ready && useR && E.Ready && target.IsValidTarget(Q.Range))
+            if (R.Ready && useR && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name != "Swipe" && target.IsValidTarget(Q.Range))
             {
                 if (target != null)
                 {

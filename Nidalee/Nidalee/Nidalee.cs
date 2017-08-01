@@ -280,7 +280,7 @@
                     E2.Cast(target);
                 }
             }
-            if (R.Ready && useR && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name != "Swipe" && target.IsValidTarget(Q.Range))
+            if (R.Ready && useR && target.IsValidTarget(Q.Range))
             {
                 if (target != null)
                 {

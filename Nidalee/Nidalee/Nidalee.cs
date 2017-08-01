@@ -37,8 +37,8 @@
             W3 = new Spell(SpellSlot.W, 750);
             W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false, HitChance.Low);
             E = new Spell(SpellSlot.E, 600);
-            E2 = new Spell(SpellSlot.E, 300);
-            E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false, HitChance.Medium);
+            E2 = new Spell(SpellSlot.E, 350);
+            E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false, HitChance.Low);
             R = new Spell(SpellSlot.R, 500);
         }
 
@@ -280,7 +280,7 @@
                     E2.Cast(target);
                 }
             }
-            if (R.Ready && useR && Q.Ready && W.Ready && target.IsValidTarget(Q.Range))
+            if (R.Ready && useR && Q.Ready || W.Ready && target.IsValidTarget(Q.Range))
             {
                 if (target != null)
                 {

@@ -280,7 +280,14 @@
                     E2.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(Q.Range))
+            if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
+            {
+                if (target != null)
+                {
+                    R.Cast();
+                }
+            }
+            if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(W2.Range))
             {
                 if (target != null)
                 {

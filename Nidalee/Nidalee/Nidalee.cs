@@ -280,6 +280,13 @@
                     E2.Cast(target);
                 }
             }
+            if (R.Ready && useR && Q.Ready && W.Ready && target.IsValidTarget(Q.Range))
+            {
+                if (target != null)
+                {
+                    R.Cast();
+                }
+            }
 
         }
 

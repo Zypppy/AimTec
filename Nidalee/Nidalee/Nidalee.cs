@@ -32,7 +32,7 @@
             Q2 = new Spell(SpellSlot.Q, 355);
             W = new Spell(SpellSlot.W, 900);
             W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
-            W2 = new Spell(SpellSlot.W, 375);
+            W2 = new Spell(SpellSlot.W, 475);
             W2.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false, HitChance.Low);
             W3 = new Spell(SpellSlot.W, 750);
             W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false, HitChance.Low);
@@ -154,7 +154,7 @@
 
             }
             Killsteal();
-            if (Menu["misc"]["autoq"].Enabled)
+            if (Menu["misc"]["autoq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss")
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
@@ -166,7 +166,7 @@
                     Q.Cast(target);
                 }
             }
-            if (Menu["misc"]["autow"].Enabled)
+            if (Menu["misc"]["autow"].Enabled && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack")
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
@@ -189,7 +189,7 @@
         private void Killsteal()
         {
             if (Q.Ready &&
-                Menu["killsteal"]["kq"].Enabled)
+                Menu["killsteal"]["kq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss")
             {
                 var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
                 if (bestTarget != null &&
@@ -266,7 +266,7 @@
                     W2.Cast(target);
                 }
             }
-            if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunter") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W3.Range))
+            if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunted") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W3.Range))
             {
                 if (target != null)
                 {

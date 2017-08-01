@@ -27,7 +27,7 @@
         public static Spell Q, Q2, W, W2, W3, E, E2, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1500);
+            Q = new Spell(SpellSlot.Q, 1400);
             Q.SetSkillshot(0.25f, 40f, 1300f, true, SkillshotType.Line, false, HitChance.High);
             Q2 = new Spell(SpellSlot.Q, 355);
             W = new Spell(SpellSlot.W, 900);
@@ -78,7 +78,8 @@
                 DrawMenu.Add(new MenuBool("drawq", "Draw Human Q Range"));
                 DrawMenu.Add(new MenuBool("drawq2", "Draw Cougar Q Range"));
                 DrawMenu.Add(new MenuBool("draww", "Draw Human W Range"));
-                DrawMenu.Add(new MenuBool("draww2", "Draw Cougar Q Range"));
+                DrawMenu.Add(new MenuBool("draww2", "Draw Cougar W Range"));
+                DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
                 DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
@@ -261,7 +262,7 @@
                     W2.Cast(target);
                 }
             }
-            if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunterd") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W2.Range))
+            if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunterd") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W3.Range))
             {
                 if (target != null)
                 {

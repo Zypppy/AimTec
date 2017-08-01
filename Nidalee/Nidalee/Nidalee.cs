@@ -119,6 +119,10 @@
             {
                 Render.Circle(Player.Position, W2.Range, 40, Color.Fuchsia);
             }
+            if (Menu["drawings"]["draww3"].Enabled)
+            {
+                Render.Circle(Player.Position, W3.Range, 40, Color.Fuchsia);
+            }
 
             if (Menu["drawings"]["drawe"].Enabled)
             {

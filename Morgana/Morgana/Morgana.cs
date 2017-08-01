@@ -65,7 +65,7 @@
             var DrawMenu = new Menu("drawings", "Drawings");
             {
                 DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-                DrawMenu.Add(new MenuBool("drawq", "Draw W Range"));
+                DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
             }
 

@@ -108,33 +108,33 @@
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled)
+            if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
-            if (Menu["drawings"]["drawq2"].Enabled)
+            if (Menu["drawings"]["drawq2"].Enabled && Q.Ready)
             {
                 Render.Circle(Player.Position, Q2.Range, 40, Color.Indigo);
             }
 
-            if (Menu["drawings"]["draww"].Enabled)
+            if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Fuchsia);
             }
-            if (Menu["drawings"]["draww2"].Enabled)
+            if (Menu["drawings"]["draww2"].Enabled && W.Ready)
             {
                 Render.Circle(Player.Position, W2.Range, 40, Color.Fuchsia);
             }
-            if (Menu["drawings"]["draww3"].Enabled)
+            if (Menu["drawings"]["draww3"].Enabled && W.Ready)
             {
                 Render.Circle(Player.Position, W3.Range, 40, Color.Fuchsia);
             }
 
-            if (Menu["drawings"]["drawe"].Enabled)
+            if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            if (Menu["drawings"]["drawe2"].Enabled)
+            if (Menu["drawings"]["drawe2"].Enabled && E.Ready)
             {
                 Render.Circle(Player.Position, E2.Range, 40, Color.DeepPink);
             }

@@ -82,7 +82,6 @@
                 DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
                 DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
-                DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
             }
 
             Menu.Add(DrawMenu);

@@ -1,5 +1,6 @@
 ﻿using Aimtec;
 using Aimtec.SDK.Prediction.Skillshots;
+using System;
 using Spell = Aimtec.SDK.Spell;
 
 namespace Adept_AIO.Champions.Riven.Core
@@ -20,7 +21,7 @@ namespace Adept_AIO.Champions.Riven.Core
             R = new Spell(SpellSlot.R);
 
             R2 = new Spell(SpellSlot.R, 900);
-            R2.SetSkillshot(0.25f, 40f, 1600, false, SkillshotType.Cone);
+            R2.SetSkillshot(0.25f, (float)(15 * Math.PI / 60), float.MaxValue, false, SkillshotType.Cone, false, HitChance.High);
             Extensions.UltimateMode = UltimateMode.First;
         }
     }

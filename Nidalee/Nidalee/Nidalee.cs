@@ -400,7 +400,7 @@
 
                 if (Player.ManaPercent() >= manapercent)
                 {
-                    if (useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(Q.Range))
+                    if (useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(Q.Range) && minion != null)
                     {
                         Q.CastOnUnit(minion);
                     }

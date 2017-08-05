@@ -30,7 +30,7 @@
             Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, Player.AttackRange);
-            R = new Spell(SpellSlot.R, 400f + 250f* Player.SpellBook.GetSpell(SpellSlot.R).Level);
+            R = new Spell(SpellSlot.R, 400f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level);
             R.SetSkillshot(1.0f, 60f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
         }
 
@@ -81,17 +81,12 @@
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled)
+            if (Q.Ready && Menu["drawings"]["drawq"].Enabled)
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
 
-            if (Menu["drawings"]["draww"].Enabled)
-            {
-                Render.Circle(Player.Position, W.Range, 40, Color.Fuchsia);
-            }
-
-            if (Menu["drawings"]["drawr"].Enabled)
+            if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.DeepPink);
             }

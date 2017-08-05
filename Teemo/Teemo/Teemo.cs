@@ -27,7 +27,7 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1100);
+            Q = new Spell(SpellSlot.Q, 675);
             W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, Player.AttackRange);
             R = new Spell(SpellSlot.R, 400f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level);

@@ -30,7 +30,7 @@
             Q = new Spell(SpellSlot.Q, 675);
             W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, Player.AttackRange);
-            R = new Spell(SpellSlot.R, 400f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level);
+            R = new Spell(SpellSlot.R, 350f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level);
             R.SetSkillshot(1.0f, 60f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
         }
 
@@ -40,7 +40,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useqa", "Use Q Only In AA Range"));
+                ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
 
             }

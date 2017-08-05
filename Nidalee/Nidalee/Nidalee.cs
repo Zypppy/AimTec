@@ -6,9 +6,10 @@
     using System.Linq;
 
     using Aimtec;
-    using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
+    using Aimtec.SDK.Events;
+    using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Menu;
     using Aimtec.SDK.Menu.Components;
     using Aimtec.SDK.Orbwalking;
@@ -67,7 +68,19 @@
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
             }
             Menu.Add(HarassMenu);
-        
+
+            var JunglCelear = new Menu("jungleclear", "Jungle Clear");
+            {
+                JunglCelear.Add(new MenuBool("usejq", "Use Human Q in Jungle"));
+                JunglCelear.Add(new MenuBool("usejcq", "Use Cougar Q in Jungle"));
+                JunglCelear.Add(new MenuBool("usejw", "Use Human W in Jungle"));
+                JunglCelear.Add(new MenuBool("usejcw", "Use Cougar W in Jungle"));
+                JunglCelear.Add(new MenuBool("usejce", "Use Cougar E in Jungle"));
+                JunglCelear.Add(new MenuBool("usejr", "Use R in Jungle"));
+                JunglCelear.Add(new MenuSlider("manaj", "Mana Manager For Jungle", 50));
+            }
+            Menu.Add(JunglCelear);
+
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Human Q"));
@@ -158,6 +171,7 @@
                     OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
+                    Jungle();
                     break;
 
             }
@@ -186,6 +200,37 @@
                     W.Cast(target);
                 }
             }
+        }
+
+
+        public static List<Obj_AI_Minion> GetAllGenericMinionsTargets()
+        {
+            return GetAllGenericMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetAllGenericMinionsTargetsInRange(float range)
+        {
+            return GetEnemyLaneMinionsTargetsInRange(range).Concat(GetGenericJungleMinionsTargetsInRange(range)).ToList();
+        }
+
+        public static List<Obj_AI_Base> GetAllGenericUnitTargets()
+        {
+            return GetAllGenericUnitTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Base> GetAllGenericUnitTargetsInRange(float range)
+        {
+            return GameObjects.EnemyHeroes.Where(h => h.IsValidTarget(range)).Concat<Obj_AI_Base>(GetAllGenericMinionsTargetsInRange(range)).ToList();
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
         }
 
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
@@ -315,7 +360,7 @@
                 {
                     return;
                 }
-                
+
                 if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
                 {
 
@@ -325,6 +370,73 @@
                     }
                 }
 
+            }
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
+        {
+            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
+        {
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
+        }
+
+        private void Jungle()
+        {
+
+            bool useQ = Menu["jungleclear"]["usejq"].Enabled;
+            bool useQ2 = Menu["jungleclear"]["usejcq"].Enabled;
+            bool useW = Menu["jungleclear"]["usejw"].Enabled;
+            bool useW2 = Menu["jungleclear"]["usejcw"].Enabled;
+            bool useE = Menu["jungleclear"]["usejce"].Enabled;
+            bool useR = Menu["jungleclear"]["usejr"].Enabled;
+            float manapercent = Menu["jungleclear"]["manaj"].As<MenuSlider>().Value;
+
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            {
+
+
+                if (manapercent < Player.ManaPercent())
+                {
+                    if (useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(Q.Range))
+                    {
+                        Q.CastOnUnit(minion);
+                    }
+                    if (useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q2.Range))
+                    {
+                        Q2.Cast();
+                    }
+                    if (useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(W.Range))
+                    {
+                        W.CastOnUnit(minion);
+                    }
+                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(W2.Range))
+                    {
+                        W2.CastOnUnit(minion);
+                    }
+                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(W3.Range))
+                    {
+                        W3.CastOnUnit(minion);
+                    }
+                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(E2.Range))
+                    {
+                        E2.CastOnUnit(minion);
+                    }
+                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q.Range))
+                    {
+                        {
+                            R.Cast();
+                        }
+                    }
+                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(W2.Range))
+                    {
+                        {
+                            R.Cast();
+                        }
+                    }
+                }
             }
         }
     }

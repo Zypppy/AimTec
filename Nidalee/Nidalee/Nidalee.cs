@@ -394,7 +394,7 @@
             bool useR = Menu["jungleclear"]["usejr"].Enabled;
             float manapercent = Menu["jungleclear"]["manaj"].As<MenuSlider>().Value;
 
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
                 if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
                 {
@@ -407,33 +407,33 @@
                     {
                         Q.CastOnUnit(minion);
                     }
-                    if (useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q2.Range))
+                    if (useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q2.Range) && minion != null)
                     {
                         Q2.Cast();
                     }
-                    if (useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(W.Range))
+                    if (useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(W.Range) && minion != null)
                     {
                         W.CastOnUnit(minion);
                     }
-                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(W2.Range))
+                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(W2.Range) && minion != null)
                     {
                         W2.CastOnUnit(minion);
                     }
-                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(W3.Range))
+                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(W3.Range) && minion != null)
                     {
                         W3.CastOnUnit(minion);
                     }
-                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(E2.Range))
+                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(E2.Range) && minion != null)
                     {
                         E2.CastOnUnit(minion);
                     }
-                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q.Range))
+                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(Q.Range) && minion != null)
                     {
                         {
                             R.Cast();
                         }
                     }
-                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(W2.Range))
+                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(W2.Range) && minion != null)
                     {
                         {
                             R.Cast();

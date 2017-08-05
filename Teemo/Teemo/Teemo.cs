@@ -30,7 +30,7 @@
             Q = new Spell(SpellSlot.Q, 675);
             W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, Player.AttackRange);
-            R = new Spell(SpellSlot.R, 400f + new[] { 0, 250, 250 } [Player.SpellBook.GetSpell(SpellSlot.R).Level - 1]);
+            R = new Spell(SpellSlot.R, 200f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level);
             R.SetSkillshot(1.0f, 60f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
         }
 

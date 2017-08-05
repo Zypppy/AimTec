@@ -127,7 +127,7 @@
             }
             if (Player.GetSpell(SpellSlot.R).Level > 0)
             {
-                R.Range = 400f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
+                R.Range = 150f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
         }
 

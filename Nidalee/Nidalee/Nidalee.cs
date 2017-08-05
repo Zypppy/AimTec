@@ -398,7 +398,7 @@
             {
 
 
-                if (manapercent < Player.ManaPercent())
+                if (Player.ManaPercent() >= manapercent)
                 {
                     if (useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(Q.Range))
                     {

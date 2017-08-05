@@ -396,7 +396,10 @@
 
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
-
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                {
+                    return;
+                }
 
                 if (Player.ManaPercent() >= manapercent)
                 {

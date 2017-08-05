@@ -195,7 +195,7 @@
                     Q.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range))
+            if (R.Ready && useR && target.IsValidTarget(450 + 200f * Player.SpellBook.GetSpell(SpellSlot.R).Level))
             {
                 if (target != null)
                 {

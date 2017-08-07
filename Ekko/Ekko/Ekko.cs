@@ -148,7 +148,7 @@
                     Q.Cast(target);
                 }
             }
-            bool autoR = Menu["misc"]["autoR"].Enabled;
+            bool autoR = Menu["misc"]["autor"].Enabled;
             float hpR = Menu["misc"]["minhp"].As<MenuSlider>().Value;
             if (R.Ready && autoR && Player.HealthPercent() <= hpR)
             {

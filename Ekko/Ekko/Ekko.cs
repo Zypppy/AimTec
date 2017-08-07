@@ -61,6 +61,7 @@
             var MiscMenu = new Menu("misc", "Misc");
             {
                 MiscMenu.Add(new MenuBool("autoq", "Auto Q on CC"));
+                MiscMenu.Add(new MenuSlider("minhp", "Min hp to Use R", 20, 0, 100));
             }
             Menu.Add(MiscMenu);
 
@@ -146,7 +147,11 @@
                     Q.Cast(target);
                 }
             }
-           
+            float hpR = Menu["misc"]["minhp"].As<MenuSlider>().Value;
+            if (R.Ready && Player.HealthPercent() <= hpR)
+            {
+                R.Cast();
+            }
         }
 
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,

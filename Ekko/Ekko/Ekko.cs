@@ -27,7 +27,7 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 600f);
+            Q = new Spell(SpellSlot.Q, 750f);
             Q.SetSkillshot(0.66f, 60f, 1200f, false, SkillshotType.Line, false, HitChance.High);
             W = new Spell(SpellSlot.W, 1600f);
             W.SetSkillshot(3.3f, 375f, 1650f, false, SkillshotType.Circle, false, HitChance.Medium);

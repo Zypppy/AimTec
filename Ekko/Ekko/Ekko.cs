@@ -46,7 +46,7 @@
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("minrh", "Min enemies to Use R", 0, 0, 5));
+                ComboMenu.Add(new MenuSlider("minrh", "Min enemies to Use R", 0, 1, 5));
             }
             Menu.Add(ComboMenu);
 

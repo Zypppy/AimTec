@@ -177,7 +177,7 @@
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(300f))
                 {
-                    R.Cast();
+                    R.Cast(bestTarget);
                 }
             }
         }
@@ -239,11 +239,11 @@
                     E.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR.CountEnemyHeroesInRange(R.Range - 50) >= hitR)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR.CountEnemyHeroesInRange(300) >= hitR)
             {
                 if (target != null)
                 {
-                    R.Cast();
+                    R.Cast(target);
                 }
             }
       

@@ -43,15 +43,39 @@
                 ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
-
             }
             Menu.Add(ComboMenu);
+
+            var WhitelistMenu = new Menu("qwhitelist", "Q Whitelist");
+            {
+              if (GameObjects.EnemyHeroes.Any())
+              {
+                foreach (var enemy in GameObjects.EnemyHeroes)
+                {
+                 WhitelistMenu.Add(new MenuBool(enemy.ChampionName.ToLower(),
+                 "Use for: " + enemy.ChampionName));
+                }
+              }
+              else
+              {
+              WhitelistMenu.Add(new MenuSeperator("separaator", "No enemies found."));
+              }
+            }
+            Menu.Add(WhitelistMenu);
 
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Q"));
             }
             Menu.Add(KSMenu);
+
+            var ItemMenu = new Menu("items", "Items In Combo");
+            {
+                ItemMenu.Add(new MenuBool("usecutlass", "Use Bilgewater Cutlass"));
+                ItemMenu.Add(new MenuBool("usegunblade", "Use Hextech Gunblade"));
+                ItemMenu.Add(new MenuSlider("gunbladeslider", "Use Gunblade when enemy HP% is less than:", 70, 0, 100));
+            }
+            Menu.Add(ItemMenu);
 
             var miscmenu = new Menu("misc", "Misc");
             {

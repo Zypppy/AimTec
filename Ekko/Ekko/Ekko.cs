@@ -54,7 +54,7 @@
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Q"));
                 KSMenu.Add(new MenuBool("kr", "Killsteal with R"));
-                KSMenu.Add(new MenuSlider("minrhks", "Min enemies to Use R KS", 0, 0, 5));
+                KSMenu.Add(new MenuSlider("minrhks", "Min enemies to Use R KS", 0, 1, 5));
             }
             Menu.Add(KSMenu);
 
@@ -173,7 +173,7 @@
             {
                 var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
-                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(300f) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
+                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(250f) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(R.Range))
                 {

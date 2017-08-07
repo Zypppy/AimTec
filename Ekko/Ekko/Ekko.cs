@@ -173,7 +173,7 @@
             {
                 var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
-                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(R.Range - 50) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
+                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(300f) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(300f))
                 {

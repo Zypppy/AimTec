@@ -177,7 +177,7 @@
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(300f))
                 {
-                    R.Cast(bestTarget);
+                    R.Cast();
                 }
             }
         }
@@ -210,6 +210,8 @@
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
+            float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
             var target = GetBestEnemyHeroTargetInRange(W.Range);
 
             if (!target.IsValidTarget())
@@ -237,11 +239,11 @@
                     E.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= Menu["combo"]["minrh"].As<MenuSlider>().Value)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR.CountEnemyHeroesInRange(R.Range - 50) >= hitR)
             {
                 if (target != null)
                 {
-                    R.Cast(target);
+                    R.Cast();
                 }
             }
       

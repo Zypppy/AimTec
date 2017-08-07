@@ -71,7 +71,7 @@
             Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
-            Console.WriteLine("Morgana by Zypppy - Loaded");
+            Console.WriteLine("Teemo by Zypppy - Loaded");
         }
 
         private void Render_OnPresent()

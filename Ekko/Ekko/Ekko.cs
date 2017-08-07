@@ -32,7 +32,7 @@
             W = new Spell(SpellSlot.W, 1600f);
             W.SetSkillshot(3.3f, 375f, 1650f, false, SkillshotType.Circle, false, HitChance.Medium);
             E = new Spell(SpellSlot.E, 450);
-            E.SetSkillshot(0.5f, 60f, 500f, false, SkillshotType.Line, false, HitChance.Medium);
+            E.SetSkillshot(0.5f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.None);
             R = new Spell(SpellSlot.R, 1600f);
             R.SetSkillshot(0.333f, 350f, 1650f, false, SkillshotType.Circle, false, HitChance.High);
         }

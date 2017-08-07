@@ -108,7 +108,7 @@
             {
                 if (EkkoR != null)
                 {
-                    Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
+                    Render.Circle(EkkoR.Position, 350, 40, Color.DeepPink);
                 }
             }
         }

@@ -108,7 +108,7 @@
             {
                 if (EkkoR != null)
                 {
-                    Render.Circle(EkkoR.Position, 300, 40, Color.DeepPink);
+                    Render.Circle(EkkoR.Position, 350, 40, Color.DeepPink);
                 }
             }
         }
@@ -173,7 +173,7 @@
             {
                 var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
-                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(250f) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
+                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(350) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(R.Range))
                 {
@@ -238,7 +238,7 @@
                     E.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && target.CountEnemyHeroesInRange(300) >= hitR)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && target.CountEnemyHeroesInRange(350) >= hitR)
             {
                 if (target != null)
                 {

@@ -211,7 +211,6 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
             var target = GetBestEnemyHeroTargetInRange(W.Range);
 
             if (!target.IsValidTarget())
@@ -239,7 +238,7 @@
                     E.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR.CountEnemyHeroesInRange(300) >= hitR)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && target.CountEnemyHeroesInRange(300) >= hitR)
             {
                 if (target != null)
                 {

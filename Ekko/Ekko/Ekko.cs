@@ -29,10 +29,10 @@
         {
             Q = new Spell(SpellSlot.Q, 800f);
             Q.SetSkillshot(0.25f, 60f, 1200f, false, SkillshotType.Line, false, HitChance.High);
-            W = new Spell(SpellSlot.W, 1600f);
+            W = new Spell(SpellSlot.W, 1800f);
             W.SetSkillshot(3.3f, 375f, 1650f, false, SkillshotType.Circle, false, HitChance.Medium);
             E = new Spell(SpellSlot.E, 600f);
-            E.SetSkillshot(0.25f, 60f, 1800f, false, SkillshotType.Line, false, HitChance.Low);
+            E.SetSkillshot(0.25f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.Low);
             R = new Spell(SpellSlot.R, 1600f);
             R.SetSkillshot(0.333f, 350f, 1650f, false, SkillshotType.Circle, false, HitChance.High);
         }
@@ -86,7 +86,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.IsAlly && o.Name == "EkkoR");
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.IsAlly && o.Name == "Ekko_R_TrailEnd.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 

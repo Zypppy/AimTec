@@ -175,9 +175,9 @@
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
                 if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(300f) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
-                    bestTarget.IsValidTarget(300f))
+                    bestTarget.IsValidTarget(R.Range))
                 {
-                    R.Cast(bestTarget);
+                    R.Cast();
                 }
             }
         }

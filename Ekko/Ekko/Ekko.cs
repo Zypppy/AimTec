@@ -61,6 +61,7 @@
             var MiscMenu = new Menu("misc", "Misc");
             {
                 MiscMenu.Add(new MenuBool("autoq", "Auto Q on CC"));
+                MiscMenu.Add(new MenuBool("autor", "Auto R Low Hp"));
                 MiscMenu.Add(new MenuSlider("minhp", "Min hp to Use R", 20, 0, 100));
             }
             Menu.Add(MiscMenu);
@@ -147,8 +148,9 @@
                     Q.Cast(target);
                 }
             }
+            bool autoR = Menu["misc"]["autoR"].Enabled;
             float hpR = Menu["misc"]["minhp"].As<MenuSlider>().Value;
-            if (R.Ready && Player.HealthPercent() <= hpR)
+            if (R.Ready && autoR && Player.HealthPercent() <= hpR)
             {
                 R.Cast();
             }

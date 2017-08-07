@@ -217,7 +217,7 @@
                     Q.Cast(target);
                 }
             }
-            if (Q.Ready && useQ2 && target.IsValidTarget(Player.AttackRange))
+            if (Q.Ready && useQ2 && target.IsValidTarget(Player.AttackRange) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
             {
                 if (target != null)
                 {

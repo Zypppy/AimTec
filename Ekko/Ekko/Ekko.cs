@@ -104,13 +104,13 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            if (R.Ready && Menu["drawings"]["drawr"].Enabled)
-            {
-                if (EkkoR != null)
-                {
-                    Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
-                }
-            }
+            //if (R.Ready && Menu["drawings"]["drawr"].Enabled)
+            //{
+              //  if (EkkoR != null)
+                //{
+                  //  Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
+                //}
+            //}
         }
 
         private void Game_OnUpdate()
@@ -134,7 +134,7 @@
             }
             Killsteal();
 
-            if (R.Ready && Menu["misc"]["autoq"].Enabled)
+            if (Q.Ready && Menu["misc"]["autoq"].Enabled)
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
@@ -171,10 +171,10 @@
             if (R.Ready &&
                Menu["killsteal"]["kr"].Enabled)
             {
-                var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
-                if (bestTarget != null &&
-                    Player.GetSpellDamage(bestTarget, SpellSlot.Q) >= bestTarget.Health &&
-                    bestTarget.IsValidTarget(Q.Range))
+                var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
+                if (bestTarget != null && Player.CountEnemyHeroesInRange(R.Range - 50) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
+                    Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
+                    bestTarget.IsValidTarget(R.Range))
                 {
                     R.Cast(bestTarget);
                 }
@@ -206,76 +206,44 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useqa"].Enabled;
+            bool useW = Menu["combo"]["usew"].Enabled;
+            bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
-            float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var target = GetBestEnemyHeroTargetInRange(W.Range);
 
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
                 if (target != null)
                 {
                     Q.Cast(target);
                 }
             }
-            if (Q.Ready && useQ2 && target.IsValidTarget(Player.AttackRange) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
+            if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
                 if (target != null)
                 {
-                    Q.Cast(target);
+                    W.Cast(target);
                 }
             }
-            if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            {
+                if (target != null)
+                {
+                    E.Cast(target);
+                }
+            }
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= Menu["combo"]["minrh"].As<MenuSlider>().Value)
             {
                 if (target != null)
                 {
                     R.Cast(target);
                 }
             }
-            var ItemCutlass = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "BilgewaterCutlass");
-            if (ItemCutlass != null)
-            {
-                Spell Cutlass = new Spell(ItemCutlass.Slot, 550);
-                if (Menu["items"]["usecutlass"].Enabled && Cutlass.Ready)
-                {
-                    var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Cutlass.Range, true) && !t.IsInvulnerable);
-                    foreach (var enemy in Enemies.Where(e =>
-                            // TODO: CHANGE LOGICS
-                            e.Health <= Player.Health && Player.CountEnemyHeroesInRange(1000) <= 1 ||
-                            e.IsFacing(Player) && e.Health >= Player.Health &&
-                            Player.CountEnemyHeroesInRange(1000) <= 1 ||
-                            e.TotalAttackDamage >= 100 &&
-                            Player.CountEnemyHeroesInRange(1000) <= 2 ||
-                            e.IsFacing(Player) && e.Health >= Player.Health &&
-                            Player.CountEnemyHeroesInRange(1000) >= 3 ||
-                            e.TotalAttackDamage >= Player.TotalAttackDamage &&
-                            Player.CountEnemyHeroesInRange(1000) <= 3))
-                    {
-
-                        Cutlass.Cast(enemy);
-                    }
-                }
-            }
-            var ItemGunblade = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "HextechGunblade");
-            if (ItemGunblade != null)
-            {
-                Spell Gunblade = new Spell(ItemGunblade.Slot, 700);
-                if (Menu["items"]["usegunblade"].Enabled && Gunblade.Ready)
-                {
-                    var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Gunblade.Range, true) && !t.IsInvulnerable);
-
-                    foreach (var enemy in Enemies.Where(
-                        e => e.Health <= e.MaxHealth / 100 * (Menu["items"]["gunbladeslider"].Value)))
-                    {
-                        Gunblade.Cast(enemy);
-                    }
-                }
-            }
-
+      
         }
 
     }

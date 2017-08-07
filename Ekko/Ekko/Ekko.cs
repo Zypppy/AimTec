@@ -86,7 +86,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_R_TrailEnd.troy");
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 

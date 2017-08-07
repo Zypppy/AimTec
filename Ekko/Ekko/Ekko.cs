@@ -149,7 +149,10 @@
             var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_R_TrailEnd.troy");
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
-                R.Range = 350;
+                if (EkkoR != null)
+                {
+                    Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
+                }
             }
 
            

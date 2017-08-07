@@ -50,11 +50,10 @@
             {
               if (GameObjects.EnemyHeroes.Any())
               {
-                foreach (var enemy in GameObjects.EnemyHeroes)
+                foreach (var target in GameObjects.EnemyHeroes)
                 {
-                 WhitelistMenu.Add(new MenuBool(enemy.ChampionName.ToLower(),
-                 "Use for: " + enemy.ChampionName));
-                }
+                 WhitelistMenu.Add(new MenuBool(target.ChampionName.ToLower(), "Use Q: " + target.ChampionName));
+                    }
               }
               else
               {
@@ -211,7 +210,7 @@
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
             {
                 if (target != null)
                 {

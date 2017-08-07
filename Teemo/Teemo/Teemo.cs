@@ -250,11 +250,27 @@
                             e.TotalAttackDamage >= Player.TotalAttackDamage &&
                             Player.CountEnemyHeroesInRange(1000) <= 3))
                     {
-                        
+
                         Cutlass.Cast(enemy);
                     }
                 }
             }
+            var ItemGunblade = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "HextechGunblade");
+            if (ItemGunblade != null)
+            {
+                Spell Gunblade = new Spell(ItemGunblade.Slot, 700);
+                if (Menu["items"]["usegunblade"].Enabled && Gunblade.Ready)
+                {
+                    var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Gunblade.Range, true) && !t.IsInvulnerable);
+
+                        foreach (var enemy in Enemies.Where(
+                            e => e.Health <= e.MaxHealth / 100 * (Menu["items"]["gunbladeslider"].Value)))
+                        {
+                            Gunblade.Cast(enemy);
+                        }
+                }
+            }
+                
         }
 
     }

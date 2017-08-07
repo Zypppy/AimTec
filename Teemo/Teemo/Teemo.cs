@@ -42,6 +42,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
+                ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
 
             }
             Menu.Add(ComboMenu);
@@ -71,7 +72,7 @@
             Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
-            Console.WriteLine("Morgana by Zypppy - Loaded");
+            Console.WriteLine("Teemo by Zypppy - Loaded");
         }
 
         private void Render_OnPresent()
@@ -179,6 +180,7 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useqa"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
+            float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -199,7 +201,7 @@
                     Q.Cast(target);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range))
+            if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
             {
                 if (target != null)
                 {

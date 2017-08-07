@@ -86,7 +86,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.IsAlly && o.Name == "Ekko_Base_R_TrailEnd.troy");
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.IsAlly && o.Name == "EkkoR");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
@@ -104,13 +104,13 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            //if (R.Ready && Menu["drawings"]["drawr"].Enabled)
-            //{
-              //  if (EkkoR != null)
-                //{
-                  //  Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
-                //}
-            //}
+            if (R.Ready && Menu["drawings"]["drawr"].Enabled)
+            {
+                if (EkkoR != null)
+                {
+                    Render.Circle(EkkoR.Position, R.Range, 40, Color.DeepPink);
+                }
+            }
         }
 
         private void Game_OnUpdate()

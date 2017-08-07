@@ -146,6 +146,12 @@
                     Q.Cast(target);
                 }
             }
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_R_TrailEnd.troy");
+            if (R.Ready && Menu["drawings"]["drawr"].Enabled)
+            {
+                R.Range = 350;
+            }
+
            
         }
 

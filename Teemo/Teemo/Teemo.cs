@@ -231,6 +231,30 @@
                     R.Cast(target);
                 }
             }
+            var ItemCutlass = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "BilgewaterCutlass");
+            if (ItemCutlass != null)
+            {
+                Spell Cutlass = new Spell(ItemCutlass.Slot, 550);
+                if (Menu["items"]["usecutlass"].Enabled && Cutlass.Ready)
+                {
+                    var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Cutlass.Range, true) && !t.IsInvulnerable);
+                    foreach (var enemy in Enemies.Where(e =>
+                            // TODO: CHANGE LOGICS
+                            e.Health <= Player.Health && Player.CountEnemyHeroesInRange(1000) <= 1 ||
+                            e.IsFacing(Player) && e.Health >= Player.Health &&
+                            Player.CountEnemyHeroesInRange(1000) <= 1 ||
+                            e.TotalAttackDamage >= 100 &&
+                            Player.CountEnemyHeroesInRange(1000) <= 2 ||
+                            e.IsFacing(Player) && e.Health >= Player.Health &&
+                            Player.CountEnemyHeroesInRange(1000) >= 3 ||
+                            e.TotalAttackDamage >= Player.TotalAttackDamage &&
+                            Player.CountEnemyHeroesInRange(1000) <= 3))
+                    {
+                        
+                        Cutlass.Cast(enemy);
+                    }
+                }
+            }
         }
 
     }

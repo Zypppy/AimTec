@@ -60,7 +60,7 @@
             var LaneClearMenu = new Menu("lclear", "Lane Clear");
             {
                 LaneClearMenu.Add(new MenuBool("useql", "Use Q"));
-                LaneClearMenu.Add(new MenuSlider("minmq", "Minimum Minions To Hit", 1, 0, 10));
+                LaneClearMenu.Add(new MenuSlider("minmq", "Minimum Minions To Hit", 1, 1, 10));
                 LaneClearMenu.Add(new MenuSlider("minmanaq", "Minimum Mana To Farm", 20, 0, 100));
             }
             Menu.Add(LaneClearMenu);
@@ -68,13 +68,13 @@
             var JungleClearMenu = new Menu("jclear", "Jungle Clear");
             {
                 JungleClearMenu.Add(new MenuBool("useqj", "Use Q"));
-                JungleClearMenu.Add(new MenuSlider("minmq", "Minimum Monsters To Hit", 1, 0, 5));
+                JungleClearMenu.Add(new MenuSlider("minmq", "Minimum Monsters To Hit", 1, 1, 5));
                 JungleClearMenu.Add(new MenuSlider("minmanaq", "Minimum Mana To Jungle Q", 20, 0, 100));
                 JungleClearMenu.Add(new MenuBool("usewj", "Use W"));
-                JungleClearMenu.Add(new MenuSlider("minmw", "Minimum Monsters To Hit", 1, 0, 5));
+                JungleClearMenu.Add(new MenuSlider("minmw", "Minimum Monsters To Hit", 1, 1, 5));
                 JungleClearMenu.Add(new MenuSlider("minmanaw", "Minimum Mana To Jungle W", 20, 0, 100));
                 JungleClearMenu.Add(new MenuBool("useej", "Use E"));
-                JungleClearMenu.Add(new MenuSlider("minmanah", "Minimum Mana To Jungle E", 20, 0, 100));
+                JungleClearMenu.Add(new MenuSlider("minmanae", "Minimum Mana To Jungle E", 20, 0, 100));
             }
             Menu.Add(JungleClearMenu);
 
@@ -161,7 +161,7 @@
                     break;
                 case OrbwalkingMode.Laneclear:
                     OnLaneClear();
-                    //OnJungleClear();
+                    OnJungleClear();
                     break;
 
             }
@@ -350,6 +350,45 @@
                 }
             }
 
+        }
+
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
+        {
+            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
+        {
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range))
+                .ToList();
+        }
+        private void OnJungleClear()
+        {
+            foreach (var jungle in GetGenericJungleMinionsTargetsInRange(Q.Range))
+            {
+                bool useQ = Menu["jclear"]["useqj"].Enabled;
+                float Qhit = Menu["jclear"]["minmq"].As<MenuSlider>().Value;
+                float Qmana = Menu["jclear"]["minmanaq"].As<MenuSlider>().Value;
+                bool useW = Menu["jclear"]["usewj"].Enabled;
+                float Whit = Menu["jclear"]["minmw"].As<MenuSlider>().Value;
+                float Wmana = Menu["jclear"]["minmanaw"].As<MenuSlider>().Value;
+                bool useE = Menu["jclear"]["useej"].Enabled;
+                float Emana = Menu["jclear"]["minmanae"].As<MenuSlider>().Value;
+
+                if (useQ && Player.ManaPercent() >= Qmana && jungle.IsValidTarget(Q.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(Q.Range, false, false, jungle.ServerPosition)) >= Qhit && jungle != null)
+                {
+                    Q.CastOnUnit(jungle);
+                }
+                if (useW && Player.ManaPercent() >= Wmana && jungle.IsValidTarget(W.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(W.Range, false, false, jungle.ServerPosition)) >= Whit && jungle != null)
+                {
+                    W.CastOnUnit(jungle);
+                }
+                if (useE && Player.ManaPercent() >= Emana && jungle.IsValidTarget(E.Range) && jungle != null)
+                {
+                    E.CastOnUnit(jungle);
+                }
+            }
         }
     }
 }

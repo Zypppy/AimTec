@@ -160,8 +160,8 @@
                     OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //LaneClear();
-                    //JungleClear();
+                    OnLaneClear();
+                    //OnJungleClear();
                     break;
 
             }
@@ -187,11 +187,17 @@
             }
         }
 
+
+
+
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
         {
             return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
         }
+
+
+
 
         private void Killsteal()
         {
@@ -220,6 +226,9 @@
             }
         }
 
+
+
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -240,6 +249,9 @@
             }
             return null;
         }
+
+
+
 
         private void OnCombo()
         {
@@ -286,13 +298,17 @@
             }
 
         }
+
+
+
+
         private void OnHarass()
         {
 
             bool useQ = Menu["harass"]["useqh"].Enabled;
             float manaQ = Menu["harass"]["hmana"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            
+
 
             if (!target.IsValidTarget())
             {
@@ -305,8 +321,35 @@
                     Q.Cast(target);
                 }
             }
-
         }
 
+
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            bool useQ = Menu["lclear"]["useql"].Enabled;
+            float QHit = Menu["lclear"]["minmq"].As<MenuSlider>().Value;
+            float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
+            if (manaQ <= Player.ManaPercent() && useQ)
+            {
+                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+                {
+                    if (minion.IsValidTarget(Q.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(Q.Range, false, false, minion.ServerPosition)) >= QHit && minion != null)
+                    {
+                        Q.Cast(minion);
+                    }
+                }
+            }
+
+        }
     }
 }

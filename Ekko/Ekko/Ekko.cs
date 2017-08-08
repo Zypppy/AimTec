@@ -50,6 +50,34 @@
             }
             Menu.Add(ComboMenu);
 
+            var HarassMenu = new Menu("harass", "Harass");
+            {
+                HarassMenu.Add(new MenuBool("useqh", "Use Q"));
+                HarassMenu.Add(new MenuSlider("hmana", "Minimum Mana To Harass", 20, 0, 100));
+            }
+            Menu.Add(HarassMenu);
+
+            var LaneClearMenu = new Menu("lclear", "Lane Clear");
+            {
+                LaneClearMenu.Add(new MenuBool("useql", "Use Q"));
+                LaneClearMenu.Add(new MenuSlider("minmq", "Minimum Minions To Hit", 1, 0, 10));
+                LaneClearMenu.Add(new MenuSlider("minmanaq", "Minimum Mana To Farm", 20, 0, 100));
+            }
+            Menu.Add(LaneClearMenu);
+
+            var JungleClearMenu = new Menu("jclear", "Jungle Clear");
+            {
+                JungleClearMenu.Add(new MenuBool("useqj", "Use Q"));
+                JungleClearMenu.Add(new MenuSlider("minmq", "Minimum Monsters To Hit", 1, 0, 5));
+                JungleClearMenu.Add(new MenuSlider("minmanaq", "Minimum Mana To Jungle Q", 20, 0, 100));
+                JungleClearMenu.Add(new MenuBool("usewj", "Use W"));
+                JungleClearMenu.Add(new MenuSlider("minmw", "Minimum Monsters To Hit", 1, 0, 5));
+                JungleClearMenu.Add(new MenuSlider("minmanaw", "Minimum Mana To Jungle W", 20, 0, 100));
+                JungleClearMenu.Add(new MenuBool("useej", "Use E"));
+                JungleClearMenu.Add(new MenuSlider("minmanah", "Minimum Mana To Jungle E", 20, 0, 100));
+            }
+            Menu.Add(JungleClearMenu);
+
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Q"));

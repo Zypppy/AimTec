@@ -157,8 +157,11 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
+                    //LaneClear();
+                    //JungleClear();
                     break;
 
             }
@@ -281,7 +284,28 @@
                     R.Cast();
                 }
             }
-      
+
+        }
+        private void OnHarass()
+        {
+
+            bool useQ = Menu["harass"]["useqh"].Enabled;
+            float manaQ = Menu["harass"]["hmana"].As<MenuSlider>().Value;
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
+            {
+                if (target != null)
+                {
+                    Q.Cast(target);
+                }
+            }
+
         }
 
     }

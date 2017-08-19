@@ -80,7 +80,6 @@
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autor", "Auto R on CC"));
-                miscmenu.Add(new MenuBool("antigap", "Use Q On GapClosers"));
             }
             Menu.Add(miscmenu);
 
@@ -275,16 +274,5 @@
             }
 
         }
-        public void OnGapcloser(Obj_AI_Hero target, GapcloserArgs Args)
-        {
-
-
-            if (target != null && Args.EndPosition.Distance(Player) < Q.Range)
-            {
-                Q.Cast(target);
-            }
-
-        }
-
     }
 }

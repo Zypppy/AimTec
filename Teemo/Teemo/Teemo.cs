@@ -43,6 +43,8 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
+                ComboMenu.Add(new MenuBool("usew", "Use W In Combo"));
+                ComboMenu.Add(new MenuSlider("minmanaw", "Minimum Mana To Use W", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
             }
@@ -217,8 +219,10 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useqa"].Enabled;
+            bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
+            float manaw = Menu["combo"]["minmanaw"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -239,6 +243,14 @@
                     Q.Cast(target);
                 }
             }
+            if (W.Ready && useW && target.IsValidTarget(Q.Range) && manaw <= Player.ManaPercent())
+            {
+                if (target != null)
+                {
+                    W.Cast();
+                }
+            }
+
             if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
             {
                 if (target != null)

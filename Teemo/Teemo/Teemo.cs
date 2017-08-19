@@ -16,9 +16,10 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
-    using Gapclosers;
+    using QGap;
 
     using Spell = Aimtec.SDK.Spell;
+    using Aimtec.SDK.Events;
 
     internal class Teemo
     {
@@ -88,16 +89,28 @@
                 DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
             }
-
             Menu.Add(DrawMenu);
+            QGap.Gapcloser.Attach(Menu, "Q Anti- GapClose");
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            Gapcloser.OnGapcloser += OnGapcloser;
 
             LoadSpells();
             Console.WriteLine("Teemo by Zypppy - Loaded");
         }
+
+        private void OnGapcloser(Obj_AI_Hero target, QGap.GapcloserArgs Args)
+        {
+            if (target != null && Args.EndPosition.Distance(Player) < Q.Range && Q.Ready && target.IsDashing() && target.IsValidTarget(Q.Range))
+            {
+
+                Q.Cast(target);
+
+            }
+        }
+        
 
         private void Render_OnPresent()
         {

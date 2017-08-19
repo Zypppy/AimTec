@@ -50,10 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameObjects.cs" />
-    <Compile Include="GapClosers.cs" />
     <Compile Include="Invulnerable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Gapcloser.cs" />
     <Compile Include="Teemo.cs" />
   </ItemGroup>
   <ItemGroup>

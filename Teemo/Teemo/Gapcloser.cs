@@ -955,9 +955,9 @@
                     {
                         new MenuBool("Gapcloser" + enemy.ChampionName.ToLower() + "Enabled", "Enabled"),
                         new MenuSlider("Gapcloser" + enemy.ChampionName.ToLower() + "Distance",
-                                "If Target Distance To Player <= x", 550, 1, 700),
+                                "If Target Distance To Player <= x", 550, 1, 800),
                             new MenuSlider("Gapcloser" + enemy.ChampionName.ToLower() + "HPercent",
-                                "When Player HealthPercent <= x%", 100, 1, 101)
+                                "When Player HealthPercent <= x%", 100, 1, 100)
                     };
                 Menu.Add(heroMenu);
                 foreach (var spell in Spells.Where(x => x.ChampionName == enemy.ChampionName))

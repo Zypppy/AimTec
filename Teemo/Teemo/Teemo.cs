@@ -16,6 +16,7 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+    using Gapclosers;
 
     using Spell = Aimtec.SDK.Spell;
 
@@ -79,6 +80,7 @@
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autor", "Auto R on CC"));
+                miscmenu.Add(new MenuBool("antigap", "Use Q On GapClosers"));
             }
             Menu.Add(miscmenu);
 
@@ -153,6 +155,7 @@
             {
                 R.Range = 150f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
+
         }
 
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
@@ -263,14 +266,24 @@
                 {
                     var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Gunblade.Range, true) && !t.IsInvulnerable);
 
-                        foreach (var enemy in Enemies.Where(
-                            e => e.Health <= e.MaxHealth / 100 * (Menu["items"]["gunbladeslider"].Value)))
-                        {
-                            Gunblade.Cast(enemy);
-                        }
+                    foreach (var enemy in Enemies.Where(
+                        e => e.Health <= e.MaxHealth / 100 * (Menu["items"]["gunbladeslider"].Value)))
+                    {
+                        Gunblade.Cast(enemy);
+                    }
                 }
             }
-                
+
+        }
+        public void OnGapcloser(Obj_AI_Hero target, GapcloserArgs Args)
+        {
+
+
+            if (target != null && Args.EndPosition.Distance(Player) < Q.Range)
+            {
+                Q.Cast(target);
+            }
+
         }
 
     }

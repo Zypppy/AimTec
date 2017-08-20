@@ -16,8 +16,10 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+    using QGap;
 
     using Spell = Aimtec.SDK.Spell;
+    using Aimtec.SDK.Events;
 
     internal class Morgana
     {
@@ -69,13 +71,32 @@
             }
 
             Menu.Add(DrawMenu);
+            QGap.Gapcloser.Attach(Menu, "Q and E Anti-GapCloser");
+
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            Gapcloser.OnGapcloser += OnGapcloser;
 
             LoadSpells();
             Console.WriteLine("Morgana by Zypppy - Loaded");
+        }
+
+        private void OnGapcloser(Obj_AI_Hero target, QGap.GapcloserArgs Args)
+        {
+            if (target != null && Args.EndPosition.Distance(Player) < Q.Range && Q.Ready && target.IsDashing() && target.IsValidTarget(Q.Range))
+            {
+
+                Q.Cast(target);
+
+            }
+            if (target != null && Args.EndPosition.Distance(Player) < E.Range && E.Ready && target.IsDashing() && target.IsValidTarget(E.Range))
+            {
+
+                E.Cast();
+
+            }
         }
 
         private void Render_OnPresent()

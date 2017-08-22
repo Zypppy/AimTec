@@ -50,7 +50,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing/NotWorkingForNow"));
+                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing"));
                 ComboMenu.Add(new MenuSlider("enemiese", "Use Second E When Enemies <", 3, 1, 5));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));

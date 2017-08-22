@@ -141,7 +141,7 @@
             }
             if (Menu["drawings"]["drawepath"].Enabled)
             {
-                if (LissandraEEnd != null)
+                if (LissandraEPath != null)
                 {
                     Render.Circle(LissandraEPath.Position, 350, 40, Color.DeepPink);
                 }

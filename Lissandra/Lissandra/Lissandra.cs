@@ -107,7 +107,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var LissandraE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lissandra_Base_E_Cast.troy");
+            var LissandraE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "LissandraEMissile.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 

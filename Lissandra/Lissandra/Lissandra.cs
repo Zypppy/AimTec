@@ -40,6 +40,7 @@
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
+            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.Low);
         }
         public Lissandra()
         {
@@ -50,6 +51,7 @@
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing/NotWorkingForNow"));
+                ComboMenu.Add(new MenuSlider("enemiese", "Use Second E When Enemies <", 3, 1, 5));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
                 ComboMenu.Add(new MenuSlider("defr", "Self R If Enemy >", 3, 1, 5));
@@ -275,6 +277,8 @@
         {
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useEGap = Menu["combo"]["useegap"].Enabled;
+            float aroundE = Menu["combo"]["enemiese"].As<MenuSlider>().Value;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
@@ -310,6 +314,13 @@
                 if (target != null)
                 {
                     E.Cast(target);
+                }
+            }
+            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name != "LissandraE" && missiles.CountEnemyHeroesInRange(450 - 50) <= aroundE)
+            {
+                if (target != null)
+                {
+                    E.Cast();
                 }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")

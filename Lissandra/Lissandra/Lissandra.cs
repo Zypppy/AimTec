@@ -316,11 +316,11 @@
                     E.Cast(target);
                 }
             }
-            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E.Width) < aroundE)
+            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) < aroundE)
             {
                 if (target != null)
                 {
-                    E.Cast();
+                    E.Cast(target);
                 }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")

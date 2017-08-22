@@ -92,7 +92,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += OnGapcloser;
-            GameObject.OnCreate += OnCreate;
+            //GameObject.OnCreate += OnCreate;
 
             LoadSpells();
             Console.WriteLine("Lissandra by Zypppy - Loaded");
@@ -107,13 +107,13 @@
             }
         }
 
-        public void OnCreate(GameObject obj)
-        {
-            if (obj != null && obj.IsValid)
-            {
-                Console.WriteLine(obj.Name);
-            }
-        }
+        //public void OnCreate(GameObject obj)
+        //{
+        //    if (obj != null && obj.IsValid)
+        //    {
+        //        Console.WriteLine(obj.Name);
+        //    }
+        //}
         private void Render_OnPresent()
         {
             Vector2 maybeworks;

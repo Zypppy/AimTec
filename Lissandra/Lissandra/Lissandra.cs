@@ -299,7 +299,7 @@
             {
                 if (target != null)
                 {
-                    Q.Cast(target);
+                    Q2.Cast(target);
                 }
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))
@@ -309,18 +309,18 @@
                     W.Cast();
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
                 if (target != null)
                 {
                     E.Cast(target);
                 }
             }
-            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) < aroundE)
+            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(400) < aroundE)
             {
                 if (target != null)
                 {
-                    E.Cast(target);
+                    E2.Cast(target);
                 }
             }
             

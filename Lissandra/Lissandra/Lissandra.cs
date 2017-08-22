@@ -50,7 +50,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing"));
+                ComboMenu.Add(new MenuBool("useegap", "NotWorking Keep Disabled"));
                 ComboMenu.Add(new MenuSlider("enemiese", "Use Second E When Enemies <", 3, 0, 5));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
@@ -316,7 +316,7 @@
                     E.Cast(target);
                 }
             }
-            if (E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(400) <= aroundE)
+            if (E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
             {
                 if (target != null)
                 {

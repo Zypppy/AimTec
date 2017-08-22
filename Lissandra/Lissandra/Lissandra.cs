@@ -316,7 +316,7 @@
                     E.Cast(target);
                 }
             }
-            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name != "LissandraE" && missiles.CountEnemyHeroesInRange(450 - 50) <= aroundE)
+            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name != "LissandraE" && missiles.CountEnemyHeroesInRange(450 - 50) < aroundE)
             {
                 if (target != null)
                 {

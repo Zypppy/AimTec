@@ -26,7 +26,7 @@
         public static Menu Menu = new Menu("Lissandra by Zypppy", "Lissandra by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, Q2, W, E, R;
+        public static Spell Q, Q2, W, E, E2, R;
         private MissileClient missiles;
 
         public void LoadSpells()
@@ -35,6 +35,7 @@
             Q2 = new Spell(SpellSlot.Q, 850);
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 1050);
+            E2 = new Spell(SpellSlot.E, 1050);
             R = new Spell(SpellSlot.R, 700);
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.VeryHigh);
@@ -48,7 +49,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing"));
+                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing/NotWorkingForNow"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
                 ComboMenu.Add(new MenuSlider("defr", "Self R If Enemy >", 3, 1, 5));

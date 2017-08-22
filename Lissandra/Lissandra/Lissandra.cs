@@ -100,11 +100,9 @@
         }
         private void OnGapcloser(Obj_AI_Hero target, WGap.GapcloserArgs Args)
         {
-            if (target != null && Args.EndPosition.Distance(Player) < W.Range && W.Ready && target.IsDashing() && target.IsValidTarget(W.Range))
+            if (target != null && Args.EndPosition.Distance(target) < W.Range && W.Ready && target.IsDashing() && target.IsValidTarget(W.Range))
             {
-
                 W.Cast();
-
             }
         }
 

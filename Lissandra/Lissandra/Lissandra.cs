@@ -40,7 +40,7 @@
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
-            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.Low);
+            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.High);
         }
         public Lissandra()
         {
@@ -323,13 +323,7 @@
                     E.Cast(target);
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")
-            {
-                if (target != null)
-                {
-                    E.Cast(target);
-                }
-            }
+            
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))
             {
                 if (target != null)

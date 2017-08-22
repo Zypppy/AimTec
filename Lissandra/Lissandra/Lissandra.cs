@@ -131,7 +131,7 @@
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
             }
-            if (E.Ready && Menu["drawings"]["drawE"].Enabled)
+            if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
             }

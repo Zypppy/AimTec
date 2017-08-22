@@ -46,6 +46,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
+                ComboMenu.Add(new MenuBool("useegap", "Use Second E For GapClosing"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
                 ComboMenu.Add(new MenuSlider("defr", "Self R If Enemy >", 3, 1, 5));
@@ -79,6 +80,7 @@
                 DrawingsMenu.Add(new MenuBool("drawq2", "Draw Extended Q Range"));
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
+                DrawingsMenu.Add(new MenuBool("drawecircle", "Draw E Circle"));
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
             }
             Menu.Add(DrawingsMenu);
@@ -105,6 +107,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            var LissandraE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lissandra_Base_E_Cast.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
@@ -123,6 +126,13 @@
             if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
+            }
+            if (Menu["drawings"]["drawecircle"].Enabled)
+            {
+                if (LissandraE != null)
+                {
+                    Render.Circle(LissandraE.Position, 350, 40, Color.DeepPink);
+                }
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
@@ -205,6 +215,7 @@
         {
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useE2 = Menu["Combo"]["useegap"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
@@ -235,7 +246,14 @@
                     W.Cast();
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")
+            {
+                if (target != null)
+                {
+                    E.Cast(target);
+                }
+            }
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "LissandraE")
             {
                 if (target != null)
                 {

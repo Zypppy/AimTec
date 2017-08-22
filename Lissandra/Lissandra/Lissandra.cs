@@ -104,7 +104,7 @@
         }
         private void OnGapcloser(Obj_AI_Hero target, WGap.GapcloserArgs Args)
         {
-            if (target != null && Args.EndPosition.Distance(target) < W.Range && W.Ready && target.IsDashing() && target.IsValidTarget(W.Range))
+            if (target != null && Args.EndPosition.Distance(Player) < W.Range && W.Ready && target.IsDashing() && target.IsValidTarget(W.Range))
             {
                 W.Cast();
             }
@@ -318,12 +318,11 @@
             }
             if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(400) < aroundE)
             {
-                if (target != null)
+                if (target != null && missiles != null)
                 {
                     E2.Cast(target);
                 }
             }
-            
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))
             {
                 if (target != null)

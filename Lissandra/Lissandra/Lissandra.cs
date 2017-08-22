@@ -82,7 +82,6 @@
                 DrawingsMenu.Add(new MenuBool("drawq2", "Draw Extended Q Range"));
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
-                DrawingsMenu.Add(new MenuBool("drawecircle", "Draw E End Position"));
                 DrawingsMenu.Add(new MenuBool("drawepath", "Draw E Path"));
 
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
@@ -145,7 +144,6 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var LissandraEEnd = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lissandra_Base_E_End.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 

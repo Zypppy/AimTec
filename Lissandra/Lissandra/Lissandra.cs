@@ -34,8 +34,8 @@
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 1050);
             R = new Spell(SpellSlot.R, 700);
-            Q.SetSkillshot(0.5f, 100, 1300, false, SkillshotType.Line, false, HitChance.VeryHigh);
-            Q2.SetSkillshot(0.5f, 150, 1300, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.5f, 100, 1300, false, SkillshotType.Line, false, HitChance.High);
+            Q2.SetSkillshot(0.5f, 150, 1300, false, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
         }
         public Lissandra()

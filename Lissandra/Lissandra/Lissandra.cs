@@ -55,10 +55,6 @@
             {
                 HarassMenu.Add(new MenuBool("useqh", "Use Q"));
                 HarassMenu.Add(new MenuSlider("qmanah", "Q Harass if Mana % >", 70, 0, 100));
-                HarassMenu.Add(new MenuBool("usewh", "Use W"));
-                HarassMenu.Add(new MenuSlider("wmanah", "W Harass if Mana % >", 70, 0, 100));
-                HarassMenu.Add(new MenuBool("useeh", "Use E"));
-                HarassMenu.Add(new MenuSlider("emanah", "E Harass if Mana % >", 70, 0, 100));
             }
             Menu.Add(HarassMenu);
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
@@ -67,14 +63,13 @@
                 LaneClearMenu.Add(new MenuSlider("qmanalc", "Q LaneClear if Mana % >", 70, 0, 100));
                 LaneClearMenu.Add(new MenuBool("usewlc", "Use W"));
                 LaneClearMenu.Add(new MenuSlider("wmanalc", "W LaneClear if Mana % >", 70, 0, 100));
-                LaneClearMenu.Add(new MenuBool("useelc", "Use E"));
-                LaneClearMenu.Add(new MenuSlider("emanalc", "E LaneClear if Mana % >", 70, 0, 100));
+                LaneClearMenu.Add(new MenuSlider("wmhitlc", "W Minion Hit >", 2, 0, 10));
             }
             Menu.Add(LaneClearMenu);
             var MiscMenu = new Menu("misc", "Misc");
             {
                 MiscMenu.Add(new MenuBool("WGap", "Use W on GapCloser"));
-                MiscMenu.Add(new MenuBool("RInt", "Use R to Interrupt"));
+                //MiscMenu.Add(new MenuBool("RInt", "Use R to Interrupt"));
             }
             Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("ks", "Killsteal");
@@ -101,7 +96,7 @@
             Gapcloser.OnGapcloser += OnGapcloser;
 
             LoadSpells();
-            Console.WriteLine("Teemo by Zypppy - Loaded");
+            Console.WriteLine("Lissandra by Zypppy - Loaded");
         }
         private void OnGapcloser(Obj_AI_Hero target, WGap.GapcloserArgs Args)
         {
@@ -152,14 +147,13 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //OnLaneClear();
+                    OnLaneClear();
                     break;
             }
             Killsteal();
-
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
@@ -266,6 +260,57 @@
                 if (target != null)
                 {
                     R.Cast(Player);
+                }
+            }
+        }
+        private void OnHarass()
+        {
+            bool useQ = Menu["harass"]["useqh"].Enabled;
+            float manaQ = Menu["harass"]["qmanah"].As<MenuSlider>().Value;
+            var target = GetBestEnemyHeroTargetInRange(Q2.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.ManaPercent() >= manaQ)
+            {
+                if (target != null)
+                {
+                    Q.Cast(target);
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            bool useQ = Menu["laneclear"]["useqlc"].Enabled;
+            float manaQ = Menu["laneclear"]["qmanalc"].As<MenuSlider>().Value;
+            bool useW = Menu["laneclear"]["usewlc"].Enabled;
+            float manaW = Menu["laneclear"]["wmanalc"].As<MenuSlider>().Value;
+            float hitW = Menu["laneclear"]["wmhitlc"].As<MenuSlider>().Value;
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q2.Range))
+            {
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
+                {
+                    if (minion != null)
+                    {
+                        Q.Cast(minion);
+                    }
+                }
+                if (W.Ready && useW && Player.ManaPercent() >= manaW && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(W.Range, false, false, minion.ServerPosition)) >= hitW)
+                {
+                    if (minion != null)
+                    {
+                        W.Cast();
+                    }
                 }
             }
         }

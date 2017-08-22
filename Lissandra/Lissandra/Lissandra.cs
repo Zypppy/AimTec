@@ -254,7 +254,7 @@
                     E.Cast(target);
                 }
             }
-            if (R.Ready && useR && Player.HealthPercent() >= RHp && target.IsValidTarget(R.Range))
+            if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))
             {
                 if (target != null)
                 {

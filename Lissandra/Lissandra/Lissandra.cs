@@ -106,7 +106,7 @@
         {
             if (target != null && Args.EndPosition.Distance(Player) < W.Range && W.Ready && target.IsDashing() && target.IsValidTarget(W.Range))
             {
-                W.Cast();
+                W.Cast(Args.EndPosition);
             }
         }
 
@@ -316,11 +316,14 @@
                     E.Cast(target);
                 }
             }
-            if (E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(400) < aroundE)
+            if (E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(400) <= aroundE)
             {
-                if (target != null && missiles != null)
+                if (target != null)
                 {
-                    E2.Cast(target);
+                    if (missiles != null)
+                    {
+                        E2.Cast(target);
+                    }
                 }
             }
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))

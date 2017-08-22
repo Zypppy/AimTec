@@ -27,6 +27,8 @@
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, Q2, W, E, R;
+        private MissileClient missiles;
+
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 725);
@@ -92,7 +94,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += OnGapcloser;
-            //GameObject.OnCreate += OnCreate;
+            GameObject.OnCreate += OnCreate;
 
             LoadSpells();
             Console.WriteLine("Lissandra by Zypppy - Loaded");
@@ -114,6 +116,31 @@
         //        Console.WriteLine(obj.Name);
         //    }
         //}
+        public void OnCreate(GameObject obj)
+        {
+            var missile = obj as MissileClient;
+            if (missile == null)
+            {
+                return;
+            }
+
+            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
+                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
+            {
+                return;
+            }
+            var hero = missile.SpellCaster as Obj_AI_Hero;
+            if (hero == null)
+            {
+                return;
+            }
+            if (missile.SpellData.Name == "LissandraEMissile")
+            {
+                missiles = missile;
+            }
+
+        }
+
         private void Render_OnPresent()
         {
             Vector2 maybeworks;
@@ -143,7 +170,7 @@
             {
                 if (LissandraEPath != null)
                 {
-                    Render.Circle(LissandraEPath.Position, 350, 40, Color.DeepPink);
+                    Render.Circle(missiles.ServerPosition, 350, 40, Color.DeepPink);
                 }
             }
             if (Menu["drawings"]["drawecircle"].Enabled)

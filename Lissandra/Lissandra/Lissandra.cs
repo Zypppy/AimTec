@@ -179,7 +179,10 @@
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
-                Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
+                if (missiles != null)
+                {
+                    Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
+                }
             }
         }
         private void Game_OnUpdate()

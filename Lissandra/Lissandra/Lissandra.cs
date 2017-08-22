@@ -173,13 +173,6 @@
                 }
                 
             }
-            if (Menu["drawings"]["drawecircle"].Enabled)
-            {
-                if (LissandraEEnd != null)
-                {
-                    Render.Circle(LissandraEEnd.Position, 350, 40, Color.DeepPink);
-                }
-            }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
               Render.Circle(Player.Position, R.Range, 40, Color.Indigo);

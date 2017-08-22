@@ -94,6 +94,7 @@
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += OnGapcloser;
             GameObject.OnCreate += OnCreate;
+            GameObject.OnDestroy += OnDestroy;
 
             LoadSpells();
             Console.WriteLine("Lissandra by Zypppy - Loaded");
@@ -136,6 +137,29 @@
                 missiles = missile;
             }
 
+        }
+        private void OnDestroy(GameObject obj)
+        {
+            var missile = obj as MissileClient;
+            if (missile == null || !missile.IsValid)
+            {
+                return;
+            }
+
+            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
+                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
+            {
+                return;
+            }
+            var hero = missile.SpellCaster as Obj_AI_Hero;
+            if (hero == null)
+            {
+                return;
+            }
+            if (missile.SpellData.Name == "LissandraEMissile")
+            {
+                missiles = null;
+            }
         }
 
         private void Render_OnPresent()
@@ -250,7 +274,6 @@
         {
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useE2 = Menu["Combo"]["useegap"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;

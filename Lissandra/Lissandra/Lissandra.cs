@@ -47,28 +47,28 @@
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("rhp", "R if HP <", 20, 0, 100));
+                ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
                 ComboMenu.Add(new MenuSlider("defr", "Self R If Enemy >", 3, 1, 5));
             }
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuBool("useqh", "Use Q"));
-                HarassMenu.Add(new MenuSlider("qmanah", "Q Harass if Mana >", 70, 0, 100));
+                HarassMenu.Add(new MenuSlider("qmanah", "Q Harass if Mana % >", 70, 0, 100));
                 HarassMenu.Add(new MenuBool("usewh", "Use W"));
-                HarassMenu.Add(new MenuSlider("wmanah", "W Harass if Mana >", 70, 0, 100));
+                HarassMenu.Add(new MenuSlider("wmanah", "W Harass if Mana % >", 70, 0, 100));
                 HarassMenu.Add(new MenuBool("useeh", "Use E"));
-                HarassMenu.Add(new MenuSlider("emanah", "E Harass if Mana >", 70, 0, 100));
+                HarassMenu.Add(new MenuSlider("emanah", "E Harass if Mana % >", 70, 0, 100));
             }
             Menu.Add(HarassMenu);
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
             {
                 LaneClearMenu.Add(new MenuBool("useqlc", "Use Q"));
-                LaneClearMenu.Add(new MenuSlider("qmanalc", "Q LaneClear if Mana >", 70, 0, 100));
+                LaneClearMenu.Add(new MenuSlider("qmanalc", "Q LaneClear if Mana % >", 70, 0, 100));
                 LaneClearMenu.Add(new MenuBool("usewlc", "Use W"));
-                LaneClearMenu.Add(new MenuSlider("wmanalc", "W LaneClear if Mana >", 70, 0, 100));
+                LaneClearMenu.Add(new MenuSlider("wmanalc", "W LaneClear if Mana % >", 70, 0, 100));
                 LaneClearMenu.Add(new MenuBool("useelc", "Use E"));
-                LaneClearMenu.Add(new MenuSlider("emanalc", "E LaneClear if Mana >", 70, 0, 100));
+                LaneClearMenu.Add(new MenuSlider("emanalc", "E LaneClear if Mana % >", 70, 0, 100));
             }
             Menu.Add(LaneClearMenu);
             var MiscMenu = new Menu("misc", "Misc");
@@ -247,7 +247,7 @@
                     W.Cast();
                 }
             }
-            if (E.Ready && useQ && target.IsValidTarget(E.Range))
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
                 if (target != null)
                 {

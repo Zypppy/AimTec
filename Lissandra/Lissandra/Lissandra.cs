@@ -119,6 +119,7 @@
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
             var LissandraEEnd = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lissandra_Base_E_End.troy");
+            var LissandraEPath = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "LissandraEMissile");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
@@ -137,6 +138,13 @@
             if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
+            }
+            if (Menu["drawings"]["drawepath"].Enabled)
+            {
+                if (LissandraEEnd != null)
+                {
+                    Render.Circle(LissandraEPath.Position, 350, 40, Color.DeepPink);
+                }
             }
             if (Menu["drawings"]["drawecircle"].Enabled)
             {

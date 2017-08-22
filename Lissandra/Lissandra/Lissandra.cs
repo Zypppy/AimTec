@@ -163,7 +163,7 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
             }
-            if (Menu["drawings"]["drawepath"].Enabled)
+            if (E.Ready && Menu["drawings"]["drawepath"].Enabled)
             {
                 if (missiles != null)
                 {

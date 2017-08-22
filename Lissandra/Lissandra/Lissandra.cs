@@ -167,7 +167,10 @@
             }
             if (Menu["drawings"]["drawepath"].Enabled)
             {
-              Render.Circle(missiles.ServerPosition, 350, 40, Color.DeepPink);
+                if (missiles != null)
+                {
+                    Render.Circle(missiles.ServerPosition, 350, 40, Color.DeepPink);
+                }
                 
             }
             if (Menu["drawings"]["drawecircle"].Enabled)
@@ -179,10 +182,7 @@
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
-                if (missiles != null)
-                {
-                    Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
-                }
+              Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
             }
         }
         private void Game_OnUpdate()

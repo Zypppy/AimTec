@@ -66,12 +66,6 @@
                 LaneClearMenu.Add(new MenuSlider("wmhitlc", "W Minion Hit >", 2, 0, 10));
             }
             Menu.Add(LaneClearMenu);
-            var MiscMenu = new Menu("misc", "Misc");
-            {
-                MiscMenu.Add(new MenuBool("WGap", "Use W on GapCloser"));
-                //MiscMenu.Add(new MenuBool("RInt", "Use R to Interrupt"));
-            }
-            Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("ks", "Killsteal");
             {
                 KillstealMenu.Add(new MenuBool("QKS", "Use Q to Killsteal"));

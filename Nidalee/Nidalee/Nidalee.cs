@@ -29,7 +29,7 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 1400);
-            Q.SetSkillshot(0.25f, 40f, 1300f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.25f, 40f, 1300f, true, SkillshotType.Line, false, HitChance.VeryHigh);
             Q2 = new Spell(SpellSlot.Q, 355);
             W = new Spell(SpellSlot.W, 900);
             W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
@@ -49,16 +49,15 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Human Q"));
-                //ComboMenu.Add(new MenuList("hitchance", "Human Q Hit Chance", new[] { "Low", "Medium", "High", "VeryHigh", "Immobile", "Dashing" }, 0));
                 ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use Human W"));
                 ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));
-                //ComboMenu.Add(new MenuBool("usee", "NOT WORKING Use Human E"));
-                //ComboMenu.Add(new MenuSlider("useeh", "Min HP To Use E", 30, 0, 100));
-                //ComboMenu.Add(new MenuSlider("useehm", "Min Mana To Use E", 30, 0, 100));
+                ComboMenu.Add(new MenuBool("usee", "Use Human E"));
+                ComboMenu.Add(new MenuSlider("useeh", "Health To Use Human E", 30, 0, 100));
+                ComboMenu.Add(new MenuSlider("useehm", "Mana To Use Human Use E", 70, 0, 100));
                 ComboMenu.Add(new MenuBool("usece", "Use Cougar E"));
                 ComboMenu.Add(new MenuBool("user", "Use R To Switch Forms"));
-
+                ComboMenu.Add(new MenuSlider("userr", "Use R If Target Is In Range", 400, 0, 1400));
             }
             Menu.Add(ComboMenu);
 
@@ -91,6 +90,8 @@
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Human Q on CC"));
                 miscmenu.Add(new MenuBool("autow", "Auto Human W on CC"));
+                miscmenu.Add(new MenuBool("autoe", "Use Auto Human E"));
+                miscmenu.Add(new MenuSlider("autoeh", "Auto Use Human E When HP Below <%", 10, 0, 100));
             }
             Menu.Add(miscmenu);
 
@@ -200,6 +201,11 @@
                     W.Cast(target);
                 }
             }
+            float hp = Menu["misc"]["autoeh"].As<MenuSlider>().Value;
+            if (Menu["misc"]["autoe"].Enabled && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.HealthPercent() <= hp)
+            {
+                E.Cast(Player);
+            }
         }
 
 
@@ -282,9 +288,12 @@
             bool useQ2 = Menu["combo"]["usecq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useW2 = Menu["combo"]["usecw"].Enabled;
-            //bool useE = Menu["combo"]["usee"].Enabled;
+            bool useE = Menu["combo"]["usee"].Enabled;
+            float hpe = Menu["combo"]["useeh"].As<MenuSlider>().Value;
+            float manae = Menu["combo"]["useehm"].As<MenuSlider>().Value;
             bool useE2 = Menu["combo"]["usece"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
+            float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -293,59 +302,39 @@
             }
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
             {
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+               Q.Cast(target);
             }
             if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q2.Range))
             {
-                if (target != null)
-                {
-                    Q2.Cast();
-                }
+                Q2.Cast();
             }
             if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && target.IsValidTarget(W.Range))
             {
-                if (target != null)
-                {
-                    W.Cast(target);
-                }
+                W.Cast(target);
             }
             if (W2.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.IsValidTarget(W2.Range))
             {
-                if (target != null)
-                {
-                    W2.Cast(target);
-                }
+                W2.Cast(target);
             }
             if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunted") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W3.Range))
             {
-                if (target != null)
-                {
-                    W3.Cast(target);
-                }
+                W3.Cast(target);
+            }
+            if (E.Ready && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.ManaPercent() >= manae && Player.HealthPercent() <= hpe)
+            {
+                E.Cast(Player);
             }
             if (E2.Ready && useE2 && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && target.IsValidTarget(E2.Range))
             {
-                if (target != null)
-                {
-                    E2.Cast(target);
-                }
+               E2.Cast(target);
             }
             if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
             {
-                if (target != null)
-                {
-                    R.Cast();
-                }
+               R.Cast();
             }
-            if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(W2.Range))
+            if (R.Ready && useR && target.IsValidTarget(rangeR))
             {
-                if (target != null)
-                {
-                    R.Cast();
-                }
+              R.Cast();
             }
 
         }
@@ -363,13 +352,8 @@
 
                 if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
                 {
-
-                    if (target != null)
-                    {
-                        Q.Cast(target);
-                    }
+                   Q.Cast(target);
                 }
-
             }
         }
 

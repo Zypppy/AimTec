@@ -35,7 +35,7 @@
             Q2 = new Spell(SpellSlot.Q, 850);
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 1050);
-            E2 = new Spell(SpellSlot.E, 1500);
+            E2 = new Spell(SpellSlot.E, 2000);
             R = new Spell(SpellSlot.R, 700);
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.Medium);
@@ -283,7 +283,7 @@
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
             float REnemies = Menu["combo"]["defr"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q2.Range);
+            var target = GetBestEnemyHeroTargetInRange(1500);
             if (!target.IsValidTarget())
             {
                 return;
@@ -309,7 +309,7 @@
                     W.Cast();
                 }
             }
-            if (missiles == null && !E2.Ready && E.Ready && useE && target.IsValidTarget(E.Range))
+            if (!E2.Ready && E.Ready && useE && target.IsValidTarget(E.Range))
             {
                 if (target != null)
                 {

@@ -191,7 +191,7 @@
             {
                 if (missiles != null)
                 {
-                    Render.Circle(missiles.ServerPosition, 350, 40, Color.DeepPink);
+                    Render.Circle(missiles.ServerPosition, 300, 40, Color.DeepPink);
                 }
                 
             }
@@ -304,7 +304,7 @@
                 {
                     E.Cast(target);
                 }
-                else if ( missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                else if (missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
                     E.Cast();
                 }

@@ -304,7 +304,7 @@
                 {
                     E.Cast(target);
                 }
-                else if ( missiles != null && target.IsValidTarget(300f, false, false, missiles.Position) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                else if ( missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
                     E.Cast();
                 }

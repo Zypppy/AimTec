@@ -298,9 +298,9 @@
             {
                W.Cast();
             }
-            if (E.Ready && useE)
+            if (E.Ready)
             {
-                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                if (target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
                     E.Cast(target);
                 }

@@ -309,7 +309,7 @@
                     W.Cast();
                 }
             }
-            if (!E2.Ready && E.Ready && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && !Player.HasBuff("Lissandra_Base_E_Cast.troy") && useE && target.IsValidTarget(E.Range))
             {
                 if (target != null)
                 {

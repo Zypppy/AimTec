@@ -316,14 +316,11 @@
                     E.Cast(target);
                 }
             }
-            if (!E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
+            if (missiles != null && E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
             {
                 if (target != null)
                 {
-                    if (missiles != null)
-                    {
-                        E2.Cast(target);
-                    }
+                   E2.Cast(target);
                 }
             }
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))

@@ -104,6 +104,7 @@
                 DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
                 DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
+                DrawMenu.Add(new MenuBool("drawr", "Draw R Raange"));
             }
 
             Menu.Add(DrawMenu);
@@ -152,6 +153,11 @@
             if (Menu["drawings"]["drawe2"].Enabled && E.Ready)
             {
                 Render.Circle(Player.Position, E2.Range, 40, Color.DeepPink);
+            }
+            float range = Menu["combo"]["userr"].As<MenuSlider>().Value;
+            if (Menu["drawings"]["drawr"].Enabled && R.Ready)
+            {
+                Render.Circle(Player.Position, range, 40, Color.Aquamarine);
             }
         }
 

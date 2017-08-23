@@ -298,13 +298,13 @@
             {
                W.Cast();
             }
-            if (E.Ready && useE )
+            if (E.Ready && useE)
             {
                 if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
                     E.Cast(target);
                 }
-                else if (target.IsValidTarget(300f, false, false, missiles.Position) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                else if ( missiles != null && target.IsValidTarget(300f, false, false, missiles.Position) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
                     E.Cast();
                 }

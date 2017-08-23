@@ -320,7 +320,7 @@
             {
                 if (target != null)
                 {
-                   E2.Cast(target);
+                   E2.Cast();
                 }
             }
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))

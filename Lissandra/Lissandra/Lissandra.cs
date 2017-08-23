@@ -85,7 +85,6 @@
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawingsMenu.Add(new MenuBool("drawepath", "Draw E Path"));
-
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
             }
             Menu.Add(DrawingsMenu);

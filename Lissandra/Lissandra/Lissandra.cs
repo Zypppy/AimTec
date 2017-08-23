@@ -316,7 +316,7 @@
                     E.Cast(target);
                 }
             }
-            if (missiles != null && E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(W.Range - 50) <= aroundE)
+            if (missiles != null && E2.Ready && Player.HasBuff("Lissandra_Base_E_Cast.troy") && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(W.Range - 50) <= aroundE)
             {
                 if (target != null)
                 {

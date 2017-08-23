@@ -40,7 +40,7 @@
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.Medium);
             E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
-            //E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.VeryHigh);
+            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.VeryHigh);
         }
         public Lissandra()
         {
@@ -50,8 +50,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
-                ComboMenu.Add(new MenuBool("useegap", "NotWorking Keep Disabled"));
-                ComboMenu.Add(new MenuSlider("enemiese", "Use Second E When Enemies <", 3, 0, 5));
+                ComboMenu.Add(new MenuBool("useegap", "Use E Gapcloser"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("rhp", "R if HP % <", 20, 0, 100));
                 ComboMenu.Add(new MenuSlider("defr", "Self R If Enemy >", 3, 1, 5));
@@ -278,7 +277,6 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useEGap = Menu["combo"]["useegap"].Enabled;
-            float aroundE = Menu["combo"]["enemiese"].As<MenuSlider>().Value;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
@@ -290,56 +288,34 @@
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q2.Range))
             {
-                if (target != null)
-                {
-                    Q2.Cast(target);
-                }
+               Q2.Cast(target);
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
-                if (target != null)
-                {
-                    W.Cast();
-                }
+               W.Cast();
             }
-            if (E.Ready && !Player.HasBuff("Lissandra_Base_E_Cast.troy") && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && useE )
             {
-                if (target != null)
+                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
                     E.Cast(target);
                 }
-            }
-            if (missiles != null)
-            {
-                Console.WriteLine(missiles.CountEnemyHeroesInRange(W.Range - 50));
-            }
-            if (missiles != null && E2.Ready && Player.HasBuff("Lissandra_Base_E_Cast.troy") && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(W.Range - 50) <= aroundE)
-            {
-                if (target != null)
+                else if (target.IsValidTarget(300f, false, false, missiles.Position) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
-                   E2.Cast(target);
+                    E.Cast();
                 }
             }
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))
             {
-                if (target != null)
-                {
-                    R.Cast(Player);
-                }
+                R.Cast(Player);
             }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= REnemies)
             {
-                if (target != null)
-                {
-                    R.Cast(Player);
-                }
+                 R.Cast(Player);
             }
         }
         private void OnHarass()
@@ -353,10 +329,7 @@
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.ManaPercent() >= manaQ)
             {
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()

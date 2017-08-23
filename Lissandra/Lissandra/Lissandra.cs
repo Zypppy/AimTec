@@ -35,12 +35,12 @@
             Q2 = new Spell(SpellSlot.Q, 850);
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 1050);
-            E2 = new Spell(SpellSlot.E, 1050);
+            E2 = new Spell(SpellSlot.E, 1500);
             R = new Spell(SpellSlot.R, 700);
             Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
             Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
-            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.High);
+            E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.VeryHigh);
         }
         public Lissandra()
         {
@@ -316,7 +316,7 @@
                     E.Cast(target);
                 }
             }
-            if (missiles != null && E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
+            if (missiles != null && E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(W.Range - 50) <= aroundE)
             {
                 if (target != null)
                 {

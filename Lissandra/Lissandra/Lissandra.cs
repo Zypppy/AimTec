@@ -316,7 +316,7 @@
                     E.Cast(target);
                 }
             }
-            if (E2.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
+            if (!E.Ready && useEGap && target.IsValidTarget(E2.Range) && missiles.CountEnemyHeroesInRange(E2.Width) <= aroundE)
             {
                 if (target != null)
                 {

@@ -60,14 +60,12 @@
                 ComboMenu.Add(new MenuSlider("userr", "Use R If Target Is In Range", 400, 0, 1400));
             }
             Menu.Add(ComboMenu);
-
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuBool("useq", "Use Human Q to Harass"));
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
             }
             Menu.Add(HarassMenu);
-
             var JunglCelear = new Menu("jungleclear", "Jungle Clear");
             {
                 JunglCelear.Add(new MenuBool("usejq", "Use Human Q in Jungle"));
@@ -79,13 +77,11 @@
                 JunglCelear.Add(new MenuSlider("manaj", "Mana Manager For Jungle", 50));
             }
             Menu.Add(JunglCelear);
-
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Human Q"));
             }
             Menu.Add(KSMenu);
-
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Human Q on CC"));
@@ -94,7 +90,6 @@
                 miscmenu.Add(new MenuSlider("autoeh", "Auto Use Human E When HP Below <%", 10, 0, 100));
             }
             Menu.Add(miscmenu);
-
             var DrawMenu = new Menu("drawings", "Drawings");
             {
                 DrawMenu.Add(new MenuBool("drawq", "Draw Human Q Range"));
@@ -104,10 +99,16 @@
                 DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
                 DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
-                DrawMenu.Add(new MenuBool("drawr", "Draw R Raange"));
+                DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
+                DrawMenu.Add(new MenuBool("drawflee", "Draw Free Circle Around Cursor"));
             }
-
             Menu.Add(DrawMenu);
+            var FleeMenu = new Menu("flee", "Flee");
+            {
+                FleeMenu.Add(new MenuBool("fleew", "Use Cougar W To Flee"));
+                FleeMenu.Add(new MenuKeyBind("key", "Flee Key:", KeyCode.Z, KeybindType.Press));
+            }
+            Menu.Add(FleeMenu);
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
@@ -159,7 +160,12 @@
             {
                 Render.Circle(Player.Position, range, 40, Color.Aquamarine);
             }
+            if (Menu["flee"]["key"].Enabled && Menu["drawings"]["drawflee"].Enabled)
+            {
+                Render.Circle(Game.CursorPos, 150, 50, Color.Chocolate);
+            }
         }
+        
 
         private void Game_OnUpdate()
         {
@@ -211,6 +217,10 @@
             if (Menu["misc"]["autoe"].Enabled && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.HealthPercent() <= hp)
             {
                 E.Cast(Player);
+            }
+            if (Menu["flee"]["key"].Enabled)
+            {
+                Flee();
             }
         }
 
@@ -430,6 +440,19 @@
                         }
                     }
                 }
+            }
+        }
+        private void Flee()
+        {
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            bool usew = Menu["flee"]["fleew"].Enabled;
+            if (usew && W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name != "Pounce" && R.Ready)
+            {
+                R.Cast();
+            }
+            else if (usew && W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce")
+            {
+                W.Cast(Game.CursorPos);
             }
         }
     }

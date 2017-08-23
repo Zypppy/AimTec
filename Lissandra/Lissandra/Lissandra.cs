@@ -309,7 +309,7 @@
                     W.Cast();
                 }
             }
-            if (E.Ready && missiles == null && useE && target.IsValidTarget(E.Range))
+            if (missiles == null && !E2.Ready && E.Ready && useE && target.IsValidTarget(E.Range))
             {
                 if (target != null)
                 {

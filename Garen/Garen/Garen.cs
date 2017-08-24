@@ -49,7 +49,6 @@
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
-                HarassMenu.Add(new MenuSlider("qrangeh", "Q Range", 200, 175, 500));
             }
             Menu.Add(HarassMenu);
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
@@ -81,7 +80,9 @@
                 DrawMenu.Add(new MenuBool("draww", "Draw Human W Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
-                DrawMenu.Add(new MenuBool("drawdmg", "Draw DMG"));
+                DrawMenu.Add(new MenuBool("drawqdmg", "Draw Q DMG"));
+                DrawMenu.Add(new MenuBool("drawedmg", "Draw E DMG"));
+                DrawMenu.Add(new MenuBool("drawRdmg", "Draw R DMG"));
             }
             Menu.Add(DrawMenu);
             Menu.Attach();
@@ -126,10 +127,10 @@
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Aquamarine);
             }
-            if (Menu["drawings"]["drawdmg"].Enabled)
+            if (Menu["drawings"]["drawqdmg"].Enabled && Q.Ready)
             {
                 ObjectManager.Get<Obj_AI_Base>()
-                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(Q.Range + R.Range))
+                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
                     .ToList()
                     .ForEach(
                         unit =>
@@ -150,6 +151,60 @@
                                                             : 0));
 
                             Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
+
+                        });
+            }
+            if (Menu["drawings"]["drawedmg"].Enabled && Q.Ready)
+            {
+                ObjectManager.Get<Obj_AI_Base>()
+                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
+                    .ToList()
+                    .ForEach(
+                        unit =>
+                        {
+
+                            var heroUnit = unit as Obj_AI_Hero;
+                            int width = 103;
+                            int height = 8;
+                            int xOffset = SxOffset(heroUnit);
+                            int yOffset = SyOffset(heroUnit);
+                            var barPos = unit.FloatingHealthBarPosition;
+                            barPos.X += xOffset;
+                            barPos.Y += yOffset;
+
+                            var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
+                            var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.E)
+                                                            ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.E))) / unit.MaxHealth * 100 / 100)
+                                                            : 0));
+
+                            Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health <  Player.GetSpellDamage(unit, SpellSlot.E) ? Color.GreenYellow : Color.Orange);
+
+                        });
+            }
+            if (Menu["drawings"]["drawrdmg"].Enabled && Q.Ready)
+            {
+                ObjectManager.Get<Obj_AI_Base>()
+                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
+                    .ToList()
+                    .ForEach(
+                        unit =>
+                        {
+
+                            var heroUnit = unit as Obj_AI_Hero;
+                            int width = 103;
+                            int height = 8;
+                            int xOffset = SxOffset(heroUnit);
+                            int yOffset = SyOffset(heroUnit);
+                            var barPos = unit.FloatingHealthBarPosition;
+                            barPos.X += xOffset;
+                            barPos.Y += yOffset;
+
+                            var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
+                            var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.R)
+                                                            ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
+                                                            : 0));
+
+                            Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
 
                         });
             }
@@ -222,22 +277,22 @@
         private void OnCombo()
         {
             bool useQ = Menu["combo"]["useq"].Enabled;
-            float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
+            float rangeQ = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             bool useW = Menu["combo"]["usew"].Enabled;
-            float WRange = Menu["combo"]["Wrange"].As<MenuSlider>().Value;
+            float rangeW = Menu["combo"]["wrange"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
-            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            var target = GetBestEnemyHeroTargetInRange(1000);
 
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(QRange))
+            if (Q.Ready && useQ && target.IsValidTarget(rangeQ))
             {
                 Q.Cast();
             }
-            if (W.Ready && useW && target.IsValidTarget(WRange))
+            if (W.Ready && useW && target.IsValidTarget(rangeW))
             {
                 W.Cast();
             }
@@ -253,14 +308,14 @@
         private void OnHarass()
         {
             bool useQ = Menu["harass"]["useq"].Enabled;
-            float QRange = Menu["harass"]["qrangeh"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(QRange);
+            float rangeQ = Menu["combo"]["qrange"].As<MenuSlider>().Value;
+            var target = GetBestEnemyHeroTargetInRange(rangeQ);
 
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(QRange))
+            if (Q.Ready && useQ && target.IsValidTarget(rangeQ))
             {
                 Q.Cast();
             }

@@ -76,13 +76,13 @@
             Menu.Add(miscmenu);
             var DrawMenu = new Menu("drawings", "Drawings");
             {
-                DrawMenu.Add(new MenuBool("drawq", "Draw Human Q Range"));
-                DrawMenu.Add(new MenuBool("draww", "Draw Human W Range"));
-                DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
+                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
+                DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
                 DrawMenu.Add(new MenuBool("drawqdmg", "Draw Q DMG"));
                 DrawMenu.Add(new MenuBool("drawedmg", "Draw E DMG"));
-                DrawMenu.Add(new MenuBool("drawRdmg", "Draw R DMG"));
+                DrawMenu.Add(new MenuBool("drawrdmg", "Draw R DMG"));
             }
             Menu.Add(DrawMenu);
             Menu.Attach();

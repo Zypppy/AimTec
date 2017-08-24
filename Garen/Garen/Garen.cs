@@ -153,7 +153,7 @@
 
                         });
             }
-            if (Menu["drawings"]["drawrdmg"].Enabled && Q.Ready)
+            if (Menu["drawings"]["drawrdmg"].Enabled && R.Ready)
             {
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
@@ -320,6 +320,10 @@
                 {
                     E.Cast();
                 }
+                else if (E.Ready && minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                {
+                    return;
+                }
             }
         }
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
@@ -341,7 +345,7 @@
                 {
                     return;
                 }
-                if (Q.Ready && useQ && minion.IsValidTarget(200))
+                if (Q.Ready && useQ && minion.IsValidTarget(250))
                 {
                     Q.Cast();
                 }

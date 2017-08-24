@@ -305,6 +305,7 @@
         {
             bool useQ = Menu["laneclear"]["useqlc"].Enabled;
             bool useQL = Menu["laneclear"]["useqlh"].Enabled;
+            bool useE = Menu["laneclear"]["useelc"].Enabled;
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
             {
                 if (Q.Ready && useQ && minion != null && minion.IsValidTarget(200))
@@ -314,6 +315,10 @@
                 if (Q.Ready && useQL && minion != null && minion.IsValidTarget(200) && minion.Health <= Player.GetSpellDamage(minion, SpellSlot.Q))
                 {
                     Q.Cast();
+                }
+                if (minion.IsValidTarget(E.Range) && minion != null && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                {
+                    E.Cast();
                 }
             }
         }
@@ -329,6 +334,7 @@
         private void OnJungleClear()
         {
             bool useQ = Menu["jungleclear"]["usejq"].Enabled;
+            bool useE = Menu["jungleclear"]["useje"].Enabled;
             foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
                 if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
@@ -338,6 +344,10 @@
                 if (Q.Ready && useQ && minion.IsValidTarget(250))
                 {
                     Q.Cast();
+                }
+                if (minion.IsValidTarget(E.Range) && minion != null && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                {
+                    E.Cast();
                 }
             }
         }

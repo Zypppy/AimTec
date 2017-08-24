@@ -268,7 +268,7 @@
             {
                 W.Cast();
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+            if (target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
             {
                 E.Cast();
             }
@@ -305,7 +305,6 @@
         {
             bool useQ = Menu["laneclear"]["useqlc"].Enabled;
             bool useQL = Menu["laneclear"]["useqlh"].Enabled;
-            bool useE = Menu["laneclear"]["useelc"].Enabled;
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
             {
                 if (Q.Ready && useQ && minion != null && minion.IsValidTarget(200))
@@ -315,14 +314,6 @@
                 if (Q.Ready && useQL && minion != null && minion.IsValidTarget(200) && minion.Health <= Player.GetSpellDamage(minion, SpellSlot.Q))
                 {
                     Q.Cast();
-                }
-                if (E.Ready && useE && minion != null && minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
-                {
-                    E.Cast();
-                }
-                else if (E.Ready && minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
-                {
-                    return;
                 }
             }
         }
@@ -338,7 +329,6 @@
         private void OnJungleClear()
         {
             bool useQ = Menu["jungleclear"]["usejq"].Enabled;
-            bool useE = Menu["jungleclear"]["useje"].Enabled;
             foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
                 if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
@@ -348,10 +338,6 @@
                 if (Q.Ready && useQ && minion.IsValidTarget(250))
                 {
                     Q.Cast();
-                }
-                if (E.Ready && useE && minion != null && minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
-                {
-                    E.Cast();
                 }
             }
         }

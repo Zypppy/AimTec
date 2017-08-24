@@ -53,9 +53,9 @@
             Menu.Add(HarassMenu);
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
             {
-                LaneClearMenu.Add(new Menu("useqlc", "Lane Q to Clear"));
-                LaneClearMenu.Add(new Menu("useqlh", "Use Q Last Hit"));
-                LaneClearMenu.Add(new Menu("useelc", "Use E to Clear"));
+                LaneClearMenu.Add(new MenuBool("useqlc", "Lane Q to Clear"));
+                LaneClearMenu.Add(new MenuBool("useqlh", "Use Q Last Hit"));
+                LaneClearMenu.Add(new MenuBool("useelc", "Use E to Clear"));
             }
             Menu.Add(LaneClearMenu);
             var JunglClearMenu = new Menu("jungleclear", "Jungle Clear");
@@ -81,7 +81,6 @@
                 DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
                 DrawMenu.Add(new MenuBool("drawqdmg", "Draw Q DMG"));
-                DrawMenu.Add(new MenuBool("drawedmg", "Draw E DMG"));
                 DrawMenu.Add(new MenuBool("drawrdmg", "Draw R DMG"));
             }
             Menu.Add(DrawMenu);
@@ -151,33 +150,6 @@
                                                             : 0));
 
                             Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
-
-                        });
-            }
-            if (Menu["drawings"]["drawedmg"].Enabled && Q.Ready)
-            {
-                ObjectManager.Get<Obj_AI_Base>()
-                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
-                    .ToList()
-                    .ForEach(
-                        unit =>
-                        {
-
-                            var heroUnit = unit as Obj_AI_Hero;
-                            int width = 103;
-                            int height = 8;
-                            int xOffset = SxOffset(heroUnit);
-                            int yOffset = SyOffset(heroUnit);
-                            var barPos = unit.FloatingHealthBarPosition;
-                            barPos.X += xOffset;
-                            barPos.Y += yOffset;
-
-                            var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
-                            var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.E)
-                                                            ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.E))) / unit.MaxHealth * 100 / 100)
-                                                            : 0));
-
-                            Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health <  Player.GetSpellDamage(unit, SpellSlot.E) ? Color.GreenYellow : Color.Orange);
 
                         });
             }

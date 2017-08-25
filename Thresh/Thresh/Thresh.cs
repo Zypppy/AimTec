@@ -205,7 +205,7 @@ namespace Zypppy_Thresh
             {
                Q2.Cast();
             }
-            if (W.Ready && useWSelf && Player.HealthPercent() <= healthW)
+            if (W.Ready && useWSelf && Player.IsValidTarget(W.Range) && Player.HealthPercent() <= healthW)
             {
                 W.Cast(Player);
             }

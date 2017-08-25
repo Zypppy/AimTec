@@ -203,7 +203,7 @@ namespace Zypppy_Thresh
                 {
                     Q.Cast(target);
                 }
-                else if (target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
+                else if (target.IsValidTarget(Q2.Range, false, false) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
                 {
                     Q2.Cast();
                 }

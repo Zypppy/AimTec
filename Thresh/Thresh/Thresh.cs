@@ -58,8 +58,13 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
-                ComboMenu.Add(new MenuSlider("selfwhp", "Self W % Hp", 20, 0, 100));
+                ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
+                ComboMenu.Add(new MenuBool("usewally", "Use W Self"));
+                ComboMenu.Add(new MenuSlider("wahp", "Self W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
+                ComboMenu.Add(new MenuBool("user", "Use R"));
+                ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));
+
             }
             Menu.Add(ComboMenu);     
             var HarassMenu = new Menu("harass", "Harass");
@@ -142,7 +147,7 @@ namespace Zypppy_Thresh
                 case OrbwalkingMode.Laneclear:
                     break;
             }
-            if (Menu["misc"]["autoq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
+            if (Menu["misc"]["autoq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
@@ -188,9 +193,13 @@ namespace Zypppy_Thresh
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQGap = Menu["combo"]["useq2"].Enabled;
+            bool useWself = Menu["combo"]["usewself"].Enabled;
+            float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
+            bool useWAlly = Menu["combo"]["usewally"].Enabled;
+            float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useWSelf = Menu["combo"]["usewself"].Enabled;
-            float healthW = Menu["combo"]["selfwhp"].As<MenuSlider>().Value;
+            bool useR = Menu["combo"]["user"].Enabled;
+            float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -205,13 +214,17 @@ namespace Zypppy_Thresh
             {
                Q2.Cast();
             }
-            if (W.Ready && useWSelf && Player.IsValidTarget(W.Range) && Player.HealthPercent() <= healthW)
+            if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
             {
                 W.Cast(Player);
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
-            E.Cast(target);
+                E.Cast(target);
+            }
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= REnemies)
+            {
+               R.Cast();
             }
         }
 
@@ -227,18 +240,11 @@ namespace Zypppy_Thresh
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
-               if (target != null)
-               {
-                  E.Cast(target);
-               }
+               E.Cast(target);
             }
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
             {
-
-               if (target != null)
-               {
-                  Q.Cast(target);
-               }
+               Q.Cast(target);
             }
         }
     }

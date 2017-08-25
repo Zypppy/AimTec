@@ -56,11 +56,9 @@ namespace Zypppy_Thresh
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useqgap", "Use Second Q"));
+                ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("selfwhp", "Self W % Hp", 20, 0, 100));
-                ComboMenu.Add(new MenuBool("usewally", "USe W Ally"));
-                ComboMenu.Add(new MenuSlider("allywhp", "Ally W % Hp", 20, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
             }
             Menu.Add(ComboMenu);     
@@ -70,7 +68,6 @@ namespace Zypppy_Thresh
                 HarassMenu.Add(new MenuSlider("manaq", "Mana Q", 50));
                 HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
                 HarassMenu.Add(new MenuSlider("manae", "Mana E", 50));
-
             }
             Menu.Add(HarassMenu);
             var miscmenu = new Menu("misc", "Misc");
@@ -190,10 +187,10 @@ namespace Zypppy_Thresh
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQGap = Menu["combo"]["useqgap"].Enabled;
+            bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useWSelf = Menu["combo"]["usewself"].Enabled;
-            float useWhps = Menu["combo"]["selfwhp"].As<MenuSlider>().Value;
+            float healthW = Menu["combo"]["selfwhp"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -204,11 +201,11 @@ namespace Zypppy_Thresh
             {
                Q.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQInternal" && target.HasBuff("ThreshQ"))
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && target.HasBuff("ThreshQ"))
             {
                Q2.Cast();
             }
-            if (W.Ready && useWSelf && Player.HealthPercent() <= useWhps)
+            if (W.Ready && useWSelf && Player.HealthPercent() <= healthW)
             {
                 W.Cast(Player);
             }

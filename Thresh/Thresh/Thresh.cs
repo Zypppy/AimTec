@@ -197,11 +197,11 @@ namespace Zypppy_Thresh
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(950) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
+            if (Q.Ready && useQ && target.IsValidTarget(950) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
             {
                 Q.Cast(target);
             }
-            else if (Q.Ready && useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+            else if (useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
             {
                 Q.Cast();
             }

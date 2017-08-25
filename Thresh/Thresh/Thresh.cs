@@ -58,8 +58,8 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
-                ComboMenu.Add(new MenuBool("usewally", "Use W Self"));
-                ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
+                //ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
+                //ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));
@@ -194,8 +194,8 @@ namespace Zypppy_Thresh
             bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
-            bool useWAlly = Menu["combo"]["usewally"].Enabled;
-            float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
+            //bool useWAlly = Menu["combo"]["usewally"].Enabled;
+            //float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;

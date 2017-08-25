@@ -201,7 +201,7 @@ namespace Zypppy_Thresh
             {
                 Q.Cast(target);
             }
-            else if (useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+            else if (useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
             {
                 Q.Cast();
             }
@@ -217,30 +217,25 @@ namespace Zypppy_Thresh
             bool useE = Menu["harass"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(E.Range);
             float manapercent = Menu["harass"]["mana"].As<MenuSlider>().Value;
-            if (manapercent < Player.ManaPercent())
+            
+            if (!target.IsValidTarget())
             {
-                if (!target.IsValidTarget())
-                {
-                    return;
-                }
+               return;
+            }
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            {
+               if (target != null)
+               {
+                  E.Cast(target);
+               }
+            }
+            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
+            {
 
-
-                if (E.Ready && useE && target.IsValidTarget(E.Range))
-                {
-                    if (target != null)
-                    {
-                        E.Cast(target);
-                    }
-                }
-                if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
-                {
-
-                    if (target != null)
-                    {
-                        Q.Cast(target);
-                    }
-                }
-
+               if (target != null)
+               {
+                  Q.Cast(target);
+               }
             }
         }
     }

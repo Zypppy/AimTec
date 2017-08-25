@@ -42,6 +42,7 @@ namespace Zypppy_Thresh
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
             Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            W.SetSkillshot(0.5f, 200f, 800f, false, SkillshotType.Circle, false, HitChance.Medium);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -191,6 +192,8 @@ namespace Zypppy_Thresh
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQGap = Menu["combo"]["useqgap"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useWSelf = Menu["combo"]["usewself"].Enabled;
+            float useWhps = Menu["combo"]["selfwhp"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -199,14 +202,18 @@ namespace Zypppy_Thresh
             }
             if (Q.Ready)
             {
-                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
+                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                 {
                     Q.Cast(target);
                 }
-                else if (target.IsValidTarget(Q2.Range, false, false) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
+                else if (target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ")
                 {
                     Q2.Cast();
                 }
+            }
+            if (W.Ready && useWSelf && Player.HealthPercent() <= useWhps)
+            {
+                W.Cast(Player);
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))
             {

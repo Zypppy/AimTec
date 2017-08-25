@@ -200,16 +200,13 @@ namespace Zypppy_Thresh
             {
                 return;
             }
-            if (Q.Ready)
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
-                if (target.IsValidTarget(Q.Range) && useQ && !target.HasBuff("threshQ"))
-                {
-                    Q.Cast(target);
-                }
-                else if (target.IsValidTarget(Q2.Range) && useQGap && target.HasBuff("threshQ"))
-                {
-                    Q2.Cast();
-                }
+               Q.Cast(target);
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQInternal" && target.HasBuff("ThreshQ"))
+            {
+               Q2.Cast();
             }
             if (W.Ready && useWSelf && Player.HealthPercent() <= useWhps)
             {

@@ -7,6 +7,7 @@ namespace Zypppy_Thresh
     using System.Linq;
 
     using Aimtec;
+    using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Damage;
     using Aimtec.SDK.Extensions;
     using Aimtec.SDK.Menu;
@@ -16,9 +17,10 @@ namespace Zypppy_Thresh
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
-
+    using EGap;
 
     using Spell = Aimtec.SDK.Spell;
+    using Aimtec.SDK.Events;
 
     internal class Thresh
     {
@@ -39,8 +41,8 @@ namespace Zypppy_Thresh
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
-            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.High);
-            E.SetSkillshot(0.125f, 100f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
+            Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
 
@@ -54,37 +56,79 @@ namespace Zypppy_Thresh
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
-                ComboMenu.Add(new MenuBool("usee", "Use E"));
+                ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
+                ComboMenu.Add(new MenuSlider("selfwhp", "Self W % Hp", 20, 0, 100));
+                ComboMenu.Add(new MenuBool("usewally", "USe W Ally"));
+                ComboMenu.Add(new MenuSlider("allywhp", "Ally W % Hp", 20, 0, 100));
+                ComboMenu.Add(new MenuBool("usee", "Use E Push"));
             }
             Menu.Add(ComboMenu);     
             var HarassMenu = new Menu("harass", "Harass");
             {
-                HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
                 HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
+                HarassMenu.Add(new MenuSlider("manaq", "Mana Q", 50));
                 HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
+                HarassMenu.Add(new MenuSlider("manae", "Mana E", 50));
 
             }
             Menu.Add(HarassMenu);
-            var miscmenu = new Menu("misc", "Misc.");
+            var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
             }
             Menu.Add(miscmenu);
-           
-
+            var DrawingsMenu = new Menu("drawings", "Drawings");
+            {
+                DrawingsMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
+                DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
+                DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
+            }
+            Menu.Add(DrawingsMenu);
+            EGap.Gapcloser.Attach(Menu, "E Anti-GapClose");
             Menu.Attach();
 
 
+            Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            Gapcloser.OnGapcloser += OnGapcloser;
             LoadSpells();
             Console.WriteLine("Zypppy Thresh - Loaded");
         }
 
-
-
-                private void Game_OnUpdate()
+        private void OnGapcloser(Obj_AI_Hero target, EGap.GapcloserArgs Args)
         {
-
+            if (target != null && Args.EndPosition.Distance(Player) < E.Range && E.Ready && target.IsDashing() && target.IsValidTarget(E.Range))
+            {
+                E.Cast(Args.EndPosition);
+            }
+        }
+        private void Render_OnPresent()
+        {
+            Vector2 maybeworks;
+            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            var xaOffset = (int)maybeworks.X;
+            var yaOffset = (int)maybeworks.Y;
+            
+            if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
+            {
+                Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
+            }
+            if (Menu["drawings"]["draww"].Enabled && W.Ready)
+            {
+                Render.Circle(Player.Position, W.Range, 40, Color.Fuchsia);
+            }
+            if (Menu["drawings"]["drawe"].Enabled && E.Ready)
+            {
+                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
+            }
+            if (Menu["drawings"]["drawr"].Enabled && R.Ready)
+            {
+                Render.Circle(Player.Position, R.Range, 40, Color.Aquamarine);
+            }
+        }
+        private void Game_OnUpdate()
+        {
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;
@@ -99,9 +143,8 @@ namespace Zypppy_Thresh
                     break;
                 case OrbwalkingMode.Laneclear:
                     break;
-
             }
-            if (Menu["misc"]["autoq"].Enabled)
+            if (Menu["misc"]["autoq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
@@ -154,31 +197,17 @@ namespace Zypppy_Thresh
             {
                 return;
             }
-
-
-            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && target.IsValidTarget(950) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
             {
-
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
-            if (Q.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ" && target.IsValidTarget(Q.Range))
+            else if (Q.Ready && useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
             {
-
-                if (target != null)
-                {
-                    Q.Cast();
-                }
+                Q.Cast();
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+                if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
-
-                if (target != null)
-                {
-                    E.Cast(target);
-                }
+                E.Cast(target);
             }
         }
 

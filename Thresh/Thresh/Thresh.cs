@@ -112,7 +112,7 @@ namespace Zypppy_Thresh
             
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, 950, 40, Color.Indigo);
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
@@ -215,7 +215,7 @@ namespace Zypppy_Thresh
         {
             bool useQ = Menu["harass"]["useq"].Enabled;
             bool useE = Menu["harass"]["usee"].Enabled;
-            var target = GetBestEnemyHeroTargetInRange(E.Range);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
             float manapercent = Menu["harass"]["mana"].As<MenuSlider>().Value;
             
             if (!target.IsValidTarget())

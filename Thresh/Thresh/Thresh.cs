@@ -69,9 +69,9 @@ namespace Zypppy_Thresh
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuBool("useq", "Use Q to Harass"));
-                HarassMenu.Add(new MenuSlider("manaq", "Mana Q", 50));
+                HarassMenu.Add(new MenuSlider("manaq", "Q Mana % >", 50, 0, 100));
                 HarassMenu.Add(new MenuBool("usee", "Use E to Harass"));
-                HarassMenu.Add(new MenuSlider("manae", "Mana E", 50));
+                HarassMenu.Add(new MenuSlider("manae", "E Mana % >", 50, 0, 100));
             }
             Menu.Add(HarassMenu);
             var miscmenu = new Menu("misc", "Misc");
@@ -230,18 +230,20 @@ namespace Zypppy_Thresh
         private void OnHarass()
         {
             bool useQ = Menu["harass"]["useq"].Enabled;
+            float useQMana = Menu["harass"]["manaq"].As<MenuSlider>().Value;
             bool useE = Menu["harass"]["usee"].Enabled;
+            float useEMana = Menu["harass"]["manae"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
             
             if (!target.IsValidTarget())
             {
                return;
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= useEMana)
             {
                E.Cast(target);
             }
-            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= useQMana)
             {
                Q.Cast(target);
             }

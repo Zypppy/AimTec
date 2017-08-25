@@ -55,7 +55,7 @@ namespace Zypppy_Thresh
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
+                ComboMenu.Add(new MenuBool("useqgap", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("selfwhp", "Self W % Hp", 20, 0, 100));
                 ComboMenu.Add(new MenuBool("usewally", "USe W Ally"));
@@ -189,7 +189,7 @@ namespace Zypppy_Thresh
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useq2"].Enabled;
+            bool useQGap = Menu["combo"]["useqgap"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
@@ -197,17 +197,20 @@ namespace Zypppy_Thresh
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(950) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
+            if (Q.Ready)
             {
-                Q.Cast(target);
+                if (target.IsValidTarget(950) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                {
+                    Q.Cast(target);
+                }
+                else if (target.IsValidTarget(Q.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+                {
+                    Q.Cast();
+                }
             }
-            else if (useQ2 && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
+            if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
-                Q.Cast();
-            }
-                if (E.Ready && useE && target.IsValidTarget(E.Range))
-            {
-                E.Cast(target);
+            E.Cast(target);
             }
         }
 
@@ -216,7 +219,6 @@ namespace Zypppy_Thresh
             bool useQ = Menu["harass"]["useq"].Enabled;
             bool useE = Menu["harass"]["usee"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            float manapercent = Menu["harass"]["mana"].As<MenuSlider>().Value;
             
             if (!target.IsValidTarget())
             {

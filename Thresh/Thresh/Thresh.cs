@@ -42,7 +42,6 @@ namespace Zypppy_Thresh
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
             Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
-            W.SetSkillshot(0.5f, 200f, 2000f, false, SkillshotType.Circle, false, HitChance.Low);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -60,7 +59,7 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usewally", "Use W Self"));
-                ComboMenu.Add(new MenuSlider("wahp", "Self W If Hp % <", 50, 0, 100));
+                ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));

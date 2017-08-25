@@ -42,7 +42,7 @@ namespace Zypppy_Thresh
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
             Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
-            W.SetSkillshot(0.5f, 200f, 800f, false, SkillshotType.Circle, false, HitChance.Medium);
+            W.SetSkillshot(0.5f, 200f, 2000f, false, SkillshotType.Circle, false, HitChance.Low);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -202,11 +202,11 @@ namespace Zypppy_Thresh
             }
             if (Q.Ready)
             {
-                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+                if (target.IsValidTarget(Q.Range) && useQ && !target.HasBuff("threshQ"))
                 {
                     Q.Cast(target);
                 }
-                else if (target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "ThreshQ")
+                else if (target.IsValidTarget(Q2.Range) && useQGap && target.HasBuff("threshQ"))
                 {
                     Q2.Cast();
                 }

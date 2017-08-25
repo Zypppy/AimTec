@@ -112,7 +112,7 @@ namespace Zypppy_Thresh
             
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, 950, 40, Color.Indigo);
+                Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
@@ -199,7 +199,7 @@ namespace Zypppy_Thresh
             }
             if (Q.Ready)
             {
-                if (target.IsValidTarget(950) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 2)
                 {
                     Q.Cast(target);
                 }

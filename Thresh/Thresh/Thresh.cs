@@ -37,7 +37,7 @@ namespace Zypppy_Thresh
 
         {
             Q = new Spell(SpellSlot.Q, 1100);
-            Q2 = new Spell(SpellSlot.Q, 1150);
+            Q2 = new Spell(SpellSlot.Q, 5000);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 450);
@@ -203,9 +203,9 @@ namespace Zypppy_Thresh
                 {
                     Q.Cast(target);
                 }
-                else if (target.IsValidTarget(Q.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+                else if (target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState != 1)
                 {
-                    Q.Cast();
+                    Q2.Cast();
                 }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range))

@@ -80,7 +80,7 @@ namespace Zypppy_Thresh
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
-                miscmenu.Add(new MenuBool("flashq", "Flash Q"));
+                miscmenu.Add(new MenuBool("flashq", "Flash Q BROKEN AFK"));
                 miscmenu.Add(new MenuKeyBind("flashqkey", "Flash Q Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(miscmenu);

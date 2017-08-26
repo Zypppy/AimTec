@@ -40,8 +40,8 @@ namespace Zypppy_Thresh
             Q2 = new Spell(SpellSlot.Q, 5000);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 400);
-            R = new Spell(SpellSlot.R, 450);
-            Q.SetSkillshot(0.5f, 70f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            R = new Spell(SpellSlot.R, 400);
+            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
 
 
@@ -221,7 +221,7 @@ namespace Zypppy_Thresh
             {
                 E.Cast(target);
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= REnemies)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {
                R.Cast();
             }

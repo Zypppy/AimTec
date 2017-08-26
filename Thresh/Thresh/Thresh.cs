@@ -31,17 +31,19 @@ namespace Zypppy_Thresh
 
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
 
-        public static Spell Q, Q2, W, E, R, Flash;
+        public static Spell Q, FQ, Q2, W, E, R, Flash;
 
         public void LoadSpells()
 
         {
             Q = new Spell(SpellSlot.Q, 1100);
+            FQ = new Spell(SpellSlot.Q, 1100);
             Q2 = new Spell(SpellSlot.Q, 5000);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 450);
             R = new Spell(SpellSlot.R, 400);
             Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.Medium);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
                 Flash = new Spell(SpellSlot.Summoner1, 425);
@@ -272,7 +274,7 @@ namespace Zypppy_Thresh
             {
                 if (Flash.Cast(target.ServerPosition))
                 {
-                    Q.Cast(target);
+                    FQ.Cast(target);
                 }
             }
         }

@@ -270,9 +270,9 @@ namespace Zypppy_Thresh
             }
             if (Q.Ready && Flash.Ready && Flash != null && target.IsValidTarget() && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && useQFlash && target.Distance(Player) < Q.Range + 410)
             {
-                if (Q.Cast(target.ServerPosition))
+                if (Flash.Cast(target.ServerPosition))
                 {
-                    Flash.Cast(target.ServerPosition);
+                    Q.Cast(target);
                 }
             }
         }

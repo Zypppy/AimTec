@@ -31,7 +31,7 @@ namespace Zypppy_Thresh
 
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
 
-        public static Spell Q, Q2, W, E, R;
+        public static Spell Q, Q2, W, E, R, Flash;
 
         public void LoadSpells()
 
@@ -43,9 +43,10 @@ namespace Zypppy_Thresh
             R = new Spell(SpellSlot.R, 400);
             Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
-
-
-
+            if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
+                Flash = new Spell(SpellSlot.Summoner1, 425);
+            if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerFlash")
+                Flash = new Spell(SpellSlot.Summoner2, 425);
         }
 
 
@@ -77,6 +78,8 @@ namespace Zypppy_Thresh
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
+                miscmenu.Add(new MenuBool("flashq", "Flash Q"));
+                miscmenu.Add(new MenuKeyBind("flashqkey", "Flash Q Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(miscmenu);
             var DrawingsMenu = new Menu("drawings", "Drawings");
@@ -85,6 +88,7 @@ namespace Zypppy_Thresh
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
+                DrawingsMenu.Add(new MenuBool("drawfq", "Draw Flash Q Range"));
             }
             Menu.Add(DrawingsMenu);
             EGap.Gapcloser.Attach(Menu, "E Anti-GapClose");
@@ -128,6 +132,10 @@ namespace Zypppy_Thresh
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Aquamarine);
             }
+            if (Menu["drawings"]["drawfq"].Enabled && Q.Ready && Flash.Ready && Flash != null)
+            {
+                Render.Circle(Player.Position, Q.Range + 410, 40, Color.AntiqueWhite);
+            }
         }
         private void Game_OnUpdate()
         {
@@ -158,8 +166,10 @@ namespace Zypppy_Thresh
 
                     Q.Cast(target);
                 }
-
-
+            }
+            if (Menu["misc"]["flashqkey"].Enabled)
+            {
+                FlashQ();
             }
         }
 
@@ -234,18 +244,36 @@ namespace Zypppy_Thresh
             bool useE = Menu["harass"]["usee"].Enabled;
             float useEMana = Menu["harass"]["manae"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            
+
             if (!target.IsValidTarget())
             {
-               return;
+                return;
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= useEMana)
             {
-               E.Cast(target);
+                E.Cast(target);
             }
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= useQMana)
             {
-               Q.Cast(target);
+                Q.Cast(target);
+            }
+        }
+        private void FlashQ()
+        {
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range + 410);
+            bool useQFlash = Menu["misc"]["flashq"].Enabled;
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && Flash.Ready && Flash != null && target.IsValidTarget() && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && useQFlash && target.Distance(Player) < Q.Range + 410)
+            {
+                if (Q.Cast(target.ServerPosition))
+                {
+                    Flash.Cast(target.ServerPosition);
+                }
             }
         }
     }

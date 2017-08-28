@@ -171,10 +171,10 @@ namespace Thresh
                     Q.Cast(target);
                 }
             }
-            if (Menu["misc"]["flashqkey"].Enabled)
-            {
+            //if (Menu["misc"]["flashqkey"].Enabled)
+            //{
                 //FlashQ();
-            }
+            //}
         }
 
             public static Obj_AI_Hero GetBestEnemyHeroTarget()
@@ -215,9 +215,8 @@ namespace Thresh
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            foreach (var ally in GameObjects.AllyHeroes.Where(ally => ally.IsValid && !ally.IsDead && Player.ServerPosition.Distance(ally.ServerPosition) < W.Range))
 
-                if (!target.IsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -227,11 +226,14 @@ namespace Thresh
             }
             if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && target.HasBuff("ThreshQ"))
             {
-               Q2.Cast();
+                Q2.Cast();
             }
-            if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
+            foreach (var ally in GameObjects.AllyHeroes.Where(ally => ally.IsValid && !ally.IsDead && Player.ServerPosition.Distance(ally.ServerPosition) < W.Range))
             {
-                W.Cast(Player.ServerPosition);
+                if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
+                {
+                    W.Cast(ally.ServerPosition);
+                }
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
             {
@@ -270,7 +272,7 @@ namespace Thresh
         //    var target = GetBestEnemyHeroTargetInRange(Q.Range + 410);
         //    bool useQFlash = Menu["misc"]["flashq"].Enabled;
 
-//            if (!target.IsValidTarget())
+//    if (!target.IsValidTarget())
 //            {
  //               return;
   //          }

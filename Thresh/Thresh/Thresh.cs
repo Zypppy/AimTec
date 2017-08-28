@@ -208,10 +208,10 @@ namespace Thresh
             bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
-           // bool useWAlly = Menu["combo"]["usewally"].Enabled;
-           // float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
+            //bool useWAlly = Menu["combo"]["usewally"].Enabled;
+            //float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useE2 = Menu["combo"]["usee2"].Enabled;
+            //bool useE2 = Menu["combo"]["usee2"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
@@ -228,12 +228,9 @@ namespace Thresh
             {
                 Q2.Cast();
             }
-            foreach (var ally in GameObjects.AllyHeroes.Where(ally => ally.IsValid && !ally.IsDead && Player.ServerPosition.Distance(ally.ServerPosition) < W.Range))
+            if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
             {
-                if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
-                {
-                    W.Cast(ally.ServerPosition);
-                }
+                W.Cast(Player.ServerPosition);
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
             {

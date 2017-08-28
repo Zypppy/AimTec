@@ -42,10 +42,10 @@ namespace Thresh
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 450);
             R = new Spell(SpellSlot.R, 400);
-            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
             W.SetSkillshot(0.5f, 50f, 2200f, false, SkillshotType.Circle);
-            FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.High);
-            E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
+            FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
+            E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
                 Flash = new Spell(SpellSlot.Summoner1, 425);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerFlash")
@@ -215,6 +215,8 @@ namespace Thresh
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var QPrediction = Q.GetPrediction(target);
+            var EPrediction = E.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -222,7 +224,10 @@ namespace Thresh
             }
             if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
-               Q.Cast(target);
+               if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
             }
             if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && target.HasBuff("ThreshQ"))
             {
@@ -234,7 +239,10 @@ namespace Thresh
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
             {
-                E.Cast(target);
+                if (EPrediction.HitChance >= HitChance.Medium)
+                {
+                    E.Cast(QPrediction.CastPosition);
+                }
             }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {

@@ -224,7 +224,7 @@ namespace Thresh
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(QRange) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
                if (QPrediction.HitChance >= HitChance.High)
                 {

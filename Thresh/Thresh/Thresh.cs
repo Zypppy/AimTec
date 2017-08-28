@@ -59,6 +59,7 @@ namespace Thresh
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuSlider("qrange", "Q Range Slider", 900, 0, 1100));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
@@ -120,9 +121,10 @@ namespace Thresh
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
             
+            float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, QRange, 40, Color.Indigo);
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {

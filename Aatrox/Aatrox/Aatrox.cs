@@ -221,12 +221,12 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                var QPrediction = Q.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                var QPrediction = Q2.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
                 {
                     if (QPrediction.HitChance >= HitChance.High)
                     {
-                        Q.Cast(QPrediction.CastPosition);
+                        Q2.Cast(QPrediction.CastPosition);
                     }
                 }
             }
@@ -295,6 +295,14 @@
                 {
                     Q2.Cast(Q2Prediction.CastPosition);
                 }
+            }
+            if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
+            {
+                W.Cast();
+            }
+            if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
+            {
+                W.Cast();
             }
         }
     }

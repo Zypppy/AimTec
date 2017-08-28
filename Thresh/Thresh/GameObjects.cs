@@ -1,6 +1,6 @@
 ﻿// ReSharper disable ArrangeAccessorOwnerBody
 
-namespace Zypppy_Thresh
+namespace Thresh
 {
     using System.Collections.Generic;
     using System.Linq;

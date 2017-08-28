@@ -1,4 +1,4 @@
-﻿namespace Zypppy_Thresh
+﻿namespace Thresh
 {
     using Aimtec;
     using Aimtec.SDK.Events;

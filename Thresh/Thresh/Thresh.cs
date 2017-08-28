@@ -1,5 +1,5 @@
 ﻿
-namespace Zypppy_Thresh
+namespace Thresh
 {
     using System;
     using System.Collections.Generic;

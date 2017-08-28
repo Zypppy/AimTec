@@ -51,7 +51,8 @@
             Orbwalker.Attach(Menu);
             var ComboMenu = new Menu("combo", "Combo");
             {
-                ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuBool("useq", "Use Outer Q"));
+                ComboMenu.Add(new MenuBool("useq2", "Use Inner Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuSlider("whp", "Switch To Heal if Hp <", 60, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
@@ -266,6 +267,7 @@
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
             bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQ2 = Menu["combo"]["useq2"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             float hpW = Menu["combo"]["whp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
@@ -285,6 +287,13 @@
                 if (QPrediction.HitChance >= HitChance.Medium)
                 {
                     Q.Cast(QPrediction.CastPosition);
+                }
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2)
+            {
+                if (Q2Prediction.HitChance >= HitChance.Medium)
+                {
+                    Q2.Cast(Q2Prediction.CastPosition);
                 }
             }
         }

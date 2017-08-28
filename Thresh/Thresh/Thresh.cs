@@ -241,10 +241,6 @@ namespace Zypppy_Thresh
             {
                 E.Cast(target);
             }
-            if (E.Ready && useE2 && target.IsValidTarget(E.Range))
-            {
-                E.Cast(Player.ServerPosition);
-            }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {
                R.Cast();

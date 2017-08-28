@@ -260,6 +260,8 @@ namespace Thresh
             bool useE = Menu["harass"]["usee"].Enabled;
             float useEMana = Menu["harass"]["manae"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var QPrediction = Q.GetPrediction(target);
+            var EPrediction = E.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -267,11 +269,17 @@ namespace Thresh
             }
             if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= useEMana)
             {
-                E.Cast(target);
+                if (EPrediction.HitChance >= HitChance.High)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
             }
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= useQMana)
             {
-                Q.Cast(target);
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
             }
         }
         //private void FlashQ()

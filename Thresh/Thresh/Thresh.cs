@@ -231,9 +231,9 @@ namespace Zypppy_Thresh
             }
             if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
             {
-                W.Cast(Player);
+                W.Cast(Player.ServerPosition);
             }
-            if (W.Ready && useWAlly && ally.HealthPercent() <= WAHP && ally.IsValidTarget(W.Range))
+            if (W.Ready && useWAlly && ally.HealthPercent() <= WAHP)
             {
                 W.Cast(ally.ServerPosition);
             }
@@ -243,7 +243,7 @@ namespace Zypppy_Thresh
             }
             if (E.Ready && useE2 && target.IsValidTarget(E.Range))
             {
-                E.Cast(Player);
+                E.Cast(Player.ServerPosition);
             }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {

@@ -146,7 +146,7 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
             }
-            if (Menu["drawings"]["drawe"].Enabled && R.Ready)
+            if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Chocolate);
             }
@@ -303,6 +303,17 @@
             if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
             {
                 W.Cast();
+            }
+            if (E.Ready && target.IsValidTarget(E.Range) && useE)
+            {
+                if (EPrediction.HitChance >= HitChance.High)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
+            }
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= thR || target.HealthPercent() < thpR)
+            {
+                R.Cast();
             }
         }
     }

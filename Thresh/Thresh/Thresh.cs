@@ -43,6 +43,7 @@ namespace Zypppy_Thresh
             E = new Spell(SpellSlot.E, 450);
             R = new Spell(SpellSlot.R, 400);
             Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.VeryHigh);
+            W.SetSkillshot(0.5f, 50f, 2200f, false, SkillshotType.Circle);
             FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line, false, HitChance.High);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line, false, HitChance.Medium);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
@@ -61,8 +62,8 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
-                //ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
-                //ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
+                ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
+                ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
                 ComboMenu.Add(new MenuBool("usee2", "Use E Pull"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
@@ -207,13 +208,14 @@ namespace Zypppy_Thresh
             bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
-            //bool useWAlly = Menu["combo"]["usewally"].Enabled;
-            //float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
+            bool useWAlly = Menu["combo"]["usewally"].Enabled;
+            float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useE2 = Menu["combo"]["usee2"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var ally = GameObjects.AllyHeroes.Where(x => x.IsInRange(Q.Range + 400) && !x.IsDead && x.IsAlly && !x.IsMe).FirstOrDefault(x => x.Distance(Player) <= 1400);
 
             if (!target.IsValidTarget())
             {
@@ -231,7 +233,11 @@ namespace Zypppy_Thresh
             {
                 W.Cast(Player);
             }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
+            if (W.Ready && useWAlly && ally.HealthPercent() <= WAHP && ally.IsValidTarget(W.Range))
+            {
+                W.Cast(ally.ServerPosition);
+            }
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && target.HasBuff("ThreshQ"))
             {
                 E.Cast(target);
             }

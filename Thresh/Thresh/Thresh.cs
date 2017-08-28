@@ -207,6 +207,7 @@ namespace Thresh
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
+            float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
@@ -224,7 +225,7 @@ namespace Thresh
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+            if (Q.Ready && target.IsValidTarget(QRange) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
                if (QPrediction.HitChance >= HitChance.High)
                 {

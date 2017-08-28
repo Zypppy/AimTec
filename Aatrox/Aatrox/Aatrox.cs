@@ -107,7 +107,7 @@
                 DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
-                DrawMenu.Add(new MenuBool("drawqdmg", "Draw DMG"));
+                DrawMenu.Add(new MenuBool("drawdmg", "Draw DMG"));
             }
             Menu.Add(DrawMenu);
             Menu.Attach();
@@ -150,7 +150,7 @@
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Chocolate);
             }
-            if (Menu["drawings"]["drawqdmg"].Enabled && Q.Ready)
+            if (Menu["drawings"]["drawdmg"].Enabled)
             {
                 ObjectManager.Get<Obj_AI_Base>()
                   .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))

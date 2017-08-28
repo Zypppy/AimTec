@@ -120,7 +120,7 @@ namespace Thresh
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
-            
+
             float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {

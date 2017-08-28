@@ -64,6 +64,7 @@ namespace Zypppy_Thresh
                 //ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
                 //ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
+                ComboMenu.Add(new MenuBool("usee2", "Use E Pull"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));
 
@@ -209,6 +210,7 @@ namespace Zypppy_Thresh
             //bool useWAlly = Menu["combo"]["usewally"].Enabled;
             //float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useE2 = Menu["combo"]["usee2"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
@@ -232,6 +234,10 @@ namespace Zypppy_Thresh
             if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
                 E.Cast(target);
+            }
+            if (E.Ready && useE2 && target.IsValidTarget(E.Range) && target.IsValidTarget(E.Width))
+            {
+                E.Cast(Player);
             }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {

@@ -42,7 +42,7 @@ namespace Thresh
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 450);
             R = new Spell(SpellSlot.R, 400);
-            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
+            Q.SetSkillshot(0.5f, 65f, 1900f, true, SkillshotType.Line);
             W.SetSkillshot(0.5f, 50f, 2200f, false, SkillshotType.Circle);
             FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line);
@@ -205,7 +205,7 @@ namespace Thresh
 
         private void OnCombo()
         {
-
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
             bool useQ = Menu["combo"]["useq"].Enabled;
             float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             bool useQGap = Menu["combo"]["useq2"].Enabled;

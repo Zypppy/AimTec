@@ -62,10 +62,10 @@ namespace Zypppy_Thresh
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
-                ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
-                ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
+                //ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
+                //ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
-                ComboMenu.Add(new MenuBool("usee2", "Use E Pull"));
+                //ComboMenu.Add(new MenuBool("usee2", "Use E Pull"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));
 
@@ -82,8 +82,8 @@ namespace Zypppy_Thresh
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
-                miscmenu.Add(new MenuBool("flashq", "Flash Q BROKEN AFK"));
-                miscmenu.Add(new MenuKeyBind("flashqkey", "Flash Q Key:", KeyCode.T, KeybindType.Press));
+                //miscmenu.Add(new MenuBool("flashq", "Flash Q BROKEN AFK"));
+                //miscmenu.Add(new MenuKeyBind("flashqkey", "Flash Q Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(miscmenu);
             var DrawingsMenu = new Menu("drawings", "Drawings");
@@ -173,7 +173,7 @@ namespace Zypppy_Thresh
             }
             if (Menu["misc"]["flashqkey"].Enabled)
             {
-                FlashQ();
+                //FlashQ();
             }
         }
 
@@ -208,16 +208,16 @@ namespace Zypppy_Thresh
             bool useQGap = Menu["combo"]["useq2"].Enabled;
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
-            bool useWAlly = Menu["combo"]["usewally"].Enabled;
-            float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
+           // bool useWAlly = Menu["combo"]["usewally"].Enabled;
+           // float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useE2 = Menu["combo"]["usee2"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            var ally = GameObjects.AllyHeroes.Where(x => x.IsInRange(Q.Range + 400) && !x.IsDead && x.IsAlly && !x.IsMe).FirstOrDefault(x => x.Distance(Player) <= 1400);
+            foreach (var ally in GameObjects.AllyHeroes.Where(ally => ally.IsValid && !ally.IsDead && Player.ServerPosition.Distance(ally.ServerPosition) < W.Range))
 
-            if (!target.IsValidTarget())
+                if (!target.IsValidTarget())
             {
                 return;
             }
@@ -233,11 +233,7 @@ namespace Zypppy_Thresh
             {
                 W.Cast(Player.ServerPosition);
             }
-            if (W.Ready && useWAlly && ally.HealthPercent() <= WAHP)
-            {
-                W.Cast(ally.ServerPosition);
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && target.HasBuff("ThreshQ"))
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
             {
                 E.Cast(target);
             }
@@ -268,23 +264,23 @@ namespace Zypppy_Thresh
                 Q.Cast(target);
             }
         }
-        private void FlashQ()
-        {
-            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
-            var target = GetBestEnemyHeroTargetInRange(Q.Range + 410);
-            bool useQFlash = Menu["misc"]["flashq"].Enabled;
+        //private void FlashQ()
+        //{
+        //    Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+        //    var target = GetBestEnemyHeroTargetInRange(Q.Range + 410);
+        //    bool useQFlash = Menu["misc"]["flashq"].Enabled;
 
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
-            if (Q.Ready && Flash.Ready && Flash != null && target.IsValidTarget() && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && useQFlash && target.Distance(Player) < Q.Range + 410)
-            {
-                if (Flash.Cast(target))
-                {
-                    FQ.Cast(target);
-                }
-            }
-        }
+//            if (!target.IsValidTarget())
+//            {
+ //               return;
+  //          }
+    //        if (Q.Ready && Flash.Ready && Flash != null && target.IsValidTarget() && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && useQFlash && target.Distance(Player) < Q.Range + 410)
+      //      {
+        //        if (Flash.Cast(target))
+          //      {
+            //        FQ.Cast(target);
+              //  }
+           // }
+       // }
     }
 }

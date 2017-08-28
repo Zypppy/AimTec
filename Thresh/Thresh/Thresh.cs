@@ -235,7 +235,7 @@ namespace Zypppy_Thresh
             {
                 E.Cast(target);
             }
-            if (E.Ready && useE2 && target.IsValidTarget(E.Range) && target.IsValidTarget(E.Width))
+            if (E.Ready && useE2 && target.IsValidTarget(E.Range))
             {
                 E.Cast(Player);
             }

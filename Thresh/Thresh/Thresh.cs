@@ -205,7 +205,6 @@ namespace Thresh
 
         private void OnCombo()
         {
-            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
             bool useQ = Menu["combo"]["useq"].Enabled;
             float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             bool useQGap = Menu["combo"]["useq2"].Enabled;

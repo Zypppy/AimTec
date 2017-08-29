@@ -394,7 +394,7 @@
                         Q2.Cast(Q2Prediction.CastPosition);
                     }
                 }
-                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW || priorityW)
+                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
                 {
                     W.Cast();
                 }

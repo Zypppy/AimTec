@@ -71,7 +71,8 @@
             Menu.Add(HarassMenu);
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
             {
-                LaneClearMenu.Add(new MenuBool("useq", "Use Q"));
+                LaneClearMenu.Add(new MenuBool("useq", "Use Outer Q"));
+                LaneClearMenu.Add(new MenuBool("useq2", "Use Inner Q"));
                 LaneClearMenu.Add(new MenuBool("usew", "Use W"));
                 LaneClearMenu.Add(new MenuBool("wpriority", "Priority Heal"));
                 LaneClearMenu.Add(new MenuSlider("whp", "Switch To Heal If Hp <", 50, 0, 100));
@@ -193,7 +194,7 @@
                     OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //OnLaneClear();
+                    OnLaneClear();
                     //OnJungleClear();
                     break;
 
@@ -351,6 +352,64 @@
                 {
                     E.Cast(EPrediction.CastPosition);
                 }
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
+            {
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                bool priorityW = Menu["laneclear"]["wpriority"].Enabled;
+                float hpW = Menu["laneclear"]["whp"].As<MenuSlider>().Value;
+                bool useE = Menu["laneclear"]["usee"].Enabled;
+                var QPrediction = Q.GetPrediction(minion);
+                var Q2Prediction = Q2.GetPrediction(minion);
+                var EPrediction = E.GetPrediction(minion);
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ)
+                {
+                    if (QPrediction.HitChance >= HitChance.Medium)
+                    {
+                        Q.Cast(QPrediction.CastPosition);
+                    }
+                }
+                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2)
+                {
+                    if (Q2Prediction.HitChance >= HitChance.Medium)
+                    {
+                        Q2.Cast(Q2Prediction.CastPosition);
+                    }
+                }
+                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW || priorityW)
+                {
+                    W.Cast();
+                }
+                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
+                {
+                    W.Cast();
+                }
+                if (E.Ready && minion.IsValidTarget(E.Range) && useE)
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+                
             }
         }
     }

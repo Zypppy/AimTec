@@ -441,11 +441,11 @@
         {
             foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                bool useW = Menu["laneclear"]["usew"].Enabled;
-                float hpW = Menu["laneclear"]["whp"].As<MenuSlider>().Value;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float hpW = Menu["jungleclear"]["whp"].As<MenuSlider>().Value;
+                bool useE = Menu["jungleclear"]["usee"].Enabled;
                 var QPrediction = Q.GetPrediction(minion);
                 var Q2Prediction = Q2.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);

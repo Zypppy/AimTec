@@ -63,7 +63,8 @@
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
             {
-                HarassMenu.Add(new MenuBool("useq", "Use Q"));
+                HarassMenu.Add(new MenuBool("useq", "Use Outer Q"));
+                HarassMenu.Add(new MenuBool("useq2", "Use Inner Q"));
                 HarassMenu.Add(new MenuSlider("qhp", "If HP >=", 60, 0, 100));
                 HarassMenu.Add(new MenuBool("usee", "Use E"));
             }
@@ -189,7 +190,7 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
                     //OnLaneClear();
@@ -314,6 +315,42 @@
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= thR || target.HealthPercent() < thpR)
             {
                 R.Cast();
+            }
+        }
+        private void OnHarass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(E.Range);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            bool useQ2 = Menu["harass"]["useq2"].Enabled;
+            float hpQ = Menu["harass"]["qhp"].As<MenuSlider>().Value;
+            bool useE = Menu["harass"]["usee"].Enabled;
+            var QPrediction = Q.GetPrediction(target);
+            var Q2Prediction = Q2.GetPrediction(target);
+            var EPrediction = E.GetPrediction(target);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.HealthPercent() >= hpQ)
+            {
+                if (QPrediction.HitChance >= HitChance.Medium)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.HealthPercent() >= hpQ)
+            {
+                if (Q2Prediction.HitChance >= HitChance.Medium)
+                {
+                    Q2.Cast(Q2Prediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E.Range) && useE)
+            {
+                if (EPrediction.HitChance >= HitChance.High)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
             }
         }
     }

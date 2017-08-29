@@ -439,7 +439,7 @@
         }
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
                 bool useQ = Menu["laneclear"]["useq"].Enabled;
                 bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
@@ -449,7 +449,7 @@
                 var QPrediction = Q.GetPrediction(minion);
                 var Q2Prediction = Q2.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);
-                if (!minion.IsValidTarget())
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
                 {
                     return;
                 }

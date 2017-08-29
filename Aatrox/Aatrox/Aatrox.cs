@@ -83,7 +83,6 @@
                 JungleClearMenu.Add(new MenuBool("useq", "Use Q"));
                 JungleClearMenu.Add(new MenuBool("useq2", "Use Inner Q"));
                 JungleClearMenu.Add(new MenuBool("usew", "Use W"));
-                JungleClearMenu.Add(new MenuBool("wpriority", "Priority Heal"));
                 JungleClearMenu.Add(new MenuSlider("whp", "Switch To Heal If Hp <", 50, 0, 100));
                 JungleClearMenu.Add(new MenuBool("usee", "Use E"));
             }

@@ -32,7 +32,7 @@
         {
             Q = new Spell(SpellSlot.Q, 900f);
             W = new Spell(SpellSlot.W, 350f);
-            W2 = new Spell(SpellSlot.W, 600f);
+            W2 = new Spell(SpellSlot.W, 650f);
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1420f);
             Q.SetSkillshot(0.4f, 180, 850, false, SkillshotType.Line);
@@ -253,6 +253,10 @@
                     W.Cast();
                 }
                 else if (target.IsValidTarget(W.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                {
+                    W.Cast();
+                }
+                else if (!target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                 {
                     W.Cast();
                 }

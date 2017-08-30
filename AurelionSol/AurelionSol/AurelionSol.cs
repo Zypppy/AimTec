@@ -248,7 +248,7 @@
             }
             if (W.Ready)
             {
-                if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState != 2)
                 {
                     W.Cast();
                 }

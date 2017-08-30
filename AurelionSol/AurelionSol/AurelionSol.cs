@@ -30,7 +30,7 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 650f);
+            Q = new Spell(SpellSlot.Q, 900f);
             W = new Spell(SpellSlot.W, 350f);
             W2 = new Spell(SpellSlot.W, 600f);
             E = new Spell(SpellSlot.E, 400f);

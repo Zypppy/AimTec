@@ -35,8 +35,8 @@
             W2 = new Spell(SpellSlot.W, 600f);
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1420f);
-            Q.SetSkillshot(0.25f, 180, 850, false, SkillshotType.Line);
-            R.SetSkillshot(0.5f, 300, 4500, false, SkillshotType.Line);
+            Q.SetSkillshot(0.4f, 180, 850, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 300, 4500, false, SkillshotType.Line);
         }
         public AurelionSol()
         {
@@ -65,6 +65,7 @@
             var DrawingsMenu = new Menu("drawings", "Drawings");
             {
                 DrawingsMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawingsMenu.Add(new MenuBool("drawq2", "Draw Q Path Range"));
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("draww2", "Draw Active W Range"));
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
@@ -82,10 +83,27 @@
         }
         public void OnCreate(GameObject obj)
         {
-           if (obj != null && obj.IsValid)
-           {
-               Console.WriteLine(obj.Name);
-           }
+            var missile = obj as MissileClient;
+            if (missile == null)
+            {
+                return;
+            }
+
+            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
+                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
+            {
+                return;
+            }
+            var hero = missile.SpellCaster as Obj_AI_Hero;
+            if (hero == null)
+            {
+                return;
+            }
+            if (missile.SpellData.Name == "AurelionSolQMissile")
+            {
+                missiles = missile;
+            }
+
         }
         private void OnDestroy(GameObject obj)
         {
@@ -105,7 +123,7 @@
             {
                 return;
             }
-            if (missile.SpellData.Name == "LissandraEMissile")
+            if (missile.SpellData.Name == "AurelionSolQMissile")
             {
                 missiles = null;
             }
@@ -121,17 +139,24 @@
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
+            if (Q.Ready && Menu["drawings"]["drawq2"].Enabled)
+            {
+                if (missiles != null)
+                {
+                    Render.Circle(missiles.ServerPosition, 180, 40, Color.DeepPink);
+                }
+            }
             if (W.Ready && Menu["drawings"]["draww2"].Enabled)
             {
-                Render.Circle(Player.Position, W2.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, W2.Range, 40, Color.DeepSkyBlue);
             }
             if (W.Ready && Menu["drawings"]["draww"].Enabled)
             {
-                Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, W.Range, 40, Color.Cornsilk);
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
-                Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
             }
         }
         private void Game_OnUpdate()

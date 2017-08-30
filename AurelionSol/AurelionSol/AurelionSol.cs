@@ -232,11 +232,18 @@
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ)
+            if (Q.Ready)
             {
-                if (QPrediction.HitChance >= HitChance.Medium)
+                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
                 {
-                    Q.Cast(QPrediction.CastPosition);
+                    if (QPrediction.HitChance >= HitChance.Medium)
+                    {
+                        Q.Cast(QPrediction.CastPosition);
+                    }
+                }
+                else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState ==2)
+                {
+                    Q.Cast();
                 }
             }
         }

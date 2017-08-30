@@ -36,7 +36,7 @@
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1420f);
             Q.SetSkillshot(0.4f, 180, 850, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 300, 4500, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 300, 1750, false, SkillshotType.Line);
         }
         public AurelionSol()
         {

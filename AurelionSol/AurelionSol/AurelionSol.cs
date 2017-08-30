@@ -241,9 +241,27 @@
                         Q.Cast(QPrediction.CastPosition);
                     }
                 }
-                else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState ==2)
+                else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                 {
                     Q.Cast();
+                }
+            }
+            if (W.Ready)
+            {
+                if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1)
+                {
+                    W.Cast();
+                }
+                else if (target.IsValidTarget(W.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                {
+                    W.Cast();
+                }
+            }
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && Player.CountEnemyHeroesInRange(R.Range) >= hitR)
+            {
+                if (RPrediction.HitChance >= HitChance.High)
+                {
+                    R.Cast(RPrediction.CastPosition);
                 }
             }
         }

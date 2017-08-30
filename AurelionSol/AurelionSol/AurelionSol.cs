@@ -143,7 +143,7 @@
             {
                 if (missiles != null)
                 {
-                    Render.Circle(missiles.ServerPosition, 180, 40, Color.DeepPink);
+                    Render.Circle(missiles.ServerPosition, 250, 40, Color.DeepPink);
                 }
             }
             if (W.Ready && Menu["drawings"]["draww2"].Enabled)

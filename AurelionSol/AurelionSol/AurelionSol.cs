@@ -171,7 +171,7 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
                     break;
@@ -266,6 +266,49 @@
                 if (RPrediction.HitChance >= HitChance.High)
                 {
                     R.Cast(RPrediction.CastPosition);
+                }
+            }
+        }
+        private void OnHarass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            var QPrediction = Q.GetPrediction(target);
+            bool useW = Menu["harass"]["usew"].Enabled;
+            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready)
+            {
+                if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1 && Player.ManaPercent() >= manaQ)
+                {
+                    if (QPrediction.HitChance >= HitChance.Medium)
+                    {
+                        Q.Cast(QPrediction.CastPosition);
+                    }
+                }
+                else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+                {
+                    Q.Cast();
+                }
+            }
+            if (W.Ready)
+            {
+                if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState != 2 && Player.ManaPercent() >= manaW)
+                {
+                    W.Cast();
+                }
+                else if (target.IsValidTarget(W.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                {
+                    W.Cast();
+                }
+                else if (!target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                {
+                    W.Cast();
                 }
             }
         }

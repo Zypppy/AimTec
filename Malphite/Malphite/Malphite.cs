@@ -42,7 +42,7 @@
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("usee", "Use E"));
-                Combo.Add(new MenuBool("user", "Use R"));
+                Combo.Add(new MenuBool("user", "Use R Only Above Slider Value"));
                 Combo.Add(new MenuSlider("hitr", "Cast R If Hit X Enemies", 2, 0, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
@@ -160,10 +160,10 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //OnLaneClear();
+                    OnLaneClear();
                     break;
             }
             if (Menu["combo"]["key"].Enabled)
@@ -253,9 +253,75 @@
                 }
             }
         }
+        private void OnHarass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            bool useW = Menu["harass"]["usew"].Enabled;
+            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+            bool useE = Menu["harass"]["usee"].Enabled;
+            float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
+            {
+                Q.Cast(target);
+            }
+            if (W.Ready && useW && target.IsValidTarget(2000) && Player.ManaPercent() >= manaW)
+            {
+                W.Cast();
+            }
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE)
+            {
+                E.Cast();
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            {
+                bool useQ = Menu["harass"]["useq"].Enabled;
+                float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+                bool useW = Menu["harass"]["usew"].Enabled;
+                float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+                bool useE = Menu["harass"]["usee"].Enabled;
+                float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
+
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
+                {
+                    Q.Cast(minion);
+                }
+                if (W.Ready && useW && minion.IsValidTarget(200) && Player.ManaPercent() >= manaW)
+                {
+                    W.Cast();
+                }
+                if (E.Ready && useE && minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE)
+                {
+                    E.Cast();
+                }
+            }
+        }
         private void ManualR()
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
             var RPrediction = R.GetPrediction(target);
             if (R.Ready && target.IsValidTarget(R.Range))
             {

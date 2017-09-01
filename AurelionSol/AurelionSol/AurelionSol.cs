@@ -36,7 +36,7 @@
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1420f);
             Q.SetSkillshot(0.4f, 180, 850, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 300, 1750, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 250, 1750, false, SkillshotType.Line);
         }
         public AurelionSol()
         {
@@ -177,6 +177,10 @@
                 case OrbwalkingMode.Laneclear:
                     break;
             }
+            if (Menu["combo"]["key"].Enabled)
+            {
+                ManualR();
+            }
             Killsteal();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
@@ -310,6 +314,19 @@
                 else if (!target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                 {
                     W.Cast();
+                }
+            }
+        }
+        private void ManualR()
+        {
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            var RPrediction = R.GetPrediction(target);
+            if (R.Ready && target.IsValidTarget(R.Range))
+            {
+                if (RPrediction.HitChance >= HitChance.High)
+                {
+                    R.Cast(RPrediction.CastPosition);
                 }
             }
         }

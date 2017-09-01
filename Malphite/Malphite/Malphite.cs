@@ -78,7 +78,7 @@
                 Drawings.Add(new MenuBool("drawq", "Draw Q Range"));
                 Drawings.Add(new MenuBool("draww", "Draw W Range"));
                 Drawings.Add(new MenuBool("drawe", "Draw E Range"));
-                Drawings.Add(new MenuBool("drawR", "Draw R Range"));
+                Drawings.Add(new MenuBool("drawr", "Draw R Range"));
                 Drawings.Add(new MenuBool("dmg", "Damage Indicator"));
             }
             Menu.Add(Drawings);

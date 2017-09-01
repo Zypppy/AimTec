@@ -45,8 +45,9 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
+                ComboMenu.Add(new MenuBool("user", "Use R Only Above Slider Value"));
+                ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 0, 5));
+                ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
@@ -261,7 +262,7 @@
                     W.Cast();
                 }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && useR && Player.CountEnemyHeroesInRange(R.Range) >= hitR)
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(null, Menu["combo"]["hitr"].As<MenuSlider>().Value))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

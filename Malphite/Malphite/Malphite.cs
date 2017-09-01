@@ -241,7 +241,7 @@
             {
                 E.Cast();
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Width) >= hitR)
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

@@ -32,7 +32,7 @@
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 375);
             R = new Spell(SpellSlot.R, 1000);
-            R.SetSkillshot(0.00f, 160, 700, false, SkillshotType.Circle);
+            R.SetSkillshot(0.00f, 160, 1700, false, SkillshotType.Circle);
         }
         public Malphite()
         {

@@ -248,6 +248,13 @@
                     R.Cast(RPrediction.CastPosition);
                 }
             }
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && Menu["combo"]["key"].Enabled)
+            {
+                if(RPrediction.HitChance >= HitChance.High)
+                {
+                    R.Cast(RPrediction.CastPosition);
+                }
+            }
         }
     }
 }

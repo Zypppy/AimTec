@@ -262,7 +262,7 @@
                     W.Cast();
                 }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(null, Menu["combo"]["hitr"].As<MenuSlider>().Value))
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

@@ -166,6 +166,10 @@
                     //OnLaneClear();
                     break;
             }
+            if (Menu["combo"]["key"].Enabled)
+            {
+                ManualR();
+            }
             Killsteal();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True, bool ignoreShields = false)
@@ -248,9 +252,14 @@
                     R.Cast(RPrediction.CastPosition);
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && Menu["combo"]["key"].Enabled)
+        }
+        private void ManualR()
+        {
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            var RPrediction = R.GetPrediction(target);
+            if (R.Ready && target.IsValidTarget(R.Range))
             {
-                if(RPrediction.HitChance >= HitChance.High)
+                if (RPrediction.HitChance >= HitChance.High)
                 {
                     R.Cast(RPrediction.CastPosition);
                 }

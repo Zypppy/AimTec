@@ -29,10 +29,10 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 230f);
-            Q2 = new Spell(SpellSlot.Q, 450f);
+            Q2 = new Spell(SpellSlot.Q, 500f);
             W = new Spell(SpellSlot.W, 750f);
-            W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 550f);
+            W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -227,6 +227,26 @@
                     Ignite.CastOnUnit(besttarget);
                 }
             }
+        }
+        public static Obj_AI_Hero GetBestEnemyHeroTarget()
+        {
+            return GetBestEnemyHeroTargetInRange(float.MaxValue);
+        }
+        public static Obj_AI_Hero GetBestEnemyHeroTargetInRange(float range)
+        {
+            var ts = TargetSelector.Implementation;
+            var target = ts.GetTarget(range);
+            if (target != null && target.IsValidTarget() && !Invulnerable.Check(target))
+            {
+                return target;
+            }
+            var firstTarget = ts.GetOrderedTargets(range)
+                .FirstOrDefault(t => t.IsValidTarget() && !Invulnerable.Check(t));
+            if (firstTarget != null)
+            {
+                return firstTarget;
+            }
+            return null;
         }
     }
 }

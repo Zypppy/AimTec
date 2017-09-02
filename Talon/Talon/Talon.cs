@@ -48,9 +48,9 @@
                 Combo.Add(new MenuBool("useq2", "Use Standart Q"));
                 Combo.Add(new MenuBool("useq", "Use Melee Q"));
                 Combo.Add(new MenuBool("usew", "Use W"));
-                Combo.Add(new MenuBool("user", "Use R"));
+                Combo.Add(new MenuBool("user", "Use R :"));
                 Combo.Add(new MenuSlider("usercount", "Use R If Enemies >=", 3, 1, 5));
-                Combo.Add(new MenuBool("userkill", "Use R Only If Enemy has X Hp"));
+                Combo.Add(new MenuBool("userkill", "Use R :"));
                 Combo.Add(new MenuSlider("enemyhpr", "Use R If Target HP % <=", 30, 0, 100));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
                 Combo.Add(new MenuBool("youmuu", "Use Youmuu GhostBlade"));

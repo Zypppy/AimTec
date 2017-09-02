@@ -50,7 +50,8 @@
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("user", "Use R"));
                 Combo.Add(new MenuSlider("usercount", "Use R If Enemies >=", 3, 1, 5));
-                Combo.Add(new MenuBool("userkill", "Use R Only If Can Kill"));
+                Combo.Add(new MenuBool("userkill", "Use R Only If Enemy has X Hp"));
+                Combo.Add(new MenuSlider("enemyhpr", "Use R If Target HP % <=", 30, 0, 100));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
                 Combo.Add(new MenuBool("youmuu", "Use Youmuu GhostBlade"));
                 Combo.Add(new MenuBool("tiamat", "Use Tiamat"));
@@ -185,7 +186,7 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    //OnCombo();
+                    OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
                     //OnHarass();
@@ -198,7 +199,7 @@
             }
             if (Menu["combo"]["key"].Enabled)
             {
-                //ManualR();
+                ManualR();
             }
             Killsteal();
         }
@@ -248,6 +249,58 @@
                 return firstTarget;
             }
             return null;
+        }
+        private void OnCombo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(900);
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQ2 = Menu["combo"]["useq2"].Enabled;
+            bool useW = Menu["combo"]["usew"].Enabled;
+            bool useR = Menu["combo"]["user"].Enabled;
+            bool useRKill = Menu["combo"]["userkill"].Enabled;
+            float hitR = Menu["combo"]["usercount"].As<MenuSlider>().Value;
+            float hpRtarget = Menu["combo"]["enemyhpr"].As<MenuSlider>().Value;
+            var WPrediction = W.GetPrediction(target);
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ)
+            {
+                Q.Cast(target);
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2)
+            {
+                Q2.Cast(target);
+            }
+            if (W.Ready && target.IsValidTarget(W.Range) && useW)
+            {
+                if (WPrediction.HitChance >= HitChance.Medium)
+                {
+                    W.Cast(WPrediction.CastPosition);
+                }
+            }
+            if (R.Ready)
+            {
+                if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= hitR)
+                {
+                    R.Cast();
+                }
+                else if (useRKill && target.IsValidTarget(R.Range) && target.HealthPercent() <= hpRtarget)
+                {
+                    R.Cast();
+                }
+            }
+        }
+        private void ManualR()
+        {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            if (R.Ready && target.IsValidTarget(1500))
+            {
+                R.Cast();
+            }
         }
     }
 }

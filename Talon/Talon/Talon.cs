@@ -29,8 +29,8 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 230f);
-            Q2 = new Spell(SpellSlot.Q, 550f);
-            W = new Spell(SpellSlot.W, 800f);
+            Q2 = new Spell(SpellSlot.Q, 500f);
+            W = new Spell(SpellSlot.W, 750f);
             W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 550f);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
@@ -75,13 +75,6 @@
                 LaneClear.Add(new MenuSlider("manaw", "Lane Clear W Mana", 60, 0, 100));
             }
             Menu.Add(LaneClear);
-            var LastHit = new Menu("lasthit", "Last Hit");
-            {
-                LastHit.Add(new MenuBool("useq2", "Use Standart Q"));
-                LastHit.Add(new MenuBool("useq", "Use Melee Q"));
-                LastHit.Add(new MenuSlider("manaq", "Last Hit Q Mana", 60, 0, 100));
-            }
-            Menu.Add(LastHit);
             var JungleClear = new Menu("jungleclear", "Jungle Clear");
             {
                 JungleClear.Add(new MenuBool("useq2", "Use Standart Q"));
@@ -174,7 +167,7 @@
 
                        var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
                        var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.W) + Player.GetSpellDamage(unit, SpellSlot.R)
-                       ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
+                       ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.W) + Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
                        : 0));
                        Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.W) + Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
 
@@ -199,9 +192,6 @@
                 case OrbwalkingMode.Laneclear:
                     //OnLaneClear();
                     //OnJungleClear();
-                    break;
-                case OrbwalkingMode.Lasthit:
-                    //OnLastHit();
                     break;
 
             }

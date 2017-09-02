@@ -26,6 +26,7 @@
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, Q2, W, R, Ignite;
+
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 230f);

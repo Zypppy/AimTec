@@ -181,5 +181,50 @@
 
             }
         }
+        private void Game_OnUpdate()
+        {
+            if (Player.IsDead || MenuGUI.IsChatOpen())
+            {
+                return;
+            }
+            switch (Orbwalker.Mode)
+            {
+                case OrbwalkingMode.Combo:
+                    //OnCombo();
+                    break;
+                case OrbwalkingMode.Mixed:
+                    //OnHarass();
+                    break;
+                case OrbwalkingMode.Laneclear:
+                    //OnLaneClear();
+                    //OnJungleClear();
+                    break;
+                case OrbwalkingMode.Lasthit:
+                    //OnLastHit();
+                    break;
+
+            }
+            Killsteal();
+        }
+        public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
+            bool ignoreShields = false)
+        {
+            return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
+        }
+        private void Killsteal()
+        {
+            if (W.Ready && Menu["killsteal"]["usew"].Enabled)
+            {
+                var besttarget = GetBestKillableHero(W, DamageType.Physical, false);
+                var WPredition = W.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.W) >= besttarget.Health && besttarget.IsValidTarget(W.Range))
+                {
+                    if (WPredition.HitChance >= HitChance.High)
+                    {
+                        W.Cast(WPredition.CastPosition);
+                    }
+                }
+            }
+        }
     }
 }

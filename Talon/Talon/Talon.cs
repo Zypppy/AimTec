@@ -28,9 +28,9 @@
         public static Spell Q, Q2, W, R, Ignite;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 170f);
-            Q2 = new Spell(SpellSlot.Q, 550f);
-            W = new Spell(SpellSlot.W, 900f);
+            Q = new Spell(SpellSlot.Q, 200f);
+            Q2 = new Spell(SpellSlot.Q, 600f);
+            W = new Spell(SpellSlot.W, 850f);
             W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 650f);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
@@ -223,6 +223,14 @@
                     {
                         W.Cast(WPredition.CastPosition);
                     }
+                }
+            }
+            if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
+            {
+                var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
+                if (besttarget != null && IgniteDamages - 100 >= besttarget.Health && besttarget.IsValidTarget(Ignite.Range))
+                {
+                    Ignite.CastOnUnit(besttarget);
                 }
             }
         }

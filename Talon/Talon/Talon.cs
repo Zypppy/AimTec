@@ -33,7 +33,7 @@
             Q2 = new Spell(SpellSlot.Q, 500f);
             W = new Spell(SpellSlot.W, 750f);
             R = new Spell(SpellSlot.R, 550f);
-            W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
+            W.SetSkillshot(0.25f, 75f, 2300f, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -103,7 +103,7 @@
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
-            //Game.OnUpdate += Game_OnUpdate;
+            Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
             Console.WriteLine("Talon by Zypppy - Loaded");

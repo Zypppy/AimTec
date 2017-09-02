@@ -28,11 +28,11 @@
         public static Spell Q, Q2, W, R, Ignite;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 200f);
-            Q2 = new Spell(SpellSlot.Q, 600f);
-            W = new Spell(SpellSlot.W, 850f);
+            Q = new Spell(SpellSlot.Q, 230f);
+            Q2 = new Spell(SpellSlot.Q, 550f);
+            W = new Spell(SpellSlot.W, 800f);
             W.SetSkillshot(0.25f, 75, 2300, false, SkillshotType.Line);
-            R = new Spell(SpellSlot.R, 650f);
+            R = new Spell(SpellSlot.R, 550f);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -50,6 +50,7 @@
                 Combo.Add(new MenuBool("user", "Use R"));
                 Combo.Add(new MenuSlider("usercount", "Use R If Enemies >=", 3, 1, 5));
                 Combo.Add(new MenuBool("userkill", "Use R Only If Can Kill"));
+                Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
                 Combo.Add(new MenuBool("youmuu", "Use Youmuu GhostBlade"));
                 Combo.Add(new MenuBool("tiamat", "Use Tiamat"));
                 Combo.Add(new MenuBool("hydra", "Use Hydra"));
@@ -204,6 +205,10 @@
                     break;
 
             }
+            if (Menu["combo"]["key"].Enabled)
+            {
+                //ManualR();
+            }
             Killsteal();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
@@ -233,6 +238,26 @@
                     Ignite.CastOnUnit(besttarget);
                 }
             }
+        }
+        public static Obj_AI_Hero GetBestEnemyHeroTarget()
+        {
+            return GetBestEnemyHeroTargetInRange(float.MaxValue);
+        }
+        public static Obj_AI_Hero GetBestEnemyHeroTargetInRange(float range)
+        {
+            var ts = TargetSelector.Implementation;
+            var target = ts.GetTarget(range);
+            if (target != null && target.IsValidTarget() && !Invulnerable.Check(target))
+            {
+                return target;
+            }
+            var firstTarget = ts.GetOrderedTargets(range)
+                .FirstOrDefault(t => t.IsValidTarget() && !Invulnerable.Check(t));
+            if (firstTarget != null)
+            {
+                return firstTarget;
+            }
+            return null;
         }
     }
 }

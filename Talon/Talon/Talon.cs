@@ -54,8 +54,7 @@
                 Combo.Add(new MenuSlider("enemyhpr", "Use R If Target HP % <=", 30, 0, 100));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
                 Combo.Add(new MenuBool("youmuu", "Use Youmuu GhostBlade"));
-                Combo.Add(new MenuBool("tiamat", "Use Tiamat"));
-                Combo.Add(new MenuBool("hydra", "Use Hydra"));
+                Combo.Add(new MenuBool("tiamat", "Use Tiamat and Hydra"));
             }
             Menu.Add(Combo);
             var Harass = new Menu("harass", "Harass");
@@ -70,8 +69,8 @@
             Menu.Add(Harass);
             var LaneClear = new Menu("laneclear", "Lane Clear");
             {
-                LaneClear.Add(new MenuBool("useq", "Use Standart Q"));
-                LaneClear.Add(new MenuBool("useq2", "Use Melee Q"));
+                LaneClear.Add(new MenuBool("useq2", "Use Standart Q"));
+                LaneClear.Add(new MenuBool("useq", "Use Melee Q"));
                 LaneClear.Add(new MenuSlider("manaq", "Lane Clear Q Mana", 60, 0, 100));
                 LaneClear.Add(new MenuBool("usew", "Use W"));
                 LaneClear.Add(new MenuSlider("manaw", "Lane Clear W Mana", 60, 0, 100));
@@ -189,11 +188,11 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //OnLaneClear();
-                    //OnJungleClear();
+                    OnLaneClear();
+                    OnJungleClear();
                     break;
 
             }
@@ -261,6 +260,8 @@
             float hitR = Menu["combo"]["usercount"].As<MenuSlider>().Value;
             float hpRtarget = Menu["combo"]["enemyhpr"].As<MenuSlider>().Value;
             var WPrediction = W.GetPrediction(target);
+            bool UseYoumuus = Menu["combo"]["youmuu"].Enabled;
+            bool UseTiamat = Menu["combo"]["tiamat"].Enabled;
 
             if (!target.IsValidTarget())
             {
@@ -292,6 +293,15 @@
                     R.Cast();
                 }
             }
+            var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
+            if (ItemTiamatHydra != null)
+            {
+                Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
+                if (UseTiamat && Tiamat.Ready && target.IsValidTarget(Tiamat.Range))
+                {
+                    Tiamat.Cast();
+                }
+            }
         }
         private void ManualR()
         {
@@ -300,6 +310,115 @@
             if (R.Ready && target.IsValidTarget(1500))
             {
                 R.Cast();
+            }
+        }
+        private void OnHarass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(W.Range);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            bool useQ2 = Menu["harass"]["useq2"].Enabled;
+            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            bool useW = Menu["harass"]["usew"].Enabled;
+            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+            var WPrediction = W.GetPrediction(target);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
+            {
+                Q.Cast(target);
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
+            {
+                Q2.Cast(target);
+            }
+            if (W.Ready && target.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+            {
+                if (WPrediction.HitChance >= HitChance.Medium)
+                {
+                    W.Cast(WPrediction.CastPosition);
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(W.Range))
+            {
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
+                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
+                var WPrediction = W.GetPrediction(minion);
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
+                {
+                    Q.Cast(minion);
+                }
+                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
+                {
+                    Q2.Cast(minion);
+                }
+                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (WPrediction.HitChance >= HitChance.Medium)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
+        {
+            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
+        {
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
+        }
+        private void OnJungleClear()
+        {
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
+            {
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
+                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
+                var WPrediction = W.GetPrediction(minion);
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
+                {
+                    Q.Cast(minion);
+                }
+                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
+                {
+                    Q2.Cast(minion);
+                }
+                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (WPrediction.HitChance >= HitChance.Medium)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
             }
         }
     }

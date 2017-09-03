@@ -53,7 +53,6 @@
                 Combo.Add(new MenuBool("userkill", "Use R :"));
                 Combo.Add(new MenuSlider("enemyhpr", "Use R If Target HP % <=", 30, 0, 100));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
-                Combo.Add(new MenuBool("youmuu", "Use Youmuu GhostBlade"));
                 Combo.Add(new MenuBool("tiamat", "Use Tiamat and Hydra"));
             }
             Menu.Add(Combo);
@@ -260,7 +259,6 @@
             float hitR = Menu["combo"]["usercount"].As<MenuSlider>().Value;
             float hpRtarget = Menu["combo"]["enemyhpr"].As<MenuSlider>().Value;
             var WPrediction = W.GetPrediction(target);
-            bool UseYoumuus = Menu["combo"]["youmuu"].Enabled;
             bool UseTiamat = Menu["combo"]["tiamat"].Enabled;
 
             if (!target.IsValidTarget())

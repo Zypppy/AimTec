@@ -340,6 +340,7 @@
                 float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
                 bool useE = Menu["laneclear"]["usee"].Enabled;
                 float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
+                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
                 var WPrediction = W.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);
                 var E2Prediction = E2.GetPrediction(minion);
@@ -376,6 +377,15 @@
                         E2.Cast(E2Prediction.CastPosition);
                     }
                 }
+                var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
+                if (ItemTiamatHydra != null)
+                {
+                    Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
+                    if (UseTiamat && Tiamat.Ready && minion.IsValidTarget(Tiamat.Range))
+                    {
+                        Tiamat.Cast();
+                    }
+                }
             }
         }
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
@@ -397,6 +407,7 @@
                 float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
                 bool useE = Menu["jungleclear"]["usee"].Enabled;
                 float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
+                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
                 var WPrediction = W.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);
                 var E2Prediction = E2.GetPrediction(minion);
@@ -431,6 +442,15 @@
                     if (E2Prediction.HitChance >= HitChance.Medium)
                     {
                         E2.Cast(E2Prediction.CastPosition);
+                    }
+                }
+                var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
+                if (ItemTiamatHydra != null)
+                {
+                    Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
+                    if (UseTiamat && Tiamat.Ready && minion.IsValidTarget(Tiamat.Range))
+                    {
+                        Tiamat.Cast();
                     }
                 }
             }

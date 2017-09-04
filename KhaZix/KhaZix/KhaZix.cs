@@ -119,6 +119,118 @@
             LoadSpells();
             Console.WriteLine("KhaZix by Zypppy - Loaded");
         }
+        static double DMGQ(Obj_AI_Base target)
+        {
+            double dmg = 0;
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 1)
+            {
+                dmg = 60;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 2)
+            {
+                dmg = 85;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 3)
+            {
+                dmg = 110;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 4)
+            {
+                dmg = 135;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.Q).Level == 5)
+            {
+                dmg = 160;
+            }
+            double ad = Player.TotalAttackDamage * 1.10;
+            double full = ad + dmg;
+            double damage = Player.CalculateDamage(target, DamageType.Physical, full);
+            return damage;
+        }
+        static double DMGW(Obj_AI_Base target)
+        {
+            double dmg = 0;
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 1)
+            {
+                dmg = 80;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 2)
+            {
+                dmg = 110;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 3)
+            {
+                dmg = 140;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 4)
+            {
+                dmg = 170;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 5)
+            {
+                dmg = 200;
+            }
+            double ad = Player.TotalAttackDamage * 1.0;
+            double full = ad + dmg;
+            double damage = Player.CalculateDamage(target, DamageType.Physical, full);
+            return damage;
+        }
+        static double DMGW2(Obj_AI_Base target)
+        {
+            double dmg = 0;
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 1)
+            {
+                dmg = 96;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 2)
+            {
+                dmg = 132;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 3)
+            {
+                dmg = 168;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 4)
+            {
+                dmg = 204;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.W).Level == 5)
+            {
+                dmg = 240;
+            }
+            double ad = Player.TotalAttackDamage * 1.2;
+            double full = ad + dmg;
+            double damage = Player.CalculateDamage(target, DamageType.Physical, full);
+            return damage;
+        }
+        static double DMGE(Obj_AI_Base target)
+        {
+            double dmg = 0;
+            if (Player.SpellBook.GetSpell(SpellSlot.E).Level == 1)
+            {
+                dmg = 65;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.E).Level == 2)
+            {
+                dmg = 100;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.E).Level == 3)
+            {
+                dmg = 135;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.E).Level == 4)
+            {
+                dmg = 170;
+            }
+            if (Player.SpellBook.GetSpell(SpellSlot.E).Level == 5)
+            {
+                dmg = 205;
+            }
+            double ad = Player.TotalAttackDamage * 0.2;
+            double full = ad + dmg;
+            double damage = Player.CalculateDamage(target, DamageType.Physical, full);
+            return damage;
+        }
         private static int IgniteDamages
         {
             get
@@ -207,7 +319,7 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && besttarget.Health <= DMGQ(besttarget) && besttarget.IsValidTarget(Q.Range))
                 {
                     Q.Cast(besttarget);
                 }
@@ -215,7 +327,7 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && besttarget.Health <= DMGQ(besttarget) && besttarget.IsValidTarget(Q2.Range))
                 {
                     Q2.Cast(besttarget);
                 }
@@ -224,7 +336,19 @@
             {
                 var besttarget = GetBestKillableHero(W, DamageType.Physical, false);
                 var WPrediction = W.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.W) >= besttarget.Health && besttarget.IsValidTarget(W.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.W).Name != "KhazixWLong" && besttarget.Health <= DMGW(besttarget) && besttarget.IsValidTarget(W.Range))
+                {
+                    if (WPrediction.HitChance >= HitChance.High)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
+            }
+            if (W.Ready && Menu["killsteal"]["usew"].Enabled)
+            {
+                var besttarget = GetBestKillableHero(W, DamageType.Physical, false);
+                var WPrediction = W.GetPrediction(besttarget);
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.W).Name == "KhazixWLong" && besttarget.Health <= DMGW2(besttarget) && besttarget.IsValidTarget(W.Range))
                 {
                     if (WPrediction.HitChance >= HitChance.High)
                     {
@@ -236,7 +360,7 @@
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPrediction = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && besttarget.Health <= DMGE(besttarget) && besttarget.IsValidTarget(E.Range))
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {
@@ -248,7 +372,7 @@
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var E2Prediction = E2.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && besttarget.Health <= DMGE(besttarget) && besttarget.IsValidTarget(E2.Range))
                 {
                     if (E2Prediction.HitChance >= HitChance.High)
                     {

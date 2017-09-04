@@ -87,19 +87,8 @@
                 JungleClear.Add(new MenuBool("useitems", "Use Hydra/Tiamat"));
             }
             Menu.Add(JungleClear);
-            var LastHit = new Menu("lasthit", "Last Hit");
-            {
-                LastHit.Add(new MenuBool("useq", "Use Q"));
-                LastHit.Add(new MenuSlider("manaq", "Last Hit Mana Q", 60, 0, 100));
-                LastHit.Add(new MenuBool("usew", "Use W"));
-                LastHit.Add(new MenuSlider("manaw", "Last Hit Mana W", 60, 0, 100));
-            }
-            Menu.Add(LastHit);
             var Killsteal = new Menu("killsteal", "Killsteal");
             {
-                Killsteal.Add(new MenuBool("useq", "Use Q"));
-                Killsteal.Add(new MenuBool("usew", "Use W"));
-                Killsteal.Add(new MenuBool("usee", "Use E"));
                 Killsteal.Add(new MenuBool("ignite", "Use Ignite"));
             }
             Menu.Add(Killsteal);
@@ -178,7 +167,7 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    //OnCombo();
+                    OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
                     //OnHarass();
@@ -194,7 +183,7 @@
             }
             if (Menu["combo"]["key"].Enabled)
             {
-                //ManualR();
+                ManualR();
             }
             Killsteal();
         }
@@ -204,14 +193,6 @@
         }
         private void Killsteal()
         {
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
-            {
-                var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
-                {
-                    Q.CastOnUnit(besttarget);
-                }
-            }
             if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
             {
                 var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
@@ -240,6 +221,61 @@
                 return firstTarget;
             }
             return null;
+        }
+        private void OnCombo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useW = Menu["combo"]["usew"].Enabled;
+            bool useE = Menu["combo"]["usee"].Enabled;
+            bool useR = Menu["combo"]["user"].Enabled;
+            float enemiesR = Menu["combo"]["usercombocount"].As<MenuSlider>().Value;
+            var WPrediction = W.GetPrediction(target);
+            var EPrediction = E.GetPrediction(target);
+            var E2Prediction = E2.GetPrediction(target);
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong")
+            {
+                Q.Cast(target);
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+            {
+                Q2.Cast(target);
+            }
+            if (W.Ready && target.IsValidTarget(W.Range) && useW)
+            {
+                if (WPrediction.HitChance >= HitChance.Medium)
+                {
+                    W.Cast(WPrediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+            {
+                if (EPrediction.HitChance >= HitChance.Medium)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+            {
+                if (E2Prediction.HitChance >= HitChance.Medium)
+                {
+                    E2.Cast(E2Prediction.CastPosition);
+                }
+            }
+        }
+        private void ManualR()
+        {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            if (R.Ready && target.IsValidTarget(E2.Range))
+            {
+                R.Cast();
+            }
         }
     }
 }

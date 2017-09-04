@@ -19,7 +19,7 @@ namespace KhaZix
 
         private static void GameEvents_GameStart()
         {
-            if (ObjectManager.GetLocalPlayer().ChampionName != "KhaZix")
+            if (ObjectManager.GetLocalPlayer().ChampionName != "Khazix")
                 return;
 
             var KhaZix = new KhaZix();

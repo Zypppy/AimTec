@@ -207,7 +207,7 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
                 {
                     Q.Cast(besttarget);
                 }
@@ -215,7 +215,7 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
                 {
                     Q2.Cast(besttarget);
                 }
@@ -236,7 +236,7 @@
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPrediction = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {
@@ -248,7 +248,7 @@
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var E2Prediction = E2.GetPrediction(besttarget);
-                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
                 {
                     if (E2Prediction.HitChance >= HitChance.High)
                     {

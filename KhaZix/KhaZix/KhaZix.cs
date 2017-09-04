@@ -33,7 +33,7 @@
             Q2 = new Spell(SpellSlot.Q, 375);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 700);
-            E2 = new Spell(SpellSlot.E, 1000);
+            E2 = new Spell(SpellSlot.E, 1250);
             R = new Spell(SpellSlot.R, 400);
             W.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.Line);
             E.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);

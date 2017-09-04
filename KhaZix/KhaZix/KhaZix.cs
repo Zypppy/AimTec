@@ -54,7 +54,7 @@
                 Combo.Add(new MenuBool("user", "Use R"));
                 Combo.Add(new MenuSlider("usercombocount", "Use R If Enemies >=", 3, 1, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
-                Combo.Add(new MenuBool("useitems", "Uuse Tiamat/Hudra"));
+                Combo.Add(new MenuBool("useitems", "Use Tiamat/Hudra"));
             }
             Menu.Add(Combo);
             var Harass = new Menu("harass", "Harass");

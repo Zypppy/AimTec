@@ -258,7 +258,7 @@
                     }
                 }
             }
-            if (E.Ready && Menu["killsteal"]["useE"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+            if (E.Ready && Menu["killsteal"]["usee"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPrediction = E.GetPrediction(besttarget);
@@ -270,7 +270,7 @@
                     }
                 }
             }
-            if (E.Ready && Menu["killsteal"]["useE"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+            if (E.Ready && Menu["killsteal"]["usee"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPrediction = E.GetPrediction(besttarget);

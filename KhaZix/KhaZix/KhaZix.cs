@@ -114,7 +114,7 @@
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
-            //Game.OnUpdate += Game_OnUpdate;
+            Game.OnUpdate += Game_OnUpdate;
 
             LoadSpells();
             Console.WriteLine("KhaZix by Zypppy - Loaded");

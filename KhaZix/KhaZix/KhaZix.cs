@@ -33,7 +33,7 @@
             Q2 = new Spell(SpellSlot.Q, 375);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 700);
-            E2 = new Spell(SpellSlot.E, 1250);
+            E2 = new Spell(SpellSlot.E, 1200);
             R = new Spell(SpellSlot.R, 400);
             W.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.Line);
             E.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);
@@ -99,6 +99,7 @@
                 Killsteal.Add(new MenuBool("useq", "Use Q"));
                 Killsteal.Add(new MenuBool("usew", "Use W"));
                 Killsteal.Add(new MenuBool("usee", "Use E"));
+                Killsteal.Add(new MenuBool("ignite", "Use Ignite"));
             }
             Menu.Add(Killsteal);
             var Drawings = new Menu("drawings", "Drawings");
@@ -192,6 +193,102 @@
 
                    });
 
+            }
+        }
+        private void Game_OnUpdate()
+        {
+            if (Player.IsDead || MenuGUI.IsChatOpen())
+            {
+                return;
+            }
+            switch (Orbwalker.Mode)
+            {
+                case OrbwalkingMode.Combo:
+                    //OnCombo();
+                    break;
+                case OrbwalkingMode.Mixed:
+                    //OnHarass();
+                    break;
+                case OrbwalkingMode.Laneclear:
+                    //OnLaneClear();
+                    //OnJungleClear();
+                    break;
+                case OrbwalkingMode.Lasthit:
+                    //OnLastHit();
+                    break;
+
+            }
+            if (Menu["combo"]["key"].Enabled)
+            {
+                //ManualR();
+            }
+            Killsteal();
+        }
+        public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True, bool ignoreShields = false)
+        {
+            return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
+        }
+        private void Killsteal()
+        {
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong")
+            {
+                var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(besttarget);
+                }
+            }
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+            {
+                var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
+                {
+                    Q2.Cast(besttarget);
+                }
+            }
+            if (W.Ready && Menu["killsteal"]["usew"].Enabled)
+            {
+                var besttarget = GetBestKillableHero(W, DamageType.Physical, false);
+                var WPrediction = W.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.W) >= besttarget.Health && besttarget.IsValidTarget(W.Range))
+                {
+                    if (WPrediction.HitChance >= HitChance.High)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
+            }
+            if (E.Ready && Menu["killsteal"]["useE"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+            {
+                var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
+                var EPrediction = E.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+            }
+            if (E.Ready && Menu["killsteal"]["useE"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+            {
+                var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
+                var EPrediction = E.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E2.Cast(EPrediction.CastPosition);
+                    }
+                }
+            }
+            if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
+            {
+                var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
+                if (besttarget != null && IgniteDamages - 100 >= besttarget.Health && besttarget.IsValidTarget(Ignite.Range))
+                {
+                    Ignite.CastOnUnit(besttarget);
+                }
             }
         }
     }

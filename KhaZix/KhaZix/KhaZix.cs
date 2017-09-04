@@ -107,7 +107,7 @@
                 Drawings.Add(new MenuBool("draww", "Draw W"));
                 Drawings.Add(new MenuBool("drawe", "Draw E"));
                 Drawings.Add(new MenuBool("drawr", "Draw R"));
-                Drawings.Add(new MenuBool("drwadmg", "Draw DMG"));
+                Drawings.Add(new MenuBool("drawdmg", "Draw DMG"));
             }
             Menu.Add(Drawings);
             Menu.Attach();

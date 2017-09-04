@@ -170,16 +170,12 @@
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
-                    //OnHarass();
+                    OnHarass();
                     break;
                 case OrbwalkingMode.Laneclear:
-                    //OnLaneClear();
-                    //OnJungleClear();
+                    OnLaneClear();
+                    OnJungleClear();
                     break;
-                case OrbwalkingMode.Lasthit:
-                    //OnLastHit();
-                    break;
-
             }
             if (Menu["combo"]["key"].Enabled)
             {
@@ -233,6 +229,7 @@
             var WPrediction = W.GetPrediction(target);
             var EPrediction = E.GetPrediction(target);
             var E2Prediction = E2.GetPrediction(target);
+            bool UseTiamat = Menu["combo"]["useitems"].Enabled;
 
             if (!target.IsValidTarget())
             {
@@ -267,6 +264,22 @@
                     E2.Cast(E2Prediction.CastPosition);
                 }
             }
+            if (R.Ready)
+            {
+                if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= enemiesR)
+                {
+                    R.Cast();
+                }
+            }
+            var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
+            if (ItemTiamatHydra != null)
+            {
+                Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
+                if (UseTiamat && Tiamat.Ready && target.IsValidTarget(Tiamat.Range))
+                {
+                    Tiamat.Cast();
+                }
+            }
         }
         private void ManualR()
         {
@@ -275,6 +288,167 @@
             if (R.Ready && target.IsValidTarget(E2.Range))
             {
                 R.Cast();
+            }
+        }
+        private void OnHarass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            bool useW = Menu["harass"]["usew"].Enabled;
+            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+            bool useE = Menu["harass"]["usee"].Enabled;
+            float manaE = Menu["harass"]["manaE"].As<MenuSlider>().Value;
+            var WPrediction = W.GetPrediction(target);
+            var EPrediction = E.GetPrediction(target);
+            var E2Prediction = E2.GetPrediction(target);
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+            {
+                Q.Cast(target);
+            }
+            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
+            {
+                Q2.Cast(target);
+            }
+            if (W.Ready && target.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+            {
+                if (WPrediction.HitChance >= HitChance.Medium)
+                {
+                    W.Cast(WPrediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
+            {
+                if (EPrediction.HitChance >= HitChance.Medium)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
+            {
+                if (E2Prediction.HitChance >= HitChance.Medium)
+                {
+                    E2.Cast(E2Prediction.CastPosition);
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
+        }
+        private void OnLaneClear()
+        {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E2.Range))
+            {
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
+                bool useE = Menu["laneclear"]["usee"].Enabled;
+                float manaE = Menu["laneclear"]["manaE"].As<MenuSlider>().Value;
+                var WPrediction = W.GetPrediction(minion);
+                var EPrediction = E.GetPrediction(minion);
+                var E2Prediction = E2.GetPrediction(minion);
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+                {
+                    Q.Cast(minion);
+                }
+                if (Q.Ready && useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
+                {
+                    Q2.Cast(minion);
+                }
+                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (WPrediction.HitChance >= HitChance.Medium)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
+                if (E.Ready && minion.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
+                {
+                    if (EPrediction.HitChance >= HitChance.Medium)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+                if (E.Ready && minion.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
+                {
+                    if (E2Prediction.HitChance >= HitChance.Medium)
+                    {
+                        E2.Cast(E2Prediction.CastPosition);
+                    }
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
+        {
+            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
+        {
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
+        }
+        private void OnJungleClear()
+        {
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E2.Range)).ToList())
+            {
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
+                bool useE = Menu["jungleclear"]["usee"].Enabled;
+                float manaE = Menu["jungleclear"]["manaE"].As<MenuSlider>().Value;
+                var WPrediction = W.GetPrediction(minion);
+                var EPrediction = E.GetPrediction(minion);
+                var E2Prediction = E2.GetPrediction(minion);
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+                {
+                    Q.Cast(minion);
+                }
+                if (Q.Ready && useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
+                {
+                    Q2.Cast(minion);
+                }
+                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (WPrediction.HitChance >= HitChance.Medium)
+                    {
+                        W.Cast(WPrediction.CastPosition);
+                    }
+                }
+                if (E.Ready && minion.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
+                {
+                    if (EPrediction.HitChance >= HitChance.Medium)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+                if (E.Ready && minion.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
+                {
+                    if (E2Prediction.HitChance >= HitChance.Medium)
+                    {
+                        E2.Cast(E2Prediction.CastPosition);
+                    }
+                }
             }
         }
     }

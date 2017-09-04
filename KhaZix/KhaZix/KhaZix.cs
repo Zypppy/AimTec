@@ -297,11 +297,7 @@
             float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
             bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
-            bool useE = Menu["harass"]["usee"].Enabled;
-            float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
             var WPrediction = W.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
-            var E2Prediction = E2.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -322,20 +318,7 @@
                     W.Cast(WPrediction.CastPosition);
                 }
             }
-            if (E.Ready && target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
-            {
-                if (EPrediction.HitChance >= HitChance.Medium)
-                {
-                    E.Cast(EPrediction.CastPosition);
-                }
-            }
-            if (E.Ready && target.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
-            {
-                if (E2Prediction.HitChance >= HitChance.Medium)
-                {
-                    E2.Cast(E2Prediction.CastPosition);
-                }
-            }
+            
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {

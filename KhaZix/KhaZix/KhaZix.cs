@@ -298,7 +298,7 @@
             bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
             bool useE = Menu["harass"]["usee"].Enabled;
-            float manaE = Menu["harass"]["manaE"].As<MenuSlider>().Value;
+            float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
             var WPrediction = W.GetPrediction(target);
             var EPrediction = E.GetPrediction(target);
             var E2Prediction = E2.GetPrediction(target);
@@ -355,7 +355,7 @@
                 bool useW = Menu["laneclear"]["usew"].Enabled;
                 float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
                 bool useE = Menu["laneclear"]["usee"].Enabled;
-                float manaE = Menu["laneclear"]["manaE"].As<MenuSlider>().Value;
+                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
                 var WPrediction = W.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);
                 var E2Prediction = E2.GetPrediction(minion);
@@ -412,7 +412,7 @@
                 bool useW = Menu["jungleclear"]["usew"].Enabled;
                 float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
                 bool useE = Menu["jungleclear"]["usee"].Enabled;
-                float manaE = Menu["jungleclear"]["manaE"].As<MenuSlider>().Value;
+                float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
                 var WPrediction = W.GetPrediction(minion);
                 var EPrediction = E.GetPrediction(minion);
                 var E2Prediction = E2.GetPrediction(minion);

@@ -35,8 +35,9 @@
             E = new Spell(SpellSlot.E, 700);
             E2 = new Spell(SpellSlot.E, 1200);
             R = new Spell(SpellSlot.R, 400);
-            W.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.Line);
+            W.SetSkillshot(0.225f, 100f, 828f, true, SkillshotType.Line);
             E.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);
+            E2.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -203,18 +204,18 @@
         }
         private void Killsteal()
         {
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong")
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
                 {
                     Q.Cast(besttarget);
                 }
             }
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
                 {
                     Q2.Cast(besttarget);
                 }
@@ -231,11 +232,11 @@
                     }
                 }
             }
-            if (E.Ready && Menu["killsteal"]["usee"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+            if (E.Ready && Menu["killsteal"]["usee"].Enabled)
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPrediction = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {
@@ -243,15 +244,15 @@
                     }
                 }
             }
-            if (E.Ready && Menu["killsteal"]["usee"].Enabled && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+            if (E.Ready && Menu["killsteal"]["usee"].Enabled)
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
-                var EPrediction = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
+                var E2Prediction = E2.GetPrediction(besttarget);
+                if (besttarget != null && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E2.Range))
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
+                    if (E2Prediction.HitChance >= HitChance.High)
                     {
-                        E2.Cast(EPrediction.CastPosition);
+                        E2.Cast(E2Prediction.CastPosition);
                     }
                 }
             }

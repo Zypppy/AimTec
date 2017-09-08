@@ -48,6 +48,7 @@
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usee", "Use E"));
+                Combo.Add(new MenuBool("useem", "Use E On Minions"));
                 Combo.Add(new MenuBool("useefgap", "Use E GapClose On Minions"));
                 Combo.Add(new MenuSlider("useegap", "Use E-GapCloser When Enemy In Range >=", 475, 375, 1300));
                 Combo.Add(new MenuBool("usersmart", "Use Smart R"));
@@ -291,6 +292,7 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
+            bool useEM = Menu["combo"]["useem"].Enabled;
             bool useEGap = Menu["combo"]["useefgap"].Enabled;
             float distanceE = Menu["combo"]["useegap"].As<MenuSlider>().Value;
             bool useSmartR = Menu["combo"]["usersmart"].Enabled;
@@ -338,7 +340,7 @@
                     {
                         E.Cast(target);
                     }
-                    else if (useE && target.HasBuff("YasuoDashWrapper") && minion.Distance(target) <= Q.Range)
+                    else if (useE && target.HasBuff("YasuoDashWrapper") && minion.Distance(target) <= Q.Range && useEM)
                     {
                         E.CastOnUnit(minion);
                     }
@@ -360,7 +362,45 @@
                     }
                 }
             }
+            if (R.Ready && target.IsValidTarget(R.Range))
+            {
+                if (useSmartR)
+                {
+                    var KockedUp = GameObjects.EnemyHeroes
+                    .Where(x => x.IsValidTarget(R.Range))
+                    .Where(x => x.HasBuffOfType(BuffType.Knockback) || x.HasBuffOfType(BuffType.Knockup));
 
+                    var enemies = KockedUp as IList<Obj_AI_Hero> ?? KockedUp.ToList();
+                    if (enemies.Count >= hittR)
+                    {
+                        R.CastOnUnit(enemies.FirstOrDefault());
+                    }
+                    else if (target.HealthPercent() <= tRHP)
+                    {
+                        R.Cast();
+                    }
+                }
+                else if (useR)
+                {
+                    var KockedUp = GameObjects.EnemyHeroes
+                    .Where(x => x.IsValidTarget(R.Range))
+                    .Where(x => x.HasBuffOfType(BuffType.Knockback) || x.HasBuffOfType(BuffType.Knockup));
+
+                    var enemies = KockedUp as IList<Obj_AI_Hero> ?? KockedUp.ToList();
+                    if (enemies.Count >= hittR)
+                    {
+                        R.CastOnUnit(enemies.FirstOrDefault());
+                    }
+                    else if (target.CountEnemyHeroesInRange(700) <= aroundTR && (target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Knockback)))
+                    {
+                        R.Cast();
+                    }
+                    else if (Player.HealthPercent() >= selfhpR && (target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Knockback)))
+                    {
+                        R.Cast();
+                    }
+                }
+            }
         }
         private void OnHarass()
         {

@@ -101,6 +101,7 @@
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
                 Drawings.Add(new MenuBool("drawq2", "Draw Tornado Q"));
                 Drawings.Add(new MenuBool("drawe", "Draw E"));
+                Drawings.Add(new MenuBool("drawegap", "Draw E GapClosing Range"));
                 Drawings.Add(new MenuBool("drawr", "Draw R"));
                 Drawings.Add(new MenuBool("drawdmg", "Draw DMG"));
             }
@@ -149,6 +150,10 @@
             if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
+            }
+            if (Menu["drawings"]["drawegap"].Enabled)
+            {
+                Render.Circle(Player.Position, Menu["combo"]["useegap"].As<MenuSlider>().Value, 40, Color.BlueViolet);
             }
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
@@ -309,21 +314,38 @@
                 {
                     Q.Cast(QPrediction.CastPosition);
                 }
-                else if (Q.Ready && Player.IsDashing() && useQ && target.IsValidTarget(Q.Range))
-                {
-                    Q.Cast();
-                }
+            }
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.IsDashing())
+            {
+                Q.Cast();
             }
             if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
             {
-                if (Q2Prediction.HitChance >= HitChance.High)
+                if (Q2Prediction.HitChance >= HitChance.Medium)
                 {
                     Q2.Cast(Q2Prediction.CastPosition);
                 }
             }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
+            {
+                Q2.Cast();
+            }
             if (E.Ready && target.IsValidTarget(E.Range) && useE && !target.HasBuff("YasuoDashWrapper"))
             {
                 E.Cast(target);
+            }
+            if (useEGap)
+            {
+                if (target.Distance(Player) > distanceE)
+                {
+                    foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
+                    {
+                        if (minion.IsValidTarget(E.Range) && minion != null)
+                        {
+                            E.CastOnUnit(minion);
+                        }
+                    }
+                }
             }
 
         }

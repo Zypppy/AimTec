@@ -137,11 +137,11 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3")
+            if (Menu["drawings"]["drawq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Azure);
             }
-            if (Menu["drawings"]["drawq2"].Enabled && Q2.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3")
+            if (Menu["drawings"]["drawq2"].Enabled && Q2.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W")
             {
                 Render.Circle(Player.Position, Q2.Range, 40, Color.Beige);
             }
@@ -210,7 +210,7 @@
         }
         private void Killsteal()
         {
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3")
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
                 var QPrediction = Q.GetPrediction(besttarget);
@@ -222,7 +222,7 @@
                     }
                 }
             }
-            if (Q.Ready && Menu["killsteal"]["useq2"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3")
+            if (Q.Ready && Menu["killsteal"]["useq2"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
                 var Q2Prediction = Q2.GetPrediction(besttarget);
@@ -245,7 +245,7 @@
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && besttarget.HasBuffOfType(BuffType.Knockup) || besttarget.HasBuffOfType(BuffType.Knockback))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && (besttarget.HasBuffOfType(BuffType.Knockup) || besttarget.HasBuffOfType(BuffType.Knockback)))
                 {
                     R.Cast();
                 }

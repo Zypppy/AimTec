@@ -220,7 +220,7 @@
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
                 var QPrediction = Q.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q.Range))
                 {
                     if (QPrediction.HitChance >= HitChance.High)
                     {
@@ -232,7 +232,7 @@
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
                 var Q2Prediction = Q2.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q2.Range))
                 {
                     if (Q2Prediction.HitChance >= HitChance.High)
                     {

@@ -48,7 +48,7 @@
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usee", "Use E"));
-                Combo.Add(new MenuBool("useegap", "Use E GapClose On Minions"));
+                Combo.Add(new MenuBool("useefgap", "Use E GapClose On Minions"));
                 Combo.Add(new MenuSlider("useegap", "Use E-GapCloser When Enemy In Range >=", 475, 375, 1300));
                 Combo.Add(new MenuBool("usersmart", "Use Smart R"));
                 Combo.Add(new MenuSlider("userhp", "When Enemy Hp <= %", 70, 0, 100));
@@ -286,7 +286,7 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useEGap = Menu["combo"]["useegap"].Enabled;
+            bool useEGap = Menu["combo"]["useefgap"].Enabled;
             float distanceE = Menu["combo"]["useegap"].As<MenuSlider>().Value;
             bool useSmartR = Menu["combo"]["user"].Enabled;
             float tRHP = Menu["combo"]["userhp"].As<MenuSlider>().Value;

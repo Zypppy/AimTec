@@ -255,7 +255,7 @@
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && besttarget.HasBuffOfType(BuffType.Knockup) || besttarget.HasBuffOfType(BuffType.Knockback))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && besttarget.HasBuffOfType(BuffType.Knockup))
                 {
                     R.Cast();
                 }

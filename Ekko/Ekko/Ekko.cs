@@ -45,6 +45,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
+                ComboMenu.Add(new MenuBool("usewslow", "USe W Only When Slowed"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("minrh", "Min enemies to Use R", 0, 1, 5));
             }
@@ -258,6 +259,7 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
+            bool useWSlow = Menu["combo"]["usewslow"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["minrh"].As<MenuSlider>().Value;
@@ -275,9 +277,13 @@
                     Q.Cast(target);
                 }
             }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
+            if (W.Ready)
             {
-                if (target != null)
+                if (useW && target.IsValidTarget(W.Range))
+                {
+                    W.Cast(target);
+                }
+                else if (useWSlow && target.IsValidTarget(W.Range) && target.HasBuffOfType(BuffType.Slow))
                 {
                     W.Cast(target);
                 }

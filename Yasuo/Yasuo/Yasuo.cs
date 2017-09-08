@@ -330,9 +330,19 @@
             {
                 Q2.Cast();
             }
-            if (E.Ready && target.IsValidTarget(E.Range) && useE && !target.HasBuff("YasuoDashWrapper"))
+            if (E.Ready && target.IsValidTarget(E.Range))
             {
-                E.Cast(target);
+                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
+                {
+                    if (useE && !target.HasBuff("YasuoDashWrapper"))
+                    {
+                        E.Cast(target);
+                    }
+                    else if (useE && target.HasBuff("YasuoDashWrapper") && minion.Distance(target) <= Q.Range)
+                    {
+                        E.CastOnUnit(minion);
+                    }
+                }
             }
             if (useEGap && E.Ready && target.IsValidTarget(distanceE))
             {

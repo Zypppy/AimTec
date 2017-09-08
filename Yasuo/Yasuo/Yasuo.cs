@@ -16,6 +16,7 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+    using Aimtec.SDK.Events;
 
     using Spell = Aimtec.SDK.Spell;
 
@@ -47,8 +48,8 @@
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usee", "Use E"));
+                Combo.Add(new MenuBool("useegap", "Use E GapClose On Minions"));
                 Combo.Add(new MenuSlider("useegap", "Use E-GapCloser When Enemy In Range >=", 475, 375, 1300));
-                Combo.Add(new MenuBool("useemode", "On = Target / Off = To Mouse"));
                 Combo.Add(new MenuBool("usersmart", "Use Smart R"));
                 Combo.Add(new MenuSlider("userhp", "When Enemy Hp <= %", 70, 0, 100));
                 Combo.Add(new MenuSlider("userhit", "Or When Kocked Up Enemy >=", 2, 0, 5));
@@ -281,6 +282,48 @@
         }
         private void OnCombo()
         {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQ2 = Menu["combo"]["useq"].Enabled;
+            bool useE = Menu["combo"]["usee"].Enabled;
+            bool useEGap = Menu["combo"]["useegap"].Enabled;
+            float distanceE = Menu["combo"]["useegap"].As<MenuSlider>().Value;
+            bool useSmartR = Menu["combo"]["user"].Enabled;
+            float tRHP = Menu["combo"]["userhp"].As<MenuSlider>().Value;
+            float hitR = Menu["combo"]["userhit"].As<MenuSlider>().Value;
+            bool useR = Menu["combo"]["userauto"].Enabled;
+            float aroundTR = Menu["combo"]["useraround"].As<MenuSlider>().Value;
+            float selfhpR = Menu["combo"]["usermyhp"].As<MenuSlider>().Value;
+            var QPrediction = Q.GetPrediction(target);
+            var Q2Prediction = Q2.GetPrediction(target);
+
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
+            {
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
+                else if (Q.Ready && Player.IsDashing() && useQ && target.IsValidTarget(Q.Range))
+                {
+                    Q.Cast();
+                }
+            }
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+            {
+                if (Q2Prediction.HitChance >= HitChance.High)
+                {
+                    Q2.Cast(Q2Prediction.CastPosition);
+                }
+            }
+            if (E.Ready && target.IsValidTarget(E.Range) && useE && !target.HasBuff("YasuoDashWrapper"))
+            {
+                E.Cast(target);
+            }
 
         }
         private void OnHarass()

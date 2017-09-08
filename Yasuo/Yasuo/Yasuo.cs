@@ -84,7 +84,7 @@
             {
                 JungleClear.Add(new MenuBool("useq", "Use Q To Jungle Clear"));
                 JungleClear.Add(new MenuBool("useq2", "Use Tornado Q To Jungle Clear"));
-                LaneClear.Add(new MenuBool("usee", "Use E To Jungle Clear"));
+                JungleClear.Add(new MenuBool("usee", "Use E To Jungle Clear"));
             }
             Menu.Add(JungleClear);
             var Killsteal = new Menu("killsteal", "Killsteal");
@@ -334,15 +334,15 @@
             {
                 E.Cast(target);
             }
-            if (useEGap)
+            if (useEGap && E.Ready && target.IsValidTarget(distanceE))
             {
-                if (target.Distance(Player) > distanceE)
+                if (target.Distance(Player) > E.Range)
                 {
                     foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
                     {
                         if (minion.IsValidTarget(E.Range) && minion != null)
                         {
-                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= E.Range && target.Distance(Player) > distanceE)
+                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= distanceE && target.Distance(Player) > E.Range)
                             {
                                 E.CastOnUnit(minion);
                             }

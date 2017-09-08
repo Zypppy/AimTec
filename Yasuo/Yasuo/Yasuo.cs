@@ -288,10 +288,11 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useEGap = Menu["combo"]["useefgap"].Enabled;
             float distanceE = Menu["combo"]["useegap"].As<MenuSlider>().Value;
-            bool useSmartR = Menu["combo"]["user"].Enabled;
+            bool useSmartR = Menu["combo"]["usersmart"].Enabled;
             float tRHP = Menu["combo"]["userhp"].As<MenuSlider>().Value;
             float hitR = Menu["combo"]["userhit"].As<MenuSlider>().Value;
             bool useR = Menu["combo"]["userauto"].Enabled;
+            float hittR = Menu["combo"]["userautohit"].As<MenuSlider>().Value;
             float aroundTR = Menu["combo"]["useraround"].As<MenuSlider>().Value;
             float selfhpR = Menu["combo"]["usermyhp"].As<MenuSlider>().Value;
             var QPrediction = Q.GetPrediction(target);

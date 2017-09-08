@@ -56,8 +56,8 @@
                 Combo.Add(new MenuSlider("userhit", "Or When Kocked Up Enemy >=", 2, 0, 5));
                 Combo.Add(new MenuBool("userauto", "Auto R"));
                 Combo.Add(new MenuSlider("userautohit", "When Kocked Up enemy >=", 3, 0, 5));
-                Combo.Add(new MenuSlider("useraround", "When Enemy In Range <=", 2, 0, 5));
-                Combo.Add(new MenuSlider("usermyhp", "When My Hp % >=", 50, 0, 100));
+                Combo.Add(new MenuSlider("useraround", "Or When Enemy In Range <=", 2, 0, 5));
+                Combo.Add(new MenuSlider("usermyhp", "Or When My Hp % >=", 50, 0, 100));
             }
             Menu.Add(Combo);
             var Harass = new Menu("harass", "Harass");

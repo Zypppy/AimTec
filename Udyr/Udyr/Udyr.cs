@@ -67,7 +67,7 @@
             {
                 JungleClear.Add(new MenuBool("useq", "Use Q"));
                 JungleClear.Add(new MenuSlider("manaq", "Mana Q", 60, 0, 100));
-                JungleClear.Add(new MenuBool("use W", "Use W"));
+                JungleClear.Add(new MenuBool("usew", "Use W"));
                 JungleClear.Add(new MenuSlider("manaw", "Mana W", 60, 0, 100));
                 JungleClear.Add(new MenuBool("usewhp", "Enable W HP Check"));
                 JungleClear.Add(new MenuSlider("hpw", "W Health % <=", 60, 0, 100));
@@ -77,6 +77,12 @@
                 JungleClear.Add(new MenuSlider("manar", "Mana R", 60, 0, 100));
             }
             Menu.Add(JungleClear);
+            var Misc = new Menu("misc", "Misc");
+            {
+                Misc.Add(new MenuBool("fleee", "Use E To Flee"));
+                Misc.Add(new MenuKeyBind("key", "Flee Key:", KeyCode.Z, KeybindType.Press));
+            }
+            Menu.Add(Misc);
             var Drawings = new Menu("drawings", "Drawings");
             {
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
@@ -154,6 +160,10 @@
                     OnJungleClear();
                     break;
             }
+            if (Menu["misc"]["key"].Enabled)
+            {
+                Flee();
+            }
         }
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
@@ -205,7 +215,7 @@
                     W.Cast();
                 }
             }
-            if (E.Ready && useE && target.IsValidTarget(rangeE) && !Player.HasBuff("UdyrTigerStance") && !Player.HasBuff("UdyrPhoenixStance"))
+            if (E.Ready && useE && target.IsValidTarget(rangeE))
             {
                 E.Cast();
             }
@@ -292,7 +302,7 @@
                 bool useR = Menu["jungleclear"]["user"].Enabled;
                 float manaR = Menu["jungleclear"]["manar"].As<MenuSlider>().Value;
 
-                if (!minion.IsValidTarget())
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
                 {
                     return;
                 }
@@ -319,6 +329,15 @@
                 {
                     R.Cast();
                 }
+            }
+        }
+        private void Flee()
+        {
+            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+            bool usee = Menu["misc"]["fleee"].Enabled;
+            if (usee && E.Ready)
+            {
+                E.Cast();
             }
         }
     }

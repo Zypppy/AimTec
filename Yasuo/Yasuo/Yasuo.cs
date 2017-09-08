@@ -342,7 +342,10 @@
                     {
                         if (minion.IsValidTarget(E.Range) && minion != null)
                         {
-                            E.CastOnUnit(minion);
+                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= E.Range && target.Distance(Player) > E.Range)
+                            {
+                                E.CastOnUnit(minion);
+                            }
                         }
                     }
                 }

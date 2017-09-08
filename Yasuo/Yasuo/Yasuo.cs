@@ -315,7 +315,7 @@
                     Q.Cast(QPrediction.CastPosition);
                 }
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(375) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.IsDashing())
             {
                 Q.Cast();
             }
@@ -326,7 +326,7 @@
                     Q2.Cast(Q2Prediction.CastPosition);
                 }
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(375) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
             {
                 Q2.Cast();
             }
@@ -342,7 +342,7 @@
                     {
                         if (minion.IsValidTarget(E.Range) && minion != null)
                         {
-                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= E.Range && target.Distance(Player) > E.Range)
+                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= E.Range && target.Distance(Player) > distanceE)
                             {
                                 E.CastOnUnit(minion);
                             }

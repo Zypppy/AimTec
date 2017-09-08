@@ -29,7 +29,7 @@
         {
             Q = new Spell(SpellSlot.Q, 475);
             Q.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.Line);
-            Q2 = new Spell(SpellSlot.Q, 900);
+            Q2 = new Spell(SpellSlot.Q, 1000);
             Q2.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 400);
             E = new Spell(SpellSlot.E, 475);
@@ -95,12 +95,6 @@
                 Killsteal.Add(new MenuBool("ignite", "Use Ignite To Killsteal"));
             }
             Menu.Add(Killsteal);
-            var Flee = new Menu("flee", "Flee");
-            {
-                Flee.Add(new MenuBool("usee", "Use E To Mouse"));
-                Flee.Add(new MenuKeyBind("key", "Flee E Key:", KeyCode.Z, KeybindType.Press));
-            }
-            Menu.Add(Flee);
             var Drawings = new Menu("drawings", "Drawings");
             {
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
@@ -208,10 +202,6 @@
                     OnLastHit();
                     break;
             }
-            if (Menu["flee"]["key"].Enabled)
-            {
-                Flee();
-            }
             Killsteal();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True, bool ignoreShields = false)
@@ -255,7 +245,7 @@
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && besttarget.HasBuffOfType(BuffType.Knockup))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range) && besttarget.HasBuffOfType(BuffType.Knockup) || besttarget.HasBuffOfType(BuffType.Knockback))
                 {
                     R.Cast();
                 }
@@ -326,15 +316,6 @@
         private void OnJungleClear()
         {
 
-        }
-        private void Flee()
-        {
-            Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
-            bool useE = Menu["flee"]["usee"].Enabled;
-            if (useE && E.Ready)
-            {
-                E.Cast(Game.CursorPos);
-            }
         }
     }
 }

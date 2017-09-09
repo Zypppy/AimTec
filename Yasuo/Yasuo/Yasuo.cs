@@ -485,6 +485,10 @@
                         }
                     }
                 }
+                if (E.Ready && useE && minion.IsValidTarget(E.Range))
+                {
+                    E.CastOnUnit(minion);
+                }
             }
         }
         private void OnLastHit()

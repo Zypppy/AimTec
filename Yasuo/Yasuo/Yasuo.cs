@@ -70,7 +70,6 @@
             {
                 LaneClear.Add(new MenuBool("useq", "Use Q To Lane Clear"));
                 LaneClear.Add(new MenuBool("useq2", "Use Tornado Q To Lane Clear"));
-                LaneClear.Add(new MenuSlider("useq2hit", "When Tornado Q Will Hit Minions >", 2, 0, 5));
                 LaneClear.Add(new MenuBool("usee", "Use E To Lane Clear"));
             }
             Menu.Add(LaneClear);
@@ -451,7 +450,6 @@
             {
                 bool useQ = Menu["laneclear"]["useq"].Enabled;
                 bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                float useQ2Hit = Menu["laneclear"]["useq2hit"].As<MenuSlider>().Value;
                 bool useE = Menu["laneclear"]["usee"].Enabled;
                 var QPrediction = Q.GetPrediction(minion);
                 var Q2Prediction = Q2.GetPrediction(minion);
@@ -468,14 +466,14 @@
                             Q.Cast(QPrediction.CastPosition);
                         }
                     }
-                    else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Q2.CastIfWillHit(minion, Menu["harass"]["useq2hit"].As<MenuSlider>().Value) && !Player.IsDashing())
+                    else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
                     {
                         if (Q2Prediction.HitChance >= HitChance.Medium)
                         {
                             Q2.Cast(Q2Prediction.CastPosition);
                         }
                     }
-                    else if (useQ2 && minion.IsValidTarget(375) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Q2.CastIfWillHit(minion, Menu["harass"]["useq2hit"].As<MenuSlider>().Value) && Player.IsDashing())
+                    else if (useQ2 && minion.IsValidTarget(375) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
                     {
                         Q2.Cast();
                     }

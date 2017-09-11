@@ -345,19 +345,31 @@
                     }
                 }
             }
-            if (useEGap && E.Ready && target.IsValidTarget(distanceE))
+            //if (useEGap && E.Ready && target.IsValidTarget(distanceE))
+            //{
+            //    if (target.Distance(Player) > E.Range)
+            //    {
+            //foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
+            // {
+            //  if (minion.IsValidTarget(E.Range) && minion != null)
+            //{
+            //if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= distanceE && target.Distance(Player) > E.Range)
+            //{
+            //E.CastOnUnit(minion);
+            //}
+            //}
+            //}
+            //}
+            //}
+            if (E.Ready && useEGap && Player.Distance(target) > Player.GetFullAttackRange(target))
             {
-                if (target.Distance(Player) > E.Range)
+                var validMinions = GetEnemyLaneMinionsTargetsInRange(E.Range).Where(m => !m.HasBuff("YasuoDashWrapper"));
+                foreach (var minion in validMinions)
                 {
-                    foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
+                    var distanceToMinionAfterDash = E.Range - Player.Distance(minion);
+                    if (Player.ServerPosition.Extend(minion.ServerPosition, distanceToMinionAfterDash).Distance(target) < Player.Distance(target))
                     {
-                        if (minion.IsValidTarget(E.Range) && minion != null)
-                        {
-                            if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= distanceE && target.Distance(Player) > E.Range)
-                            {
-                                E.CastOnUnit(minion);
-                            }
-                        }
+                        E.CastOnUnit(minion);
                     }
                 }
             }

@@ -98,6 +98,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += OnGapcloser;
+            Orbwalker.PostAttack += OnPostAttack;
 
             LoadSpells();
             Console.WriteLine("Teemo by Zypppy - Loaded");
@@ -214,6 +215,18 @@
             return null;
         }
 
+        public void OnPostAttack(object sender, PostAttackEventArgs args)
+        {
+            var heroTarget = args.Target as Obj_AI_Hero;
+            if (heroTarget == null)
+            {
+                return;
+            }
+            if (Q.Ready && Menu["combo"]["useq"].Enabled || Menu["combo"]["useqa"].Enabled)
+            {
+                Q.CastOnUnit(heroTarget);
+            }
+        }
         private void OnCombo()
         {
 

@@ -163,7 +163,7 @@
         {
             if (E.Ready && Menu["killsteal"]["usee"].Enabled)
             {
-                var besttarget = GetBestKillableHero(E, DamageType.Mixed, false);
+                var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPredition = E.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.W) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
                 {

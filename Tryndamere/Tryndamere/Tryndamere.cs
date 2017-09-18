@@ -121,7 +121,7 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["draww"].Enabled && W.Ready)
+            if (Menu["drawings"]["draww"].Enabled)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Aquamarine);
             }

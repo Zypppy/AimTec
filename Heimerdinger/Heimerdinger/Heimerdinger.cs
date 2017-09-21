@@ -152,12 +152,12 @@
             }
             if (Q.Ready && target.IsValidTarget(650) && useQ)
             {
-                Q.Cast(Player.Position);
+                Q.Cast(Player.Position + 300);
             }
             if (Q.Ready && useQ2 && useR && target.IsValidTarget(650) && Player.CountEnemyHeroesInRange(Q.Range + 300) >= useQ2Hit)
             {
                 R.Cast();
-                Q.Cast(Player.Position);
+                Q.Cast(Player.Position + 300);
             }
             if (W.Ready)
             {

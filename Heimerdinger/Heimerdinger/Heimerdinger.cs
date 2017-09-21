@@ -168,7 +168,7 @@
                         W.Cast(WPrediction.CastPosition);
                     }
                 }
-                else if (useW2 && useR && target.IsValidTarget(W2.Range - 15) && Player.CountEnemyHeroesInRange(W2.Range) >= useW2Hit || target.HealthPercent() <= 30)
+                else if (useW2 && useR && target.IsValidTarget(W2.Range - 15) && Player.CountEnemyHeroesInRange(W2.Range) >= useW2Hit)
                 {
                     if (W2Prediction.HitChance >= HitChance.High)
                     {
@@ -186,7 +186,7 @@
                         E.Cast(EPrediction.CastPosition);
                     }
                 }
-                else if (useE && useR && target.IsValidTarget(E2.Range) && Player.CountEnemyHeroesInRange(E2.Range) >= useE2Hit && !W.Ready)
+                else if (useE && useR && target.IsValidTarget(E2.Range) && Player.CountEnemyHeroesInRange(E2.Range) >= useE2Hit)
                 {
                     if (E2Prediction.HitChance >= HitChance.High)
                     {

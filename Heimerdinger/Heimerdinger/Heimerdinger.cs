@@ -168,7 +168,7 @@
                         W.Cast(WPrediction.CastPosition);
                     }
                 }
-                else if (useW2 && useR && target.IsValidTarget(W2.Range - 15) && Player.CountEnemyHeroesInRange(W2.Range) >= useW2Hit)
+                else if (useW2 && useR && target.IsValidTarget(W2.Range - 15) && Player.CountEnemyHeroesInRange(W2.Range) >= useW2Hit || target.HealthPercent() <= 30)
                 {
                     if (W2Prediction.HitChance >= HitChance.High)
                     {

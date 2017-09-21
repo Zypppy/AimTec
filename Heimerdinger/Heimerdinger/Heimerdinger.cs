@@ -62,8 +62,8 @@
             var Drawings = new Menu("drawings", "Drawings");
             {
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
-                Drawings.Add(new MenuBool("drawq", "Draw W"));
-                Drawings.Add(new MenuBool("drawq", "Draw E"));
+                Drawings.Add(new MenuBool("draww", "Draw W"));
+                Drawings.Add(new MenuBool("drawe", "Draw E"));
             }
             Menu.Add(Drawings);
             Menu.Add(Drawings);
@@ -186,7 +186,7 @@
                         E.Cast(EPrediction.CastPosition);
                     }
                 }
-                else if (useE && useR && target.IsValidTarget(E2.Range) && Player.CountEnemyHeroesInRange(E2.Range) >= useE2Hit)
+                else if (useE && useR && target.IsValidTarget(E2.Range) && Player.CountEnemyHeroesInRange(E2.Range) >= useE2Hit && !W.Ready)
                 {
                     if (E2Prediction.HitChance >= HitChance.High)
                     {

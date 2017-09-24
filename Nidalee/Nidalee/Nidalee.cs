@@ -164,7 +164,7 @@
                 Render.Circle(Game.CursorPos, 150, 50, Color.Chocolate);
             }
         }
-        
+
 
         private void Game_OnUpdate()
         {
@@ -298,7 +298,7 @@
 
         //public void OnPostAttack(object sender, PostAttackEventArgs args)
         //{
-            
+
         //    bool useQ2 = Menu["combo"]["usecq"].Enabled;
         //    bool useR = Menu["combo"]["user"].Enabled;
         //    float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
@@ -319,7 +319,7 @@
         //   {
         //      R.Cast();
         //    }
-       // }
+        // }
 
         private void OnCombo()
         {
@@ -392,7 +392,7 @@
 
                 if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
                 {
-                   Q.Cast(target);
+                    Q.Cast(target);
                 }
             }
         }

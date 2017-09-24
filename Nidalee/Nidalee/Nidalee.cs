@@ -113,6 +113,7 @@
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            Orbwalker.PostAttack += OnPostAttack;
 
             LoadSpells();
             Console.WriteLine("Nidalee by Zypppy - Loaded");
@@ -297,19 +298,40 @@
             return null;
         }
 
+        public void OnPostAttack(object sender, PostAttackEventArgs args)
+        {
+            bool useQ2 = Menu["combo"]["usecq"].Enabled;
+            bool useR = Menu["combo"]["user"].Enabled;
+            float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q2.Range))
+            {
+                Q2.Cast();
+            }
+            if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
+            {
+                R.Cast();
+            }
+            if (R.Ready && useR && target.IsValidTarget(rangeR))
+            {
+                R.Cast();
+            }
+        }
+
         private void OnCombo()
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["usecq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useW2 = Menu["combo"]["usecw"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
             float hpe = Menu["combo"]["useeh"].As<MenuSlider>().Value;
             float manae = Menu["combo"]["useehm"].As<MenuSlider>().Value;
             bool useE2 = Menu["combo"]["usece"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
             if (!target.IsValidTarget())
@@ -319,10 +341,6 @@
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
             {
                Q.Cast(target);
-            }
-            if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q2.Range))
-            {
-                Q2.Cast();
             }
             if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && target.IsValidTarget(W.Range))
             {
@@ -344,15 +362,6 @@
             {
                E2.Cast(target);
             }
-            if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
-            {
-               R.Cast();
-            }
-            if (R.Ready && useR && target.IsValidTarget(rangeR))
-            {
-              R.Cast();
-            }
-
         }
         private void OnHarass()
         {

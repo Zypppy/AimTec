@@ -295,32 +295,7 @@
             }
             return null;
         }
-
-        //public void OnPostAttack(object sender, PostAttackEventArgs args)
-        //{
-
-        //    bool useQ2 = Menu["combo"]["usecq"].Enabled;
-        //    bool useR = Menu["combo"]["user"].Enabled;
-        //    float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
-        //    var target = GetBestEnemyHeroTargetInRange(Q.Range);
-        //    if (!target.IsValidTarget())
-        //    {
-        //        return;
-        //    }
-        //    if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q2.Range))
-        //    {
-        //        Q2.Cast();
-        //    }
-        //    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
-        //    {
-        //       R.Cast();
-        //    }
-        //    if (R.Ready && useR && target.IsValidTarget(rangeR))
-        //   {
-        //      R.Cast();
-        //    }
-        // }
-
+        
         private void OnCombo()
         {
 

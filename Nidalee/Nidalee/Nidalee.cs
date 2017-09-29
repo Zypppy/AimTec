@@ -109,6 +109,7 @@
                 FleeMenu.Add(new MenuKeyBind("key", "Flee Key:", KeyCode.Z, KeybindType.Press));
             }
             Menu.Add(FleeMenu);
+            Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;

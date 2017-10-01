@@ -26,7 +26,7 @@
         public static Menu Menu = new Menu("Teemo by Zypppy", "Teemo by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, W, E, R;
+        public static Spell Q, W, E, R, Ignite;
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 675f);
@@ -34,6 +34,10 @@
             E = new Spell(SpellSlot.E, Player.AttackRange);
             R = new Spell(SpellSlot.R, 900f);
             R.SetSkillshot(1.0f, 60f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
+            if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
+                Ignite = new Spell(SpellSlot.Summoner1, 600);
+            if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
+                Ignite = new Spell(SpellSlot.Summoner2, 600);
         }
 
         public Teemo()
@@ -69,6 +73,7 @@
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Q"));
+                KSMenu.Add(new MenuBool("ignite", "Use Ignite"));
             }
             Menu.Add(KSMenu);
 
@@ -102,7 +107,15 @@
             LoadSpells();
             Console.WriteLine("Teemo by Zypppy - Loaded");
         }
+        private static int IgniteDamages
+        {
+            get
+            {
+                int[] Hello = new int[] { 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410 };
 
+                return Hello[Player.Level - 1];
+            }
+        }
         private void OnGapcloser(Obj_AI_Hero target, QGap.GapcloserArgs Args)
         {
             if (target != null && Args.EndPosition.Distance(Player) < Q.Range && Q.Ready && target.IsDashing() && target.IsValidTarget(Q.Range))
@@ -112,8 +125,6 @@
 
             }
         }
-        
-
         private void Render_OnPresent()
         {
             Vector2 maybeworks;
@@ -189,6 +200,14 @@
                     bestTarget.IsValidTarget(Q.Range))
                 {
                     Q.Cast(bestTarget);
+                }
+            }
+            if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
+            {
+                var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
+                if (besttarget != null && IgniteDamages - 100 >= besttarget.Health && besttarget.IsValidTarget(Ignite.Range))
+                {
+                    Ignite.CastOnUnit(besttarget);
                 }
             }
         }

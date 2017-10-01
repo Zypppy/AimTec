@@ -248,26 +248,20 @@
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
+            if (Q.Ready)
             {
-                if (target != null)
+                if (useQ && target.IsValidTarget(Q.Range) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
                 {
                     Q.Cast(target);
                 }
-            }
-            if (Q.Ready && useQ2 && target.IsValidTarget(Player.AttackRange) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
-            {
-                if (target != null)
+                else if (useQ2 && target.IsValidTarget(Player.AttackRange + target.BoundingRadius) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
                 {
                     Q.Cast(target);
                 }
             }
             if (W.Ready && useW && target.IsValidTarget(Q.Range) && manaw <= Player.ManaPercent())
             {
-                if (target != null)
-                {
-                    W.Cast();
-                }
+                W.Cast();
             }
 
             if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))

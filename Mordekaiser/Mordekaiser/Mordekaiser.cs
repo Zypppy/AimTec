@@ -33,7 +33,7 @@
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 670);
-            E.SetSkillshot(0.25f, 12f * 2 * (float)Math.PI / 180, 200f, false, SkillshotType.Cone);
+            E.SetSkillshot(0.25f, 12f * 2 * (float)Math.PI / 180, 2000f, false, SkillshotType.Cone);
             R = new Spell(SpellSlot.R, 650);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
@@ -272,7 +272,7 @@
             {
                 W.Cast();
             }
-            if (E.Ready && target.IsValidTarget(E.Range))
+            if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {
                 if (EPrediction.HitChance >= HitChance.High)
                 {
@@ -286,15 +286,113 @@
         }
         private void OnHarass()
         {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float useQHP = Menu["harass"]["hpq"].As<MenuSlider>().Value;
+            bool useE = Menu["harass"]["usee"].Enabled;
+            float useEHP = Menu["harass"]["hpe"].As<MenuSlider>().Value;
+            var EPrediction = E.GetPrediction(target);
 
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && target.IsValidTarget(Player.AttackRange + target.BoundingRadius))
+            {
+                Q.Cast();
+            }
+            if (E.Ready && Player.HealthPercent() >= useEHP && target.IsValidTarget(E.Range) && useE)
+            {
+                if (EPrediction.HitChance >= HitChance.High)
+                {
+                    E.Cast(EPrediction.CastPosition);
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
+        {
+            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
+        {
+            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
         }
         private void OnLaneClear()
         {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(1500))
+            {
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                float useQHP = Menu["laneclear"]["hpq"].As<MenuSlider>().Value;
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float useWHP = Menu["laneclear"]["hpw"].As<MenuSlider>().Value;
+                float minionsW = Menu["laneclear"]["minions"].As<MenuSlider>().Value;
+                bool useE = Menu["laneclear"]["usee"].Enabled;
+                float useEHP = Menu["laneclear"]["hpe"].As<MenuSlider>().Value;
+                var EPrediction = E.GetPrediction(minion);
 
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Player.AttackRange + minion.BoundingRadius))
+                {
+                    Q.Cast();
+                }
+                if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(250, false, false, minion.ServerPosition)) >= minionsW)
+                {
+                    W.Cast();
+                }
+                if (E.Ready && Player.HealthPercent() >= useEHP && minion.IsValidTarget(E.Range))
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+            }
+        }
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
+        {
+            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
+        }
+
+        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
+        {
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
         private void OnJungleClear()
         {
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(1500)).ToList())
+            {
+                bool useQ = Menu["hungleclear"]["useq"].Enabled;
+                float useQHP = Menu["hungleclear"]["hpq"].As<MenuSlider>().Value;
+                bool useW = Menu["hungleclear"]["usew"].Enabled;
+                float useWHP = Menu["hungleclear"]["hpw"].As<MenuSlider>().Value;
+                bool useE = Menu["hungleclear"]["usee"].Enabled;
+                float useEHP = Menu["hungleclear"]["hpe"].As<MenuSlider>().Value;
+                var EPrediction = E.GetPrediction(minion);
 
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Player.AttackRange + minion.BoundingRadius))
+                {
+                    Q.Cast();
+                }
+                if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range))
+                {
+                    W.Cast();
+                }
+                if (E.Ready && Player.HealthPercent() >= useEHP && minion.IsValidTarget(E.Range))
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+            }
         }
     }
 }

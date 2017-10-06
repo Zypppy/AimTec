@@ -72,16 +72,6 @@
                 LaneClear.Add(new MenuSlider("hpe", "Laneclear E HP % >", 60, 0, 100));
             }
             Menu.Add(LaneClear);
-            var JungleClear = new Menu("jungleclear", "Jungle Clear");
-            {
-                JungleClear.Add(new MenuBool("useq", "Use Q"));
-                JungleClear.Add(new MenuSlider("hpq", "JungleClear Q HP % >", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usew", "Use W"));
-                JungleClear.Add(new MenuSlider("hpw", "JungleClear W HP % >", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usee", "Use E"));
-                JungleClear.Add(new MenuSlider("hpe", "JungleClear E HP % >", 60, 0, 100));
-            }
-            Menu.Add(JungleClear);
             var Killsteal = new Menu("killsteal", "Killsteal");
             {
                 Killsteal.Add(new MenuBool("usee", "Use E"));
@@ -189,7 +179,6 @@
                     break;
                 case OrbwalkingMode.Laneclear:
                     OnLaneClear();
-                    OnJungleClear();
                     break;
 
             }
@@ -340,48 +329,6 @@
                     Q.Cast();
                 }
                 if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(250, false, false, minion.ServerPosition)) >= minionsW)
-                {
-                    W.Cast();
-                }
-                if (E.Ready && Player.HealthPercent() >= useEHP && minion.IsValidTarget(E.Range))
-                {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
-                }
-            }
-        }
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
-        {
-            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
-        {
-            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
-        }
-        private void OnJungleClear()
-        {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(1500)).ToList())
-            {
-                bool useQ = Menu["hungleclear"]["useq"].Enabled;
-                float useQHP = Menu["hungleclear"]["hpq"].As<MenuSlider>().Value;
-                bool useW = Menu["hungleclear"]["usew"].Enabled;
-                float useWHP = Menu["hungleclear"]["hpw"].As<MenuSlider>().Value;
-                bool useE = Menu["hungleclear"]["usee"].Enabled;
-                float useEHP = Menu["hungleclear"]["hpe"].As<MenuSlider>().Value;
-                var EPrediction = E.GetPrediction(minion);
-
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
-                {
-                    return;
-                }
-                if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Player.AttackRange + minion.BoundingRadius))
-                {
-                    Q.Cast();
-                }
-                if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range))
                 {
                     W.Cast();
                 }

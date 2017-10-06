@@ -373,7 +373,7 @@
                 float useEHP = Menu["hungleclear"]["hpe"].As<MenuSlider>().Value;
                 var EPrediction = E.GetPrediction(minion);
 
-                if (!minion.IsValidTarget())
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
                 {
                     return;
                 }

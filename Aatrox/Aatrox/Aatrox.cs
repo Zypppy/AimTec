@@ -35,7 +35,7 @@
             R = new Spell(SpellSlot.R, 550);
             Q.SetSkillshot(0.6f, 250, 2000, false, SkillshotType.Circle);
             Q2.SetSkillshot(0.6f, 150, 2000, false, SkillshotType.Circle);
-            E.SetSkillshot(0.25f, 35, 1250, false, SkillshotType.Line);
+            E.SetSkillshot(0.25f, 40, 1254, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
                 Flash = new Spell(SpellSlot.Summoner1, 425);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerFlash")

@@ -30,9 +30,9 @@
         {
             Q = new Spell(SpellSlot.Q, 950);
             W = new Spell(SpellSlot.W, 125);
-            E = new Spell(SpellSlot.E, 125);
+            E = new Spell(SpellSlot.E, 300);
             R = new Spell(SpellSlot.R, 600);
-            Q.SetSkillshot(0.25f, 70f, 1700f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.25f, 70f, 1801.029f, true, SkillshotType.Line, false, HitChance.High);
         }
 
         public Blitzcrank()

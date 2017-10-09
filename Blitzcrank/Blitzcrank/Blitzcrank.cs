@@ -28,7 +28,7 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1000);
+            Q = new Spell(SpellSlot.Q, 1050);
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 300);
             R = new Spell(SpellSlot.R, 600);
@@ -196,7 +196,7 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             //bool useFOTM = Menu["supportitems"]["usefotm"].Enabled;
             //bool useSOLARI = Menu["supportitems"]["usesolari"].Enabled;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var target = GetBestEnemyHeroTargetInRange(1500);
 
             if (!target.IsValidTarget())
             {

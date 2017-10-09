@@ -263,7 +263,7 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["minrh"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(W.Range);
+            var target = GetBestEnemyHeroTargetInRange(2000);
             var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
 
             if (!target.IsValidTarget())

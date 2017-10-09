@@ -27,14 +27,14 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 800f);
-            Q.SetSkillshot(0.25f, 60f, 1200f, false, SkillshotType.Line, false, HitChance.High);
-            W = new Spell(SpellSlot.W, 1800f);
-            W.SetSkillshot(3.3f, 375f, 1650f, false, SkillshotType.Circle, false, HitChance.Medium);
+            Q = new Spell(SpellSlot.Q, 950f);
+            Q.SetSkillshot(0.251f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.High);
+            W = new Spell(SpellSlot.W, 1600f);
+            W.SetSkillshot(3.3f, 200f, 1308f, false, SkillshotType.Circle, false, HitChance.Medium);
             E = new Spell(SpellSlot.E, 600f);
             E.SetSkillshot(0.25f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.Low);
             R = new Spell(SpellSlot.R, 1600f);
-            R.SetSkillshot(0.333f, 350f, 1650f, false, SkillshotType.Circle, false, HitChance.High);
+            R.SetSkillshot(0.333f, 350f, 4800f, false, SkillshotType.Circle, false, HitChance.High);
         }
 
         public Ekko()

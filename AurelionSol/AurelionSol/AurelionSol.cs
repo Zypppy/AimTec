@@ -35,8 +35,8 @@
             W2 = new Spell(SpellSlot.W, 650f);
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1419f);
-            Q.SetSkillshot(0.25f, 110, 701, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 250, 1500, false, SkillshotType.Line);
+            Q.SetSkillshot(0.25f, 250, 701, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 120, 1500, false, SkillshotType.Line);
         }
         public AurelionSol()
         {
@@ -45,7 +45,7 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("user", "Use R Only Above Slider Value"));
+                ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "R Target + Minimum Enemeies Hit", 3, 0, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
@@ -246,7 +246,7 @@
                         Q.Cast(QPrediction.CastPosition);
                     }
                 }
-                else if (missiles != null && target.IsValidTarget(250f, false, true, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+                else if (missiles != null && target.IsValidTarget(110f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                 {
                     Q.Cast();
                 }

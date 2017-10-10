@@ -28,18 +28,18 @@
         public static Spell Q, Q2, W, W2, W3, E, E2, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1400);
-            Q.SetSkillshot(0.25f, 40f, 1300f, true, SkillshotType.Line, false, HitChance.VeryHigh);
-            Q2 = new Spell(SpellSlot.Q, 355);
+            Q = new Spell(SpellSlot.Q, 1500);
+            Q.SetSkillshot(0.25f, 40f, 1318f, true, SkillshotType.Line, false);
+            Q2 = new Spell(SpellSlot.Q, 500);
             W = new Spell(SpellSlot.W, 900);
-            W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
+            W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false);
             W2 = new Spell(SpellSlot.W, 475);
-            W2.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false, HitChance.Low);
+            W2.SetSkillshot(0.3f, 75f, 1500f, false, SkillshotType.Line, false);
             W3 = new Spell(SpellSlot.W, 750);
-            W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false, HitChance.Low);
+            W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false);
             E = new Spell(SpellSlot.E, 600);
             E2 = new Spell(SpellSlot.E, 350);
-            E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false, HitChance.Low);
+            E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false);
             R = new Spell(SpellSlot.R, 500);
         }
 
@@ -299,7 +299,7 @@
         
         private void OnCombo()
         {
-
+            var target = GetBestEnemyHeroTargetInRange(1600);
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["usecq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
@@ -310,7 +310,12 @@
             bool useE2 = Menu["combo"]["usece"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var QPrediction = Q.GetPrediction(target);
+            var WPrediction = W.GetPrediction(target);
+            var W2Prediction = W2.GetPrediction(target);
+            var W3Prediction = W3.GetPrediction(target);
+            var E2Prediction = E2.GetPrediction(target);
+
 
             if (!target.IsValidTarget())
             {
@@ -318,7 +323,10 @@
             }
             if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(Q.Range))
             {
-                Q.Cast(target);
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
             }
             if (Q2.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q2.Range))
             {
@@ -326,15 +334,24 @@
             }
             if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && target.IsValidTarget(W.Range))
             {
-                W.Cast(target);
+                if (WPrediction.HitChance >= HitChance.Medium)
+                {
+                    W.Cast(WPrediction.CastPosition);
+                }
             }
             if (W2.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.IsValidTarget(W2.Range))
             {
-                W2.Cast(target);
+                if (W2Prediction.HitChance >= HitChance.Medium)
+                {
+                    W2.Cast(W2Prediction.CastPosition);
+                }
             }
             if (W3.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunted") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(W3.Range))
             {
-                W3.Cast(target);
+                if (W3Prediction.HitChance >= HitChance.Medium)
+                {
+                    W3.Cast(W3Prediction.CastPosition);
+                }
             }
             if (E.Ready && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.ManaPercent() >= manae && Player.HealthPercent() <= hpe)
             {
@@ -342,7 +359,10 @@
             }
             if (E2.Ready && useE2 && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && target.IsValidTarget(E2.Range))
             {
-                E2.Cast(target);
+                if (E2Prediction.HitChance >= HitChance.Low)
+                {
+                    E2.Cast(E2Prediction.CastPosition);
+                }
             }
             if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(Q.Range))
             {

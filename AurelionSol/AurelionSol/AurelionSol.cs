@@ -255,7 +255,7 @@
             {
                 if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState != 2)
                 {
-                    W.Cast();
+                    W2.Cast();
                 }
                 else if (target.IsValidTarget(W.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                 {
@@ -263,7 +263,7 @@
                 }
                 else if (!target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                 {
-                    W.Cast();
+                    W2.Cast();
                 }
             }
             if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value))

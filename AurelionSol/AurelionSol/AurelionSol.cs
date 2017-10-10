@@ -30,13 +30,13 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 900f);
+            Q = new Spell(SpellSlot.Q, 1000f);
             W = new Spell(SpellSlot.W, 350f);
             W2 = new Spell(SpellSlot.W, 650f);
             E = new Spell(SpellSlot.E, 400f);
-            R = new Spell(SpellSlot.R, 1420f);
-            Q.SetSkillshot(0.4f, 180, 850, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 250, 1750, false, SkillshotType.Line);
+            R = new Spell(SpellSlot.R, 1419f);
+            Q.SetSkillshot(0.25f, 110, 701, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 250, 4536, false, SkillshotType.Line);
         }
         public AurelionSol()
         {

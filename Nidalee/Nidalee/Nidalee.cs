@@ -32,14 +32,14 @@
             Q.SetSkillshot(0.25f, 40f, 1318f, true, SkillshotType.Line, false);
             Q2 = new Spell(SpellSlot.Q, 500);
             W = new Spell(SpellSlot.W, 900);
-            W.SetSkillshot(0.75f, 80f, float.MaxValue, false, SkillshotType.Circle, false);
+            W.SetSkillshot(0.75f, 80f, 1450, false, SkillshotType.Circle, false);
             W2 = new Spell(SpellSlot.W, 475);
             W2.SetSkillshot(0.3f, 75f, 1500f, false, SkillshotType.Line, false);
             W3 = new Spell(SpellSlot.W, 750);
-            W3.SetSkillshot(0.25f, 75f, 1800f, false, SkillshotType.Line, false);
+            W3.SetSkillshot(0.3f, 75f, 1800f, false, SkillshotType.Line, false);
             E = new Spell(SpellSlot.E, 600);
             E2 = new Spell(SpellSlot.E, 350);
-            E2.SetSkillshot(0.25f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false);
+            E2.SetSkillshot(0.73f, (float)(15 * Math.PI / 180), float.MaxValue, false, SkillshotType.Cone, false);
             R = new Spell(SpellSlot.R, 500);
         }
 

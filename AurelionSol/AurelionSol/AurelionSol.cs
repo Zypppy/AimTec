@@ -36,7 +36,7 @@
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1419f);
             Q.SetSkillshot(0.25f, 110, 701, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 250, 1000, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 250, 950, false, SkillshotType.Line);
         }
         public AurelionSol()
         {
@@ -46,7 +46,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("user", "Use R Only Above Slider Value"));
-                ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 0, 5));
+                ComboMenu.Add(new MenuSlider("hitr", "R Target + Minimum Enemeies Hit", 3, 0, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(ComboMenu);
@@ -266,7 +266,7 @@
                     W.Cast();
                 }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  0 + Menu["combo"]["hitr"].As<MenuSlider>().Value))
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

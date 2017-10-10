@@ -29,12 +29,12 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1100);
+            Q = new Spell(SpellSlot.Q, 1200);
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 625);
-            Q.SetSkillshot(0.25f, 80f, 1200f, true, SkillshotType.Line, false, HitChance.VeryHigh);
-            W.SetSkillshot(0.25f, 279f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
+            Q.SetSkillshot(0.1515f, 70f, 1198f, true, SkillshotType.Line, false);
+            W.SetSkillshot(0.672f, 279f, float.MaxValue, false, SkillshotType.Circle, false);
         }
 
         public Morgana()
@@ -206,12 +206,13 @@
 
         private void OnCombo()
         {
-
+            var target = GetBestEnemyHeroTargetInRange(1500);
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            var QPrediction = Q.GetPrediction(target);
+            var WPrediction = W.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -219,16 +220,16 @@
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (target != null)
+                if (QPrediction.HitChance >= HitChance.High)
                 {
-                    Q.Cast(target);
+                    Q.Cast(QPrediction.CastPosition);
                 }
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
-                if (target != null)
+                if (WPrediction.HitChance >= HitChance.Medium)
                 {
-                    W.Cast(target);
+                    W.Cast(WPrediction.CastPosition);
                 }
             }
             if (useR)

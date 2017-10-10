@@ -246,7 +246,7 @@
                         Q.Cast(QPrediction.CastPosition);
                     }
                 }
-                else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
+                else if (missiles != null && target.IsValidTarget(250f, false, true, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                 {
                     Q.Cast();
                 }
@@ -266,7 +266,7 @@
                     W.Cast();
                 }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value))
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  0 + Menu["combo"]["hitr"].As<MenuSlider>().Value))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

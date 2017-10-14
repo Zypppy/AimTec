@@ -31,16 +31,16 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 725);
+            Q = new Spell(SpellSlot.Q, 700);
             Q2 = new Spell(SpellSlot.Q, 850);
             W = new Spell(SpellSlot.W, 450);
-            E = new Spell(SpellSlot.E, 1050);
+            E = new Spell(SpellSlot.E, 1025);
             E2 = new Spell(SpellSlot.E, 2000);
             R = new Spell(SpellSlot.R, 700);
-            Q.SetSkillshot(0.5f, 100, 2200, false, SkillshotType.Line, false, HitChance.High);
-            Q2.SetSkillshot(0.5f, 150, 2200, false, SkillshotType.Line, false, HitChance.Medium);
-            E.SetSkillshot(0.5f, 110, 850, false, SkillshotType.Line, false, HitChance.Medium);
-            //E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false, HitChance.VeryHigh);
+            Q.SetSkillshot(0.251f, 75f, 2201f, false, SkillshotType.Line, false);
+            Q2.SetSkillshot(0.333f, 90, 2217f, false, SkillshotType.Line, false);
+            E.SetSkillshot(0.250f, 125, 848f, false, SkillshotType.Line, false);
+            //E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false);
         }
         public Lissandra()
         {
@@ -229,9 +229,13 @@
             if (Q.Ready && Menu["ks"]["QKS"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
+                var QPrediction = Q.GetPrediction(bestTarget);
                 if (bestTarget != null && Player.GetSpellDamage(bestTarget, SpellSlot.Q) >= bestTarget.Health && bestTarget.IsValidTarget(Q.Range))
                 {
-                    Q.Cast(bestTarget);
+                    if (QPrediction.HitChance >= HitChance.High)
+                    {
+                        Q.Cast(QPrediction.CastPosition);
+                    }
                 }
             }
             if (W.Ready && Menu["ks"]["WKS"].Enabled)
@@ -273,25 +277,35 @@
         }
         private void OnCombo()
         {
+            var target = GetBestEnemyHeroTargetInRange(1500);
             bool useQ = Menu["combo"]["useq"].Enabled;
+            var QPrediction = Q.GetPrediction(target);
+            var Q2Prediction = Q2.GetPrediction(target);
             bool useE = Menu["combo"]["usee"].Enabled;
+            var EPrediction = E.GetPrediction(target);
             bool useEGap = Menu["combo"]["useegap"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
             float REnemies = Menu["combo"]["defr"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(1500);
+            
             if (!target.IsValidTarget())
             {
                 return;
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                Q.Cast(target);
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q2.Range))
             {
-               Q2.Cast(target);
+                if (Q2Prediction.HitChance >= HitChance.Medium)
+                {
+                    Q2.Cast(Q2Prediction.CastPosition);
+                }
             }
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
@@ -301,7 +315,10 @@
             {
                 if (target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
-                    E.Cast(target);
+                    if (EPrediction.HitChance >= HitChance.Medium)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
                 }
                 else if (missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
@@ -319,16 +336,21 @@
         }
         private void OnHarass()
         {
+            var target = GetBestEnemyHeroTargetInRange(Q2.Range);
             bool useQ = Menu["harass"]["useqh"].Enabled;
             float manaQ = Menu["harass"]["qmanah"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q2.Range);
+            var QPrediction = Q.GetPrediction(target);
+
             if (!target.IsValidTarget())
             {
                 return;
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.ManaPercent() >= manaQ)
             {
-                Q.Cast(target);
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
             }
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
@@ -349,11 +371,15 @@
             float hitW = Menu["laneclear"]["wmhitlc"].As<MenuSlider>().Value;
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q2.Range))
             {
+                var QPrediction = Q.GetPrediction(minion);
                 if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
                 {
                     if (minion != null)
                     {
-                        Q.Cast(minion);
+                        if (QPrediction.HitChance >= HitChance.High)
+                        {
+                            Q.Cast(QPrediction.CastPosition);
+                        }
                     }
                 }
                 if (W.Ready && useW && Player.ManaPercent() >= manaW && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(W.Range, false, false, minion.ServerPosition)) >= hitW)

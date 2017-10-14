@@ -29,11 +29,11 @@
         public static Spell Q, W, E, R, Ignite;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 675f);
+            Q = new Spell(SpellSlot.Q, 680f);
             W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, Player.AttackRange);
             R = new Spell(SpellSlot.R, 900f);
-            R.SetSkillshot(1.0f, 60f, float.MaxValue, false, SkillshotType.Circle, false, HitChance.Medium);
+            R.SetSkillshot(0.396f, 120f, 1000f, false, SkillshotType.Circle, false, HitChance.Medium);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -49,8 +49,8 @@
                 ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
                 ComboMenu.Add(new MenuBool("usew", "Use W In Combo"));
                 ComboMenu.Add(new MenuSlider("minmanaw", "Minimum Mana To Use W", 50, 0, 100));
-                ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
+                //ComboMenu.Add(new MenuBool("user", "Use R"));
+                //ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
             }
             Menu.Add(ComboMenu);
 
@@ -239,8 +239,8 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQ2 = Menu["combo"]["useqa"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
+            //bool useR = Menu["combo"]["user"].Enabled;
+            //float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
             float manaw = Menu["combo"]["minmanaw"].As<MenuSlider>().Value;
             var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
@@ -264,13 +264,13 @@
                 W.Cast();
             }
 
-            if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
-            {
-                if (target != null)
-                {
-                    R.Cast(target);
-                }
-            }
+            //if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
+            //{
+            //    if (target != null)
+            //    {
+            //        R.Cast(target);
+            //    }
+            // }
             var ItemCutlass = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "BilgewaterCutlass");
             if (ItemCutlass != null)
             {

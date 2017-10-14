@@ -31,9 +31,9 @@
         {
             Q = new Spell(SpellSlot.Q, 230f);
             Q2 = new Spell(SpellSlot.Q, 500f);
-            W = new Spell(SpellSlot.W, 750f);
+            W = new Spell(SpellSlot.W, 800f);
             R = new Spell(SpellSlot.R, 550f);
-            W.SetSkillshot(0.25f, 75f, 2300f, false, SkillshotType.Line);
+            W.SetSkillshot(0.502f, 75f, 2343f, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")

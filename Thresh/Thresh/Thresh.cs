@@ -42,7 +42,7 @@ namespace Thresh
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 450);
             R = new Spell(SpellSlot.R, 400);
-            Q.SetSkillshot(0.25f, 70f, 1906f, true, SkillshotType.Line);
+            Q.SetSkillshot(0.5f, 70f, 1906f, true, SkillshotType.Line);
             W.SetSkillshot(0.265f, 120f, 1752f, false, SkillshotType.Circle);
             FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
             E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line);

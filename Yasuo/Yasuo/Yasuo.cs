@@ -28,11 +28,12 @@
         public static Spell Q, Q2, W, E, R, Ignite;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 475);
-            Q.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.Line);
-            Q2 = new Spell(SpellSlot.Q, 1000);
-            Q2.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.Line);
+            Q = new Spell(SpellSlot.Q, 500f);
+            Q.SetSkillshot(0.4f, 50f, float.MaxValue, false, SkillshotType.Line);
+            Q2 = new Spell(SpellSlot.Q, 1100);
+            Q2.SetSkillshot(0.333f, 90f, 1203f, false, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 400);
+            W.SetSkillshot(0.25f, 100f, 850f, false, SkillshotType.Line);
             E = new Spell(SpellSlot.E, 475);
             R = new Spell(SpellSlot.R, 1200);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")

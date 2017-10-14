@@ -31,7 +31,7 @@
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 830);
             E = new Spell(SpellSlot.E, 660);
-            E.SetSkillshot(0.25f, 93, 1300, false, SkillshotType.Line);
+            E.SetSkillshot(0.325f, 125f, 700f, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
@@ -165,7 +165,7 @@
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
                 var EPredition = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.W) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
                 {
                     if (EPredition.HitChance >= HitChance.High)
                     {
@@ -218,7 +218,7 @@
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(200) && useQ && Player.HealthPercent() < useQHP)
+            if (Q.Ready && target.IsValidTarget(400) && useQ && Player.HealthPercent() < useQHP)
             {
                 Q.Cast();
             }

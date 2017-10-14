@@ -31,13 +31,13 @@
         {
             Q = new Spell(SpellSlot.Q, 325);
             Q2 = new Spell(SpellSlot.Q, 375);
-            W = new Spell(SpellSlot.W, 1000);
+            W = new Spell(SpellSlot.W, 1025);
             E = new Spell(SpellSlot.E, 700);
             E2 = new Spell(SpellSlot.E, 1200);
             R = new Spell(SpellSlot.R, 400);
-            W.SetSkillshot(0.225f, 100f, 828f, true, SkillshotType.Line);
-            E.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);
-            E2.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.Circle);
+            W.SetSkillshot(0.250f, 70f, 1699f, true, SkillshotType.Line);
+            E.SetSkillshot(0.538f, 120f, 1000f, false, SkillshotType.Circle);
+            E2.SetSkillshot(0.538f, 120f, 1000f, false, SkillshotType.Circle);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")

@@ -29,10 +29,10 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 625);
-            W = new Spell(SpellSlot.W, 125);
-            E = new Spell(SpellSlot.E, 375);
+            W = new Spell(SpellSlot.W, 400);
+            E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 1000);
-            R.SetSkillshot(0.00f, 160, 1700, false, SkillshotType.Circle);
+            R.SetSkillshot(0.325f, 160, 1700, false, SkillshotType.Circle);
         }
         public Malphite()
         {
@@ -43,7 +43,7 @@
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("usee", "Use E"));
                 Combo.Add(new MenuBool("user", "Use R Only Above Slider Value"));
-                Combo.Add(new MenuSlider("hitr", "Cast R If Hit X Enemies", 2, 0, 5));
+                Combo.Add(new MenuSlider("hitr", "Cast R If Hit 1 + X Enemies", 2, 0, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(Combo);
@@ -112,7 +112,7 @@
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
-                Render.Circle(Player.Position, 200, 40, Color.Azure);
+                Render.Circle(Player.Position, W.Range, 40, Color.Azure);
             }
             if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
@@ -237,7 +237,7 @@
             {
                 Q.Cast(target);
             }
-            if (W.Ready && useW && target.IsValidTarget(200))
+            if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
                 W.Cast();
             }
@@ -271,7 +271,7 @@
             {
                 Q.Cast(target);
             }
-            if (W.Ready && useW && target.IsValidTarget(2000) && Player.ManaPercent() >= manaW)
+            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.ManaPercent() >= manaW)
             {
                 W.Cast();
             }
@@ -308,7 +308,7 @@
                 {
                     Q.Cast(minion);
                 }
-                if (W.Ready && useW && minion.IsValidTarget(200) && Player.ManaPercent() >= manaW)
+                if (W.Ready && useW && minion.IsValidTarget(W.Range) && Player.ManaPercent() >= manaW)
                 {
                     W.Cast();
                 }

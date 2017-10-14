@@ -54,7 +54,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("hitr", "Enemies Around Target", 2, 0, 5));
+                ComboMenu.Add(new MenuSlider("hitr", "Enemies Around Target", 2, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(ComboMenu);

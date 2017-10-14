@@ -18,3 +18,14 @@ C:\Users\Toshiba\Source\Repos\AimTec\Thresh\Thresh\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Toshiba\Source\Repos\AimTec\Thresh\Thresh\obj\Debug\Thresh.csprojResolveAssemblyReference.cache
 C:\Users\Toshiba\Source\Repos\AimTec\Thresh\Thresh\obj\Debug\Thresh.exe
 C:\Users\Toshiba\Source\Repos\AimTec\Thresh\Thresh\obj\Debug\Thresh.pdb
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Thresh.exe.config
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Thresh.exe
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Thresh.pdb
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Aimtec.dll
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Aimtec.SDK.dll
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\NLog.dll
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\bin\Debug\Newtonsoft.Json.dll
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\obj\Debug\Thresh.csprojResolveAssemblyReference.cache
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\obj\Debug\Thresh.csproj.CoreCompileInputs.cache
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\obj\Debug\Thresh.exe
+C:\Users\zypppy\Documents\GitHub\AimTec\Thresh\Thresh\obj\Debug\Thresh.pdb

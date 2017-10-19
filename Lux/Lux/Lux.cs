@@ -141,10 +141,6 @@
                     Render.Circle(LuxE.Position, 350, 40, Color.DeepPink);
                 }
             }
-            if (R.Ready && Menu["drawngs"]["drawr"].Enabled)
-            {
-                Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
-            }
         }
 
         private void Game_OnUpdate()

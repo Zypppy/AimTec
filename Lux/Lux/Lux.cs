@@ -24,7 +24,7 @@
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, W, E, E2, R;
-        private MissileClient missiles;
+        //private MissileClient missiles;
 
         public void LoadSpells()
         {
@@ -97,7 +97,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             GameObject.OnCreate += OnCreate;
-            GameObject.OnDestroy += OnDestroy;
+            //GameObject.OnDestroy += OnDestroy;
 
             LoadSpells();
             Console.WriteLine("Lux by Zypppy - Loaded");
@@ -107,29 +107,6 @@
             if (obj != null && obj.IsValid)
             {
                 Console.WriteLine(obj.Name);
-            }
-        }
-        private void OnDestroy(GameObject obj)
-        {
-            var missile = obj as MissileClient;
-            if (missile == null || !missile.IsValid)
-            {
-                return;
-            }
-
-            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
-                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
-            {
-                return;
-            }
-            var hero = missile.SpellCaster as Obj_AI_Hero;
-            if (hero == null)
-            {
-                return;
-            }
-            if (missile.SpellData.Name == "LissandraEMissile")
-            {
-                missiles = null;
             }
         }
         private void Render_OnPresent()
@@ -168,6 +145,18 @@
         }
         private void Killsteal()
         {
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
+            {
+                var besttarget = GetBestKillableHero(Q, DamageType.Magical, false);
+                var QPredition = Q.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
+                {
+                    if (QPredition.HitChance >= HitChance.High)
+                    {
+                        Q.Cast(QPredition.CastPosition);
+                    }
+                }
+            }
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Magical, false);

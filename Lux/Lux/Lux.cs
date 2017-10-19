@@ -122,7 +122,7 @@
             {
                 return;
             }
-            if (missile.SpellData.Name == "LissandraEMissile")
+            if (missile.SpellData.Name == "LuxLightStrikeKugel")
             {
                 missiles = missile;
             }
@@ -173,32 +173,6 @@
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
-            if (Q.Ready && Menu["drawings"]["drawqdmg"].Enabled)
-            {
-                ObjectManager.Get<Obj_AI_Base>()
-                 .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
-                 .ToList()
-                 .ForEach(
-                  unit =>
-                  {
-                      var heroUnit = unit as Obj_AI_Hero;
-                      int width = 103;
-                      int height = 8;
-                      int xOffset = SxOffset(heroUnit);
-                      int yOffset = SyOffset(heroUnit);
-                      var barPos = unit.FloatingHealthBarPosition;
-                      barPos.X += xOffset;
-                      barPos.Y += yOffset;
-
-                      var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
-                      var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.Q)
-                      ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.Q))) / unit.MaxHealth * 100 / 100)
-                      : 0));
-                      Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) ? Color.GreenYellow : Color.Orange);
-
-                  });
-
-            }
             if (W.Ready && Menu["drawings"]["draww"].Enabled)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
@@ -207,69 +181,16 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
             }
-            if (E.Ready && Menu["drawings"]["drawedmg"].Enabled)
-            {
-                ObjectManager.Get<Obj_AI_Base>()
-                 .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
-                 .ToList()
-                 .ForEach(
-                  unit =>
-                  {
-                      var heroUnit = unit as Obj_AI_Hero;
-                      int width = 103;
-                      int height = 8;
-                      int xOffset = SxOffset(heroUnit);
-                      int yOffset = SyOffset(heroUnit);
-                      var barPos = unit.FloatingHealthBarPosition;
-                      barPos.X += xOffset;
-                      barPos.Y += yOffset;
-
-                      var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
-                      var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.E)
-                      ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.E))) / unit.MaxHealth * 100 / 100)
-                      : 0));
-                      Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.E) ? Color.GreenYellow : Color.Orange);
-
-                  });
-
-            }
             if (E.Ready && Menu["drawings"]["drawe2"].Enabled)
             {
                 if (missiles != null)
                 {
                     Render.Circle(missiles.ServerPosition, 350, 40, Color.DeepPink);
                 }
-
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
-            }
-            if (Q.Ready && Menu["drawings"]["drawqdmg"].Enabled)
-            {
-                ObjectManager.Get<Obj_AI_Base>()
-                 .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(5000))
-                 .ToList()
-                 .ForEach(
-                  unit =>
-                  {
-                      var heroUnit = unit as Obj_AI_Hero;
-                      int width = 103;
-                      int height = 8;
-                      int xOffset = SxOffset(heroUnit);
-                      int yOffset = SyOffset(heroUnit);
-                      var barPos = unit.FloatingHealthBarPosition;
-                      barPos.X += xOffset;
-                      barPos.Y += yOffset;
-
-                      var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
-                      var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.R)
-                      ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
-                      : 0));
-                      Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
-
-                  });
-
             }
         }
         private void Game_OnUpdate()
@@ -313,6 +234,18 @@
                     if (QPredition.HitChance >= HitChance.High)
                     {
                         Q.Cast(QPredition.CastPosition);
+                    }
+                }
+            }
+            if (E.Ready && Menu["killsteal"]["usee"].Enabled)
+            {
+                var besttarget = GetBestKillableHero(E, DamageType.Magical, false);
+                var EPredition = E.GetPrediction(besttarget);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range) && missiles.CountEnemyHeroesInRange(350) >= 1)
+                {
+                    if (EPredition.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPredition.CastPosition);
                     }
                 }
             }

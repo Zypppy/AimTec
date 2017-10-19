@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+
     using Aimtec;
     using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Damage;
@@ -15,6 +16,7 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+
     using Spell = Aimtec.SDK.Spell;
     using Aimtec.SDK.Events;
 
@@ -58,22 +60,22 @@
                 Harass.Add(new MenuSlider("manae", "E Harass if Mana % >=", 60, 0, 100));
             }
             Menu.Add(Harass);
-            var Lane = new Menu("lane", "Lane Clear");
+            var LaneClear = new Menu("laneclear", "Lane Clear");
             {
-                Lane.Add(new MenuBool("useq", "Use Q"));
-                Lane.Add(new MenuSlider("manaq", "Q Lane Clear if Mana % >=", 60, 0, 100));
-                Lane.Add(new MenuBool("usee", "Use E"));
-                Lane.Add(new MenuSlider("manae", "E Lane clear if Mana % >=", 60, 0, 100));
+                LaneClear.Add(new MenuBool("useq", "Use Q"));
+                LaneClear.Add(new MenuSlider("manaq", "Q Lane Clear if Mana % >=", 60, 0, 100));
+                LaneClear.Add(new MenuBool("usee", "Use E"));
+                LaneClear.Add(new MenuSlider("manae", "E Lane clear if Mana % >=", 60, 0, 100));
             }
-            Menu.Add(Lane);
-            var Jungle = new Menu("jungle", "Jungle Clear");
+            Menu.Add(LaneClear);
+            var JungleClear = new Menu("jungle", "Jungle Clear");
             {
-                Jungle.Add(new MenuBool("useq", "Use Q"));
-                Jungle.Add(new MenuSlider("manaq", "Q Jungle Clear if Mana % >=", 60, 0, 100));
-                Jungle.Add(new MenuBool("usee", "Use E"));
-                Jungle.Add(new MenuSlider("manae", "E Jungle clear if Mana % >=", 60, 0, 100));
+                JungleClear.Add(new MenuBool("useq", "Use Q"));
+                JungleClear.Add(new MenuSlider("manaq", "Q Jungle Clear if Mana % >=", 60, 0, 100));
+                JungleClear.Add(new MenuBool("usee", "Use E"));
+                JungleClear.Add(new MenuSlider("manae", "E Jungle clear if Mana % >=", 60, 0, 100));
             }
-            Menu.Add(Jungle);
+            Menu.Add(JungleClear);
             var Killsteal = new Menu("killsteal", "Killsteal");
             {
                 Killsteal.Add(new MenuBool("useq", "Use Q"));

@@ -26,7 +26,6 @@
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, W, E, E2, R;
-        private MissileClient missiles;
 
         public void LoadSpells()
         {
@@ -115,29 +114,39 @@
 
         private void Render_OnPresent()
         {
-            Vector2 efkalopas;
-            var heropos = Render.WorldToScreen(Player.Position, out efkalopas);
-            var xaOffset = (int)efkalopas.X;
-            var yaOffset = (int)efkalopas.Y;
+            Vector2 maybeworks;
+            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+            var xaOffset = (int)maybeworks.X;
+            var yaOffset = (int)maybeworks.Y;
 
             if (Q.Ready && Menu["drawings"]["drawq"].Enabled)
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
-            
+
             if (W.Ready && Menu["drawings"]["draww"].Enabled)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
             }
+
             if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
+                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            if (R.Ready && Menu["drawings"]["drawr"].Enabled)
+            if (E.Ready && Menu["drawings"]["drawe2"].Enabled)
             {
-                Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
+                if (LuxE != null)
+                {
+                    Render.Circle(LuxE.Position, 350, 40, Color.DeepPink);
+                }
+            }
+            if (R.Ready && Menu["drawngs"]["drawr"].Enabled)
+            {
+                Render.Circle(Player.Position, R.Range, 40, Color.Crimson);
             }
         }
+
         private void Game_OnUpdate()
         {
             if (Player.IsDead || MenuGUI.IsChatOpen())
@@ -179,18 +188,6 @@
                     if (QPredition.HitChance >= HitChance.High)
                     {
                         Q.Cast(QPredition.CastPosition);
-                    }
-                }
-            }
-            if (E.Ready && Menu["killsteal"]["usee"].Enabled)
-            {
-                var besttarget = GetBestKillableHero(E, DamageType.Magical, false);
-                var EPredition = E.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range) && missiles.CountEnemyHeroesInRange(350) >= 1)
-                {
-                    if (EPredition.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPredition.CastPosition);
                     }
                 }
             }

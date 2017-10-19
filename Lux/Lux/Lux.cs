@@ -273,7 +273,7 @@
             }
             if (E.Ready && useE)
             {
-                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {

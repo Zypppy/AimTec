@@ -199,24 +199,24 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Magical, false);
-                var QPredition = Q.GetPrediction(besttarget);
+                var QPrediction = Q.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
                 {
-                    if (QPredition.HitChance >= HitChance.High)
+                    if (QPrediction.HitChance >= HitChance.High)
                     {
-                        Q.Cast(QPredition.CastPosition);
+                        Q.Cast(QPrediction.CastPosition);
                     }
                 }
             }
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Magical, false);
-                var RPredition = R.GetPrediction(besttarget);
+                var RPrediction = R.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range))
                 {
-                    if (RPredition.HitChance >= HitChance.High)
+                    if (RPrediction.HitChance >= HitChance.High)
                     {
-                        R.Cast(RPredition.CastPosition);
+                        R.Cast(RPrediction.CastPosition);
                     }
                 }
             }
@@ -244,10 +244,67 @@
         }
         private void Combo()
         {
+            var target = GetBestEnemyHeroTargetInRange(5000);
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            var QPrediction = Q.GetPrediction(target);
+            bool useW = Menu["combo"]["usew"].Enabled;
+            float useWhp = Menu["combo"]["usewhp"].As<MenuSlider>().Value;
+            bool useE = Menu["combo"]["usee"].Enabled;
+            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+            var EPrediction = E.GetPrediction(target);
+            bool useR = Menu["combo"]["user"].Enabled;
+            var RPrediction = R.GetPrediction(target);
 
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            {
+                if (QPrediction.HitChance >= HitChance.High)
+                {
+                    Q.Cast(QPrediction.CastPosition);
+                }
+            }
+            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
+            {
+                W.Cast();
+            }
+            if (E.Ready && useE)
+            {
+                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                {
+                    if (EPrediction.HitChance >= HitChance.High)
+                    {
+                        E.Cast(EPrediction.CastPosition);
+                    }
+                }
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
+                {
+                    E2.Cast();
+                }
+            }
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value))
+            {
+                if (RPrediction.HitChance >= HitChance.High)
+                {
+                    R.Cast(RPrediction.CastPosition);
+                }
+            }
         }
         private void ManualR()
         {
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            var RPrediction = R.GetPrediction(target);
+
+            if (R.Ready && target.IsValidTarget(R.Range))
+            {
+                if (RPrediction.HitChance >= HitChance.High)
+                {
+                    R.Cast(RPrediction.CastPosition);
+                }
+            }
 
         }
         private void Harass()

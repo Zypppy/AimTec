@@ -38,7 +38,7 @@
             E.SetSkillshot(0.25f, 350f, 1292f, false, SkillshotType.Circle);
             E2 = new Spell(SpellSlot.E, 2000f);
             R = new Spell(SpellSlot.R, 3300f);
-            R.SetSkillshot(0.25f, 60f, 3426f, false, SkillshotType.Line);
+            R.SetSkillshot(1.0f, 60f, 3426f, false, SkillshotType.Line);
         }
         public Lux()
         {

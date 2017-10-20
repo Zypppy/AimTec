@@ -276,7 +276,7 @@
                         }
                         break;
                     case 2:
-                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && LuxE != null)
+                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2 && LuxE != null)
                         {
                             E2.Cast();
                         }

@@ -270,13 +270,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 1:
-                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
                         {
                             E.Cast(target);
                         }
                         break;
                     case 2:
-                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && LuxE != null)
                         {
                             E2.Cast();
                         }

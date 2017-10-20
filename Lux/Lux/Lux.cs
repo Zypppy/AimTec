@@ -258,7 +258,7 @@
 
             bool useW = Menu["combo"]["usew"].Enabled;
             float useWhp = Menu["combo"]["usewhp"].As<MenuSlider>().Value;
-	        if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
+            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
             {
                 W.Cast();
             }
@@ -286,7 +286,7 @@
             bool useR = Menu["combo"]["user"].Enabled;
             if (R.Ready && useR && target.IsValidTarget(R.Range))
             {
-                R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value);
+               if (R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast(target);
                 }

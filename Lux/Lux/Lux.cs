@@ -49,7 +49,7 @@
                 Combo.Add(new MenuSlider("usewhp", "HP % For W <=", 30, 0, 100));
                 Combo.Add(new MenuBool("usee", "Use E"));
                 Combo.Add(new MenuBool("user", "Use R"));
-                Combo.Add(new MenuSlider("userhit", "Anemies Hit With R Target + ", 2, 0, 5));
+                Combo.Add(new MenuSlider("userhit", "Anemies Hit With R", 2, 1, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(Combo);
@@ -270,7 +270,7 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 1:
-                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1)
                         {
                             E.Cast(target);
                         }

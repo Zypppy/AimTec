@@ -326,7 +326,7 @@
                         E.Cast(EPrediction.CastPosition);
                     }
                 }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1 && LuxE != null)
                 {
                     E2.Cast();
                 }

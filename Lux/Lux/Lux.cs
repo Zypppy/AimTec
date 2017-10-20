@@ -86,7 +86,7 @@
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
                 Drawings.Add(new MenuBool("draww", "Draw W"));
                 Drawings.Add(new MenuBool("drawe", "Draw E"));
-                Drawings.Add(new MenuBool("drawe2", "Draw E Circle"));
+                Drawings.Add(new MenuBool("drawe2", "Draw Circle Around E"));
                 Drawings.Add(new MenuBool("drawdmg", "Draw Dmg"));
             }
             Menu.Add(Drawings);

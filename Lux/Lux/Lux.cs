@@ -375,7 +375,7 @@
                             E.Cast(EPrediction.CastPosition);
                         }
                     }
-                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
+                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range))
                     {
                         E2.Cast();
                     }
@@ -424,7 +424,7 @@
                             E.Cast(EPrediction.CastPosition);
                         }
                     }
-                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
+                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range))
                     {
                         E2.Cast();
                     }

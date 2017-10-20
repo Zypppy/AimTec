@@ -136,6 +136,10 @@
                     Render.Circle(LuxE.ServerPosition, 335, 40, Color.DeepPink);
                 }
             }
+            if (R.Ready)
+            {
+                Render.Circle(Player.Position, R.Range, 40, Color.DeepPink);
+            }
             if (Menu["drawings"]["drawdmg"].Enabled)
             {
                 ObjectManager.Get<Obj_AI_Base>()

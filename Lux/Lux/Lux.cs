@@ -273,13 +273,13 @@
                 var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
-                    case 1:
-                        if (target.IsValidTarget(E.Range) && LuxE == null)
+                    case 0:
+                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                         {
                             E.Cast(target);
                         }
                         break;
-                    case 2:
+                    case 1:
                         if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             E2.Cast();

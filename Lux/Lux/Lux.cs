@@ -274,13 +274,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 1:
-                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                         {
                             E.Cast(target);
                         }
                         break;
                     case 2:
-                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2 && LuxE != null)
+                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             E2.Cast();
                         }
@@ -323,7 +323,7 @@
             }
             if (E.Ready && useE)
             {
-                if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2 && LuxE == null)
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {

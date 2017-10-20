@@ -30,14 +30,14 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 1300f);
-            Q.SetSkillshot(0.27f, 50f, 1202f, true, SkillshotType.Line);
+            Q.SetSkillshot(0.27f, 50f, 1150f, true, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 1175f);
             W.SetSkillshot(0.361f, 110f, 1077f, false, SkillshotType.Line);
             E = new Spell(SpellSlot.E, 1100f);
-            E.SetSkillshot(0.25f, 350f, 1292f, false, SkillshotType.Circle);
+            E.SetSkillshot(0.25f, 350f, 800f, false, SkillshotType.Circle);
             E2 = new Spell(SpellSlot.E, 2000f);
             R = new Spell(SpellSlot.R, 3300f);
-            R.SetSkillshot(1.0f, 60f, 3426f, false, SkillshotType.Line);
+            R.SetSkillshot(1.1f, 60f, float.MaxValue, false, SkillshotType.Line);
         }
         public Lux()
         {
@@ -280,7 +280,7 @@
                         E.Cast(EPrediction.CastPosition);
                     }
                 }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f, target) >= 1)
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
                 {
                     E2.Cast();
                 }

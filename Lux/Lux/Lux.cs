@@ -245,51 +245,50 @@
         private void Combo()
         {
             var target = GetBestEnemyHeroTargetInRange(2500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
-            bool useW = Menu["combo"]["usew"].Enabled;
-            float useWhp = Menu["combo"]["usewhp"].As<MenuSlider>().Value;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
-            var EPrediction = E.GetPrediction(target);
-            bool useR = Menu["combo"]["user"].Enabled;
-            var RPrediction = R.GetPrediction(target);
-
             if (!target.IsValidTarget())
             {
                 return;
             }
 
+            bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+                Q.Cast(target);
             }
-            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            float useWhp = Menu["combo"]["usewhp"].As<MenuSlider>().Value;
+	        if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
             {
                 W.Cast();
             }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
             if (E.Ready && useE)
             {
-                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+                switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
-                }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE.CountEnemyHeroesInRange(335f) >= 1)
-                {
-                    E2.Cast();
+                    case 1:
+                        if (target.IsValidTarget(E.Range))
+                        {
+                            E.Cast(target);
+                        }
+                        break;
+                    case 2:
+                        if (LuxE.CountEnemyHeroesInRange(335f) >= 1)
+                        {
+                            E2.Cast();
+                        }
+                        break;
                 }
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value))
+            bool useR = Menu["combo"]["user"].Enabled;
+            if (R.Ready && useR && target.IsValidTarget(R.Range))
             {
-                if (RPrediction.HitChance >= HitChance.High)
+                R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value - 1);
                 {
-                    R.Cast(RPrediction.CastPosition);
+                    R.Cast(target);
                 }
             }
         }

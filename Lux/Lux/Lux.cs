@@ -282,7 +282,8 @@
                     case 1:
                         if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
-                            E2.Cast();
+                            //E2.Cast();
+                            Console.WriteLine("Second E");
                         }
                         break;
                 }

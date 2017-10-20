@@ -286,7 +286,7 @@
             bool useR = Menu["combo"]["user"].Enabled;
             if (R.Ready && useR && target.IsValidTarget(R.Range))
             {
-                R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value - 1);
+                R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value);
                 {
                     R.Cast(target);
                 }

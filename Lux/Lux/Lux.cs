@@ -49,7 +49,7 @@
                 Combo.Add(new MenuSlider("usewhp", "HP % For W <=", 30, 0, 100));
                 Combo.Add(new MenuBool("usee", "Use E"));
                 Combo.Add(new MenuBool("user", "Use R"));
-                Combo.Add(new MenuSlider("userhit", "Anemies Hit With R", 2, 1, 5));
+                Combo.Add(new MenuSlider("userhit", "Enemies Hit With R", 2, 1, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(Combo);

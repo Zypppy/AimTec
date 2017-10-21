@@ -274,9 +274,12 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 0:
-                        if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0 && LuxE == null)
+                        if (LuxE == null)
                         {
-                            E.Cast(target);
+                            if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                            {
+                                E.Cast(target);
+                            }
                         }
                         break;
                     case 2:
@@ -315,27 +318,35 @@
         private void Harass()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useE = Menu["harass"]["usee"].Enabled;
-            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
-            var EPrediction = E.GetPrediction(target);
-            float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
-
             if (!target.IsValidTarget())
             {
                 return;
             }
+            bool useE = Menu["combo"]["usee"].Enabled;
+            float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
             if (E.Ready && useE)
             {
-                if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2 && LuxE == null)
+                var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+                switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
-                }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && target.IsValidTarget(E2.Range) && LuxE != null && LuxE.CountEnemyHeroesInRange(335f) >= 1)
-                {
-                    E2.Cast();
+                    case 0:
+                        if (LuxE == null)
+                        {
+                            if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                            {
+                                E.Cast(target);
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (LuxE != null)
+                        {
+                            if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                            {
+                                E2.Cast(target);
+                            }
+                        }
+                        break;
                 }
             }
         }

@@ -43,7 +43,7 @@
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("usee", "Use E"));
                 Combo.Add(new MenuBool("user", "Use R Only Above Slider Value"));
-                Combo.Add(new MenuSlider("hitr", "Cast R If Hit 1 + X Enemies", 2, 0, 5));
+                Combo.Add(new MenuSlider("hitr", "Cast R If Hit X Enemies", 2, 1, 5));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(Combo);
@@ -245,7 +245,7 @@
             {
                 E.Cast();
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value))
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

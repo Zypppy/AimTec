@@ -46,7 +46,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuSlider("hitr", "R Target + Minimum Enemeies Hit", 3, 0, 5));
+                ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(ComboMenu);
@@ -66,7 +66,7 @@
             var DrawingsMenu = new Menu("drawings", "Drawings");
             {
                 DrawingsMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-                DrawingsMenu.Add(new MenuBool("drawq2", "Draw Q Path Range"));
+                DrawingsMenu.Add(new MenuBool("drawq2", "Draw Circle Around Q"));
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("draww2", "Draw Active W Range"));
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
@@ -261,12 +261,8 @@
                 {
                     W.Cast();
                 }
-                else if (!target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
-                {
-                    W2.Cast();
-                }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value))
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {

@@ -16,6 +16,7 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+    using Aimtec.SDK.Orbwalking;
 
     using Spell = Aimtec.SDK.Spell;
     using Aimtec.SDK.Events;
@@ -60,6 +61,11 @@
                 HarassMenu.Add(new MenuSlider("manaw", "Minimum Mana To Use W", 70, 0, 100));
             }
             Menu.Add(HarassMenu);
+            var MiscMenu = new Menu("misc", "Misc");
+            {
+                MiscMenu.Add(new MenuSliderBool("disableaa", "Disable Auto Attack In Combo / if Level >=", false, 2, 2, 18));
+            }
+            Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("killsteal", "Killsteal");
             {
                 KillstealMenu.Add(new MenuBool("RKS", "Use R to Killsteal"));
@@ -242,6 +248,19 @@
             }
 
             return false;
+        }
+
+        public static void OnPreAttack(object sender, PreAttackEventArgs args)
+        {
+            switch (Orbwalker.Mode)
+            {
+                case OrbwalkingMode.Combo:
+                    if (Player.Level >= Menu["misc"]["disableaa"].As<MenuSliderBool>().Value && Menu["misc"]["disableaa"].As<MenuBool>().Enabled)
+                    {
+                        args.Cancel = true;
+                    }
+                    break;
+            }
         }
 
         private void WLock()

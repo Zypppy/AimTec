@@ -16,7 +16,6 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
-    using Aimtec.SDK.Orbwalking;
 
     using Spell = Aimtec.SDK.Spell;
     using Aimtec.SDK.Events;
@@ -31,13 +30,13 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1000f);
+            Q = new Spell(SpellSlot.Q, 1500f);
             W = new Spell(SpellSlot.W, 350f);
             W2 = new Spell(SpellSlot.W, 650f);
             E = new Spell(SpellSlot.E, 400f);
             R = new Spell(SpellSlot.R, 1419f);
-            Q.SetSkillshot(0.25f, 250, 701, false, SkillshotType.Line);
-            R.SetSkillshot(0.25f, 120, 1500, false, SkillshotType.Line);
+            Q.SetSkillshot(0.25f, 180, 850, false, SkillshotType.Line);
+            R.SetSkillshot(0.3f, 120, 4500, false, SkillshotType.Line);
         }
         public AurelionSol()
         {
@@ -46,8 +45,8 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use Inner W"));
-                ComboMenu.Add(new MenuBool("usew2", "USse Outer W"));
-                ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock"));
+                ComboMenu.Add(new MenuBool("usew2", "Use Outer W"));
+                //ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
@@ -63,7 +62,7 @@
             Menu.Add(HarassMenu);
             var MiscMenu = new Menu("misc", "Misc");
             {
-                MiscMenu.Add(new MenuSliderBool("disableaa", "Disable Auto Attack In Combo / if Level >=", false, 2, 2, 18));
+                //MiscMenu.Add(new MenuSliderBool("disableaa", "Disable Auto Attack In Combo / if Level >=", false, 2, 2, 18));
             }
             Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("killsteal", "Killsteal");
@@ -177,7 +176,7 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    WLock();
+                    //WLock();
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
@@ -250,49 +249,49 @@
             return false;
         }
 
-        public static void OnPreAttack(object sender, PreAttackEventArgs args)
-        {
-            switch (Orbwalker.Mode)
-            {
-                case OrbwalkingMode.Combo:
-                    if (Player.Level >= Menu["misc"]["disableaa"].As<MenuSliderBool>().Value && Menu["misc"]["disableaa"].As<MenuBool>().Enabled)
-                    {
-                        args.Cancel = true;
-                    }
-                    break;
-            }
-        }
+        //public static void OnPreAttack(object sender, PreAttackEventArgs args)
+        //{
+        //    switch (Orbwalker.Mode)
+        //    {
+        //        case OrbwalkingMode.Combo:
+        //            if (Player.Level >= Menu["misc"]["disableaa"].As<MenuSliderBool>().Value && Menu["misc"]["disableaa"].As<MenuBool>().Enabled)
+        //            {
+        //                args.Cancel = true;
+        //            }
+        //            break;
+        //    }
+        //}
 
-        private void WLock()
-        {
-            if (Menu["combo"]["usewlock"].Enabled)
-            {
-                var target = GetBestEnemyHeroTargetInRange(W2.Range);
-                {
-                    if (target.IsValidTarget(W2.Range) && target != null)
-                    {
-                        if (target.ServerPosition.Distance(Player.ServerPosition) < W2.Range)
-                        {
-                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
-                            {
-                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, W2.Range));
-                            }
-                        }
-                    }
-                }
-            }
-            var target2 = GetBestEnemyHeroTargetInRange(W2.Range + 200);
-            if (target2.IsValidTarget(W2.Range + 200) && target2 != null)
-            {
-                if (target2.ServerPosition.Distance(Player.ServerPosition) > W2.Range - 50)
-                {
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Menu["combo"]["usewlock"].Enabled)
-                    {
-                        Orbwalker.Move(target2.ServerPosition);
-                    }
-                }
-            }
-        }
+        //private void WLock()
+        //{
+        //    if (Menu["combo"]["usewlock"].Enabled)
+        //    {
+        //        var target = GetBestEnemyHeroTargetInRange(W2.Range);
+        //        {
+        //            if (target.IsValidTarget(W2.Range) && target != null)
+        //            {
+        //                if (target.ServerPosition.Distance(Player.ServerPosition) < W2.Range)
+        //                {
+        //                    if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+        //                   {
+        //                        Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, W2.Range));
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    var target2 = GetBestEnemyHeroTargetInRange(W2.Range + 200);
+        //    if (target2.IsValidTarget(W2.Range + 200) && target2 != null)
+        //    {
+        //        if (target2.ServerPosition.Distance(Player.ServerPosition) > W2.Range - 50)
+        //        {
+        //            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Menu["combo"]["usewlock"].Enabled)
+        //            {
+        //                Orbwalker.Move(target2.ServerPosition);
+        //            }
+        //        }
+        //    }
+        //}
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);

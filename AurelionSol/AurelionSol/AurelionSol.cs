@@ -286,7 +286,7 @@
             {
                 if (target2.ServerPosition.Distance(Player.ServerPosition) > W2.Range - 50)
                 {
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Menu["combo"]["usewlock"].Enabled)
                     {
                         Orbwalker.Move(target2.ServerPosition);
                     }

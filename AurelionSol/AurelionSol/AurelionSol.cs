@@ -256,9 +256,20 @@
                         {
                             if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                             {
-                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, 350));
+                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, 250));
                             }
                         }
+                    }
+                }
+            }
+            var target2 = GetBestEnemyHeroTargetInRange(W2.Range + 200);
+            if (target2.IsValidTarget(W2.Range + 200) && target2 != null)
+            {
+                if (target2.ServerPosition.Distance(Player.ServerPosition) > W2.Range - 50)
+                {
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                    {
+                        Orbwalker.Move(target2.ServerPosition);
                     }
                 }
             }

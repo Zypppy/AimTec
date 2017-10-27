@@ -44,7 +44,9 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("usew", "Use W"));
+                ComboMenu.Add(new MenuBool("usew", "Use Inner W"));
+                ComboMenu.Add(new MenuBool("usew2", "USse Outer W"));
+                ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
@@ -169,6 +171,7 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
+                    WLock();
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
@@ -207,31 +210,67 @@
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTargetInRange(float range)
         {
             var ts = TargetSelector.Implementation;
             var target = ts.GetTarget(range);
-            if (target != null && target.IsValidTarget() && !Invulnerable.Check(target))
+            if (target != null && target.IsValidTarget())
             {
                 return target;
             }
+
             var firstTarget = ts.GetOrderedTargets(range)
-                .FirstOrDefault(t => t.IsValidTarget() && !Invulnerable.Check(t));
+                .FirstOrDefault(t => t.IsValidTarget());
             if (firstTarget != null)
             {
                 return firstTarget;
             }
+
             return null;
+        }
+
+        public static bool AnyWallInBetween(Vector3 startPos, Vector2 endPos)
+        {
+            for (var i = 0; i < startPos.Distance(endPos); i++)
+            {
+                var point = NavMesh.WorldToCell(startPos.Extend(endPos, i));
+                if (point.Flags.HasFlag(NavCellFlags.Wall | NavCellFlags.Building))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void WLock()
+        {
+            if (Menu["combo"]["usewlock"].Enabled)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W2.Range);
+                {
+                    if (target.IsValidTarget(W2.Range) && target != null)
+                    {
+                        if (target.ServerPosition.Distance(Player.ServerPosition) < W2.Range)
+                        {
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                            {
+                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, 350));
+                            }
+                        }
+                    }
+                }
+            }
         }
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);
             bool useQ = Menu["combo"]["useq"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
             bool useW = Menu["combo"]["usew"].Enabled;
+            bool useW2 = Menu["combo"]["usew2"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-            var RPrediction = R.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -241,10 +280,7 @@
             {
                 if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
                 {
-                    if (QPrediction.HitChance >= HitChance.Medium)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(target);
                 }
                 else if (missiles != null && target.IsValidTarget(110f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                 {
@@ -253,7 +289,7 @@
             }
             if (W.Ready)
             {
-                if (target.IsValidTarget(W2.Range) && useW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState != 2)
+                if (target.IsValidTarget(W2.Range) && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState != 2)
                 {
                     W2.Cast();
                 }
@@ -264,10 +300,7 @@
             }
             if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
             {
-                if (RPrediction.HitChance >= HitChance.High)
-                {
-                    R.Cast(RPrediction.CastPosition);
-                }
+                R.Cast(target);
             }
         }
         private void OnHarass()
@@ -275,7 +308,6 @@
             var target = GetBestEnemyHeroTargetInRange(R.Range);
             bool useQ = Menu["harass"]["useq"].Enabled;
             float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
             bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
 
@@ -287,10 +319,7 @@
             {
                 if (target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1 && Player.ManaPercent() >= manaQ)
                 {
-                    if (QPrediction.HitChance >= HitChance.Medium)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(target);
                 }
                 else if (missiles != null && target.IsValidTarget(250f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                 {
@@ -317,13 +346,9 @@
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);
             Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
-            var RPrediction = R.GetPrediction(target);
             if (R.Ready && target.IsValidTarget(R.Range))
             {
-                if (RPrediction.HitChance >= HitChance.High)
-                {
-                    R.Cast(RPrediction.CastPosition);
-                }
+                R.Cast(target);
             }
         }
     }

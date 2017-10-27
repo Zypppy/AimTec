@@ -256,7 +256,7 @@
                         {
                             if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                             {
-                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, 100));
+                                Orbwalker.Move(target.ServerPosition.Extend(Player.ServerPosition, W2.Range));
                             }
                         }
                     }

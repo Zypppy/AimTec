@@ -181,6 +181,7 @@
                     break;
                 case OrbwalkingMode.Mixed:
                     Harass();
+                    LastHitH();
                     break;
                 case OrbwalkingMode.Laneclear:
                     LaneClear();
@@ -294,6 +295,9 @@
             {
                 Q.Cast(target);
             }
+        }
+        private void LastHitH()
+        { 
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
                 bool LQ = Menu["h"]["ql"].Enabled;
@@ -306,7 +310,7 @@
 
                 if (Q.Ready && LQ && Player.ManaPercent() >= LQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
                 {
-                    Q.Cast(minion);
+                    Q.Cast();
                 }
             } 
 

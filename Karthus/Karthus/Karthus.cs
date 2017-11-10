@@ -45,7 +45,7 @@
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
                 Combo.Add(new MenuBool("w", "Use W"));
-                Combo.Add(new MenuBool("e", "Use E"));
+                Combo.Add(new MenuBool("e", "Use E / Not Working Properly ATM", false));
                 Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
             }
             Menu.Add(Combo);
@@ -53,6 +53,9 @@
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
+                Harass.Add(new MenuBool("ql", "Use Q Last Hit"));
+                Harass.Add(new MenuSlider("qlm", "Use Q Last Hit Mana Percent >=", 60, 0, 100));
+
             }
             Menu.Add(Harass);
             var Lane = new Menu("l", "Lane Clear");
@@ -178,7 +181,6 @@
                     break;
                 case OrbwalkingMode.Mixed:
                     Harass();
-                    LastHit();
                     break;
                 case OrbwalkingMode.Laneclear:
                     LaneClear();
@@ -263,8 +265,8 @@
                             Console.WriteLine("Autistic Toggle State");
                         }
                         break;
-                    case 1:
-                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                    case 1056964608:
+                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
                         {
                             Console.WriteLine("Autistic Toggle State 2");
                         }
@@ -280,6 +282,33 @@
         }
         private void Harass()
         {
+            var target = GetBestEnemyHeroTargetInRange(1500);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+
+            bool HQ = Menu["h"]["q"].Enabled;
+            float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
+            if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
+            {
+                Q.Cast(target);
+            }
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            {
+                bool LQ = Menu["h"]["ql"].Enabled;
+                float LQM = Menu["h"]["qlm"].As<MenuSlider>().Value;
+
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+
+                if (Q.Ready && LQ && Player.ManaPercent() >= LQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                {
+                    Q.Cast(minion);
+                }
+            } 
 
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()

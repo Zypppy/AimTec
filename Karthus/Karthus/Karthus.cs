@@ -310,7 +310,7 @@
 
                 if (Q.Ready && LQ && Player.ManaPercent() >= LQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
                 {
-                    Q.Cast();
+                    Q.Cast(minion);
                 }
             } 
 

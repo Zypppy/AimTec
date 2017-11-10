@@ -257,14 +257,14 @@
             {
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
-                    case 0:
-                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                    case 1:
+                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                         {
                             E.Cast();
                         }
                         break;
                     case 1056964608:
-                        if (target.IsValidTarget(E.Range + 150) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
+                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
                         {
                            return;
                         }

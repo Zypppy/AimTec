@@ -45,7 +45,7 @@
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
                 Combo.Add(new MenuBool("w", "Use W"));
-                Combo.Add(new MenuBool("e", "Use E / Not Working Properly ATM", false));
+                Combo.Add(new MenuBool("e", "Use E / Not Working Properly ATM"));
                 Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
             }
             Menu.Add(Combo);

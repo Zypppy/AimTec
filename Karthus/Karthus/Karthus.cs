@@ -263,8 +263,8 @@
                             Console.WriteLine("Autistic Toggle State");
                         }
                         break;
-                    case 1056964608:
-                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
+                    case 2:
+                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             Console.WriteLine("Autistic Toggle State 2");
                         }

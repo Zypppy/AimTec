@@ -260,8 +260,8 @@
                             E.Cast();
                         }
                         break;
-                    case 1:
-                        if (target.IsValidTarget(E.Range + 150) || Player.ManaPercent() <= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                    case 2:
+                        if (target.IsValidTarget(E.Range + 150) || Player.ManaPercent() <= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             E.Cast();
                         }

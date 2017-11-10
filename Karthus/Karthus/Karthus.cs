@@ -257,16 +257,16 @@
             {
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
-                    case 2:
-                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                    case 0:
+                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                         {
-                            E.Cast();
+                            Console.WriteLine("Autistic Toggle State");
                         }
                         break;
                     case 1056964608:
                         if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
                         {
-                           return;
+                            Console.WriteLine("Autistic Toggle State 2");
                         }
                         break;
                 }

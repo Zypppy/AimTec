@@ -132,10 +132,10 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            if (R.Ready && Menu["d"]["rr"].Enabled)
-            {
-                Render.Circle(Player.Position, Menu["u"]["rke"].As<MenuSlider>().Value, 40, Color.HotPink);
-            }
+            //if (R.Ready && Menu["d"]["rr"].Enabled)
+            //{
+            //    Render.Circle(Player.Position, Menu["u"]["rke"].As<MenuSlider>().Value, 40, Color.HotPink);
+            //}
             if (Menu["d"]["rd"].Enabled)
             {
                 ObjectManager.Get<Obj_AI_Base>()

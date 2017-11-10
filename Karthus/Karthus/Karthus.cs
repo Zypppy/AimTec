@@ -248,6 +248,8 @@
                 W.Cast(target);
             }
 
+            
+
             bool CE = Menu["c"]["e"].Enabled;
             float ME = Menu["c"]["em"].As<MenuSlider>().Value;
             if (E.Ready && CE)
@@ -260,8 +262,8 @@
                             E.Cast();
                         }
                         break;
-                    case 2:
-                        if (target.IsValidTarget(E.Range + 150) || Player.ManaPercent() <= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                    case 1056964608:
+                        if (target.IsValidTarget(E.Range + 150) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
                         {
                             E.Cast();
                         }

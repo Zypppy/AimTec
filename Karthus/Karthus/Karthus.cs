@@ -266,7 +266,7 @@
                     case 1056964608:
                         if (target.IsValidTarget(E.Range + 150) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
                         {
-                            E2.Cast();
+                           return;
                         }
                         break;
                 }

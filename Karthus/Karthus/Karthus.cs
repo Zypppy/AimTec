@@ -53,7 +53,7 @@
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                Harass.Add(new MenuBool("ql", "Use Q Last Hit"));
+                Harass.Add(new MenuBool("ql", "Use Q Last Hit Only Out of AA Range"));
                 //Harass.Add(new MenuBool("qla", "Use Last Hit Only Out Of AA Range"));
                 Harass.Add(new MenuSlider("qlm", "Use Q Last Hit Mana Percent >=", 60, 0, 100));
 

@@ -54,6 +54,7 @@
                 Harass.Add(new MenuBool("q", "Use Q"));
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
                 Harass.Add(new MenuBool("ql", "Use Q Last Hit"));
+                //Harass.Add(new MenuBool("qla", "Use Last Hit Only Out Of AA Range"));
                 Harass.Add(new MenuSlider("qlm", "Use Q Last Hit Mana Percent >=", 60, 0, 100));
 
             }
@@ -301,6 +302,7 @@
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
                 bool LQ = Menu["h"]["ql"].Enabled;
+                //bool QLA = Menu["h"]["qla"].Enabled;
                 float LQM = Menu["h"]["qlm"].As<MenuSlider>().Value;
 
                 if (!minion.IsValidTarget())
@@ -308,7 +310,7 @@
                     return;
                 }
 
-                if (Q.Ready && LQ && Player.ManaPercent() >= LQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                if (Q.Ready && LQ && Player.ManaPercent() >= LQM && !minion.IsValidAutoRange() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
                 {
                     Q.Cast(minion);
                 }

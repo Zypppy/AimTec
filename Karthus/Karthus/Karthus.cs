@@ -45,8 +45,8 @@
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
                 Combo.Add(new MenuBool("w", "Use W"));
-                Combo.Add(new MenuBool("e", "Use E / Not Working Properly ATM"));
-                Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
+                //Combo.Add(new MenuBool("e", "Use E"));
+                //Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
             }
             Menu.Add(Combo);
             var Harass = new Menu("h", "Harass");
@@ -63,14 +63,15 @@
             {
                 Lane.Add(new MenuBool("q", "Use Q"));
                 Lane.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                Lane.Add(new MenuBool("e", "Use E"));
-                Lane.Add(new MenuSlider("ec", "E Min Minions Count", 3, 1, 10));
-                Lane.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
+                //Lane.Add(new MenuBool("e", "Use E"));
+                //Lane.Add(new MenuSlider("ec", "E Min Minions Count", 3, 1, 10));
+                //Lane.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Lane);
             var Last = new Menu("lh", "Last Hit");
             {
                 Last.Add(new MenuBool("q", "Use Q"));
+                Last.Add(new MenuBool("qa", "Use Q Only Out OF AA Range"));
                 Last.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Last);
@@ -78,8 +79,8 @@
             {
                 Jungle.Add(new MenuBool("q", "Use Q"));
                 Jungle.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                Jungle.Add(new MenuBool("e", "Use E"));
-                Jungle.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
+                //Jungle.Add(new MenuBool("e", "Use E"));
+                //Jungle.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Jungle);
             var Ult = new Menu("u", "R");
@@ -255,26 +256,26 @@
 
             
 
-            bool CE = Menu["c"]["e"].Enabled;
-            float ME = Menu["c"]["em"].As<MenuSlider>().Value;
-            if (E.Ready && CE)
-            {
-                switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
-                {
-                    case 0:
-                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
-                        {
-                            Console.WriteLine("Autistic Toggle State");
-                        }
-                        break;
-                    case 1056964608:
-                        if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
-                        {
-                            Console.WriteLine("Autistic Toggle State 2");
-                        }
-                        break;
-                }
-            }
+            //bool CE = Menu["c"]["e"].Enabled;
+            //float ME = Menu["c"]["em"].As<MenuSlider>().Value;
+            //if (E.Ready && CE)
+            //{
+            //    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+            //    {
+            //        case 0:
+            //            if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+            //            {
+            //                Console.WriteLine("Autistic Toggle State");
+            //            }
+            //            break;
+            //        case 1056964608:
+            //            if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
+            //            {
+            //                Console.WriteLine("Autistic Toggle State 2");
+            //            }
+            //            break;
+            //    }
+            //}
             bool CR = Menu["u"]["rt"].Enabled;
             if (R.Ready && Player.IsZombie && CR)
             {
@@ -327,11 +328,46 @@
         }
         private void LaneClear()
         {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            {
+                bool CQ = Menu["l"]["q"].Enabled;
+                float CQM = Menu["l"]["qm"].As<MenuSlider>().Value;
 
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+
+                if (Q.Ready && CQ && Player.ManaPercent() >= CQM && minion.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(minion);
+                }
+            }
         }
         private void LastHit()
         {
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            {
+                bool LQ = Menu["lh"]["q"].Enabled;
+                bool LQA = Menu["lh"]["qa"].Enabled;
+                float LQM = Menu["lh"]["qm"].As<MenuSlider>().Value;
 
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+                if (Q.Ready && Player.ManaPercent() >= LQM && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                {
+                    if (LQ && minion.IsValidTarget(Q.Range))
+                    {
+                        Q.Cast(minion);
+                    }
+                    else if (LQA && !minion.IsValidAutoRange())
+                    {
+                        Q.Cast(minion);
+                    }
+                }
+            }
         }
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
@@ -344,7 +380,21 @@
         }
         private void JungleClear()
         {
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
+            {
+                bool JQ = Menu["j"]["q"].Enabled;
+                float JQM = Menu["j"]["Qm"].As<MenuSlider>().Value;
 
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                {
+                    return;
+                }
+
+                if (Q.Ready && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM && JQ)
+                {
+                    Q.Cast(minion);
+                }
+            }
         }
     }
 }

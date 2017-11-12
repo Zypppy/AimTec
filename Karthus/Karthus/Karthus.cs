@@ -391,9 +391,9 @@
                     return;
                 }
 
-                if (Q.Ready && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM && JQ)
+                if (Q.Ready && JQ && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
                 {
-                    Q.Cast(minion);
+                    Console.WriteLine("Derp");
                 }
             }
         }

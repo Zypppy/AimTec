@@ -383,9 +383,6 @@
         {
             foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
-                bool JQ = Menu["j"]["q"].Enabled;
-                float JQM = Menu["j"]["Qm"].As<MenuSlider>().Value;
-                
                 if (Q.Ready)
                 {
                     Console.WriteLine("Derp");

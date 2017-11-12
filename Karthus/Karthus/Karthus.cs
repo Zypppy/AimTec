@@ -52,6 +52,7 @@
             var Harass = new Menu("h", "Harass");
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
+                //Harass.Add
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
                 Harass.Add(new MenuBool("ql", "Use Q Last Hit Only Out of AA Range"));
                 //Harass.Add(new MenuBool("qla", "Use Last Hit Only Out Of AA Range"));
@@ -380,7 +381,7 @@
         }
         private void JungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
                 bool JQ = Menu["j"]["q"].Enabled;
                 float JQM = Menu["j"]["Qm"].As<MenuSlider>().Value;

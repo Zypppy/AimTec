@@ -385,12 +385,7 @@
             {
                 bool JQ = Menu["j"]["q"].Enabled;
                 float JQM = Menu["j"]["Qm"].As<MenuSlider>().Value;
-
-                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
-                {
-                    return;
-                }
-
+                
                 if (Q.Ready)
                 {
                     Console.WriteLine("Derp");

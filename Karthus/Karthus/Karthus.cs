@@ -391,7 +391,7 @@
                     return;
                 }
 
-                if (Q.Ready && JQ && jungle.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
+                if (Q.Ready)
                 {
                     Console.WriteLine("Derp");
                 }

@@ -52,9 +52,8 @@
             var Harass = new Menu("h", "Harass");
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
-                //Harass.Add
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                Harass.Add(new MenuBool("ql", "Use Q Last Hit Only Out of AA Range"));
+                Harass.Add(new MenuList("qlo", "Last Hit options", new[] { "Always", "Out Of AA Range", "Never" }, 2));
                 //Harass.Add(new MenuBool("qla", "Use Last Hit Only Out Of AA Range"));
                 Harass.Add(new MenuSlider("qlm", "Use Q Last Hit Mana Percent >=", 60, 0, 100));
 
@@ -72,7 +71,7 @@
             var Last = new Menu("lh", "Last Hit");
             {
                 Last.Add(new MenuBool("q", "Use Q"));
-                Last.Add(new MenuBool("qa", "Use Q Only Out OF AA Range"));
+                Harass.Add(new MenuList("qlo", "Last Hit options", new[] { "Always", "Out Of AA Range"}, 2));
                 Last.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Last);
@@ -303,19 +302,39 @@
         { 
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
-                bool LQ = Menu["h"]["ql"].Enabled;
-                //bool QLA = Menu["h"]["qla"].Enabled;
-                float LQM = Menu["h"]["qlm"].As<MenuSlider>().Value;
-
+                float HQM = Menu["h"]["qlm"].As<MenuSlider>().Value;
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
-
-                if (Q.Ready && LQ && Player.ManaPercent() >= LQM && !minion.IsValidAutoRange() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                switch (Menu["h"]["qlo"].As<MenuList>().Value)
                 {
-                    Q.Cast(minion);
+                    case 0:
+                        if (Q.Ready)
+                        {
+                            if (Player.ManaPercent() >= HQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                            {
+                                Q.Cast(minion);
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (Q.Ready)
+                        {
+                            if (Player.ManaPercent() >= HQM && !minion.IsValidAutoRange() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                            {
+                                Q.Cast(minion);
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (Q.Ready)
+                        {
+                            return;
+                        }
+                        break;
                 }
+                
             } 
 
         }

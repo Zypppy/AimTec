@@ -326,12 +326,7 @@
                             }
                         }
                         break;
-                    case 2:
-                        if (Q.Ready)
-                        {
-                            return;
-                        }
-                        break;
+                    
                 }
             } 
         }
@@ -390,12 +385,7 @@
                             }
                         }
                         break;
-                    case 2:
-                        if (Q.Ready)
-                        {
-                            return;
-                        }
-                        break;
+                   
                 }
             }
         }

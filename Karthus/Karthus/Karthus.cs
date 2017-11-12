@@ -383,9 +383,17 @@
         {
             foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
-                if (Q.Ready)
+                bool JQ = Menu["j"]["q"].Enabled;
+                float JQM = Menu["j"]["qm"].As<MenuSlider>().Value;
+
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
-                    Console.WriteLine("Derp");
+                    return;
+                }
+
+                if (Q.Ready && JQ && jungle.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
+                {
+                   Q.Cast(jungle);
                 }
             }
         }

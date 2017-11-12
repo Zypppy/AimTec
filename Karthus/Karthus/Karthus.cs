@@ -298,38 +298,34 @@
             }
         }
         private void LastHitH()
-        { 
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+        {
+            if (Q.Ready && Player.ManaPercent() >= Menu["h"]["qlm"].As<MenuSlider>().Value)
             {
-                float HQM = Menu["h"]["qlm"].As<MenuSlider>().Value;
-                if (!minion.IsValidTarget())
+                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
                 {
-                    return;
-                }
-                switch (Menu["h"]["qlo"].As<MenuList>().Value)
-                {
-                    case 0:
-                        if (Q.Ready)
+                    if (minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                    {
+                        switch (Menu["h"]["qlo"].As<MenuList>().Value)
                         {
-                            if (Player.ManaPercent() >= HQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
-                            {
-                                Q.Cast(minion);
-                            }
+                            case 0:
+                                if (minion.IsValidTarget(Q.Range))
+                                {
+                                    Q.Cast(minion);
+                                }
+                                break;
+                            case 1:
+                                if (!minion.IsValidAutoRange())
+                                {
+                                    Q.Cast(minion);
+                                }
+                                break;
+
                         }
-                        break;
-                    case 1:
-                        if (Q.Ready)
-                        {
-                            if (Player.ManaPercent() >= HQM && !minion.IsValidAutoRange() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
-                            {
-                                Q.Cast(minion);
-                            }
-                        }
-                        break;
-                    
+                    }
                 }
-            } 
+            }
         }
+           
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
@@ -356,36 +352,36 @@
                 }
             }
         }
+
+
+        
+
+
         private void LastHit()
         {
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+            if (Q.Ready && Player.ManaPercent() >= Menu["lh"]["qm"].As<MenuSlider>().Value)
             {
-                float LQM = Menu["lh"]["qm"].As<MenuSlider>().Value;
-                if (!minion.IsValidTarget())
+                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
                 {
-                    return;
-                }
-                switch (Menu["lh"]["qlo"].As<MenuList>().Value)
-                {
-                    case 0:
-                        if (Q.Ready)
+                    if (minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                    {
+                        switch (Menu["lh"]["qlo"].As<MenuList>().Value)
                         {
-                            if (Player.ManaPercent() >= LQM && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
-                            {
-                                Q.Cast(minion);
-                            }
+                            case 0:
+                                if (minion.IsValidTarget(Q.Range))
+                                {
+                                    Q.Cast(minion);
+                                }
+                                break;
+                            case 1:
+                                if (!minion.IsValidAutoRange())
+                                {
+                                    Q.Cast(minion);
+                                }
+                                break;
+
                         }
-                        break;
-                    case 1:
-                        if (Q.Ready)
-                        {
-                            if (Player.ManaPercent() >= LQM && !minion.IsValidAutoRange() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
-                            {
-                                Q.Cast(minion);
-                            }
-                        }
-                        break;
-                   
+                    }
                 }
             }
         }

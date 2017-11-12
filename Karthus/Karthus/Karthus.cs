@@ -71,7 +71,7 @@
             var Last = new Menu("lh", "Last Hit");
             {
                 Last.Add(new MenuBool("q", "Use Q"));
-                Harass.Add(new MenuList("qlo", "Last Hit options", new[] { "Always", "Out Of AA Range"}, 2));
+                Last.Add(new MenuList("qlo", "Last Hit options", new[] { "Always", "Out Of AA Range"}, 2));
                 Last.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Last);

@@ -381,17 +381,17 @@
         }
         private void JungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
                 bool JQ = Menu["j"]["q"].Enabled;
                 float JQM = Menu["j"]["Qm"].As<MenuSlider>().Value;
 
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
 
-                if (Q.Ready && JQ && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
+                if (Q.Ready && JQ && jungle.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
                 {
                     Console.WriteLine("Derp");
                 }

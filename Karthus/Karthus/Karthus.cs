@@ -213,6 +213,7 @@
         //        }
         //    }
         //}
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -233,6 +234,7 @@
             }
             return null;
         }
+
         private void Combo()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
@@ -252,9 +254,7 @@
             {
                 W.Cast(target);
             }
-
             
-
             //bool CE = Menu["c"]["e"].Enabled;
             //float ME = Menu["c"]["em"].As<MenuSlider>().Value;
             //if (E.Ready && CE)
@@ -282,6 +282,7 @@
             }
 
         }
+
         private void Harass()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
@@ -297,6 +298,7 @@
                 Q.Cast(target);
             }
         }
+
         private void LastHitH()
         {
             if (Q.Ready && Player.ManaPercent() >= Menu["h"]["qlm"].As<MenuSlider>().Value)
@@ -353,10 +355,6 @@
             }
         }
 
-
-        
-
-
         private void LastHit()
         {
             if (Q.Ready && Player.ManaPercent() >= Menu["lh"]["qm"].As<MenuSlider>().Value)
@@ -385,6 +383,7 @@
                 }
             }
         }
+
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
             return GetGenericJungleMinionsTargetsInRange(float.MaxValue);

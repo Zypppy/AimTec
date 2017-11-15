@@ -25,7 +25,7 @@
         public static Menu Menu = new Menu("Karthus by Zypppy", "Karthus by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, W, E, E2, R;
+        public static Spell Q, W, E, R;
 
         public void LoadSpells()
         {
@@ -34,7 +34,6 @@
             W = new Spell(SpellSlot.W, 1000f);
             W.SetSkillshot(0.5f, 50f, float.MaxValue, false, SkillshotType.Circle);
             E = new Spell(SpellSlot.E, 550f);
-            E2 = new Spell(SpellSlot.E, 700f);
             R = new Spell(SpellSlot.R);
         }
 
@@ -238,13 +237,13 @@
                     case 1:
                         if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                         {
-                            Console.WriteLine("Autistic Toggle State");
+                            E.Cast();
                         }
                         break;
                     case 2:
                         if (!target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
-                            Console.WriteLine("Autistic Toggle State 2");
+                            E.Cast();
                         }
                         break;
                 }

@@ -45,8 +45,8 @@
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
                 Combo.Add(new MenuBool("w", "Use W"));
-                //Combo.Add(new MenuBool("e", "Use E"));
-                //Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
+                Combo.Add(new MenuBool("e", "Use E"));
+                Combo.Add(new MenuSlider("em", "Use E Mana Percent >= ", 60, 0, 100));
             }
             Menu.Add(Combo);
             var Harass = new Menu("h", "Harass");
@@ -54,7 +54,6 @@
                 Harass.Add(new MenuBool("q", "Use Q"));
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
                 Harass.Add(new MenuList("qlo", "Last Hit options", new[] { "Always", "Out Of AA Range", "Never" }, 2));
-                //Harass.Add(new MenuBool("qla", "Use Last Hit Only Out Of AA Range"));
                 Harass.Add(new MenuSlider("qlm", "Use Q Last Hit Mana Percent >=", 60, 0, 100));
 
             }
@@ -63,9 +62,9 @@
             {
                 Lane.Add(new MenuBool("q", "Use Q"));
                 Lane.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                //Lane.Add(new MenuBool("e", "Use E"));
-                //Lane.Add(new MenuSlider("ec", "E Min Minions Count", 3, 1, 10));
-                //Lane.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
+                Lane.Add(new MenuBool("e", "Use E"));
+                Lane.Add(new MenuSlider("ec", "E Min Minions Count", 3, 1, 10));
+                Lane.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Lane);
             var Last = new Menu("lh", "Last Hit");
@@ -78,8 +77,8 @@
             {
                 Jungle.Add(new MenuBool("q", "Use Q"));
                 Jungle.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
-                //Jungle.Add(new MenuBool("e", "Use E"));
-                //Jungle.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
+                Jungle.Add(new MenuBool("e", "Use E"));
+                Jungle.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Jungle);
             var Ult = new Menu("u", "R");
@@ -95,7 +94,6 @@
                 Drawings.Add(new MenuBool("q", "Draw Q Range"));
                 Drawings.Add(new MenuBool("w", "Draw W Range"));
                 Drawings.Add(new MenuBool("e", "Draw E Range"));
-                //Drawings.Add(new MenuBool("rr", "Draw Dont Cast R If Enemy Range"));
                 Drawings.Add(new MenuBool("rd", "Draw R Damage"));
                 Drawings.Add(new MenuBool("rdk", "Draw Killable Champs With R"));
             }
@@ -137,10 +135,6 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            //if (R.Ready && Menu["d"]["rr"].Enabled)
-            //{
-            //    Render.Circle(Player.Position, Menu["u"]["rke"].As<MenuSlider>().Value, 40, Color.HotPink);
-            //}
             if (Menu["d"]["rd"].Enabled)
             {
                 ObjectManager.Get<Obj_AI_Base>()
@@ -192,28 +186,8 @@
                     LastHit();
                     break;
             }
-            //Killsteal();
         }
-
-        //public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True, bool ignoreShields = false)
-        //{
-        //    return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
-        //}
-
-        //private void Killsteal()
-        //{
-        //
-        //    if (R.Ready && Menu["u"]["rk"].Enabled)
-        //    {
-        //        var besttarget = GetBestKillableHero(R, DamageType.Magical, false);
-        //        var RRange = Menu["u"]["rke"].As<MenuSlider>().Value;
-        //        if (!besttarget.IsZombie && besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(50000))
-        //        {
-        //           
-        //        }
-        //    }
-        //}
-
+        
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -255,26 +229,26 @@
                 W.Cast(target);
             }
             
-            //bool CE = Menu["c"]["e"].Enabled;
-            //float ME = Menu["c"]["em"].As<MenuSlider>().Value;
-            //if (E.Ready && CE)
-            //{
-            //    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
-            //    {
-            //        case 0:
-            //            if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
-            //            {
-            //                Console.WriteLine("Autistic Toggle State");
-            //            }
-            //            break;
-            //        case 1056964608:
-            //            if (target.IsValidTarget(E.Range + 50) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1056964608)
-            //            {
-            //                Console.WriteLine("Autistic Toggle State 2");
-            //            }
-            //            break;
-            //    }
-            //}
+            bool CE = Menu["c"]["e"].Enabled;
+            float ME = Menu["c"]["em"].As<MenuSlider>().Value;
+            if (E.Ready && CE)
+            {
+                switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                {
+                    case 1:
+                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                        {
+                            Console.WriteLine("Autistic Toggle State");
+                        }
+                        break;
+                    case 2:
+                        if (!target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                        {
+                            Console.WriteLine("Autistic Toggle State 2");
+                        }
+                        break;
+                }
+            }
             bool CR = Menu["u"]["rt"].Enabled;
             if (R.Ready && Player.IsZombie && CR)
             {

@@ -62,7 +62,6 @@
                 Lane.Add(new MenuBool("q", "Use Q"));
                 Lane.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
                 Lane.Add(new MenuBool("e", "Use E"));
-                Lane.Add(new MenuSlider("ec", "E Min Minions Count", 3, 1, 10));
                 Lane.Add(new MenuSlider("em", "Use E Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Lane);
@@ -83,9 +82,6 @@
             var Ult = new Menu("u", "R");
             {
                 Ult.Add(new MenuBool("rt", "R Teamfight"));
-                //Ult.Add(new MenuBool("rk", "R Killsteal"));
-                //Ult.Add(new MenuSlider("rke", "Use R Killsteal Only If No Enemies", 500, 1, 1000));
-                //Ult.Add(new MenuSlider("rkc", "R Killsteal Count", 2, 1, 5));
             }
             Menu.Add(Ult);
             var Drawings = new Menu("d", "Drawings");
@@ -94,7 +90,7 @@
                 Drawings.Add(new MenuBool("w", "Draw W Range"));
                 Drawings.Add(new MenuBool("e", "Draw E Range"));
                 Drawings.Add(new MenuBool("rd", "Draw R Damage"));
-                Drawings.Add(new MenuBool("rdk", "Draw Killable Champs With R"));
+                //Drawings.Add(new MenuBool("rdk", "Draw Killable Champs With R"));
             }
             Menu.Add(Drawings);
             Menu.Attach();
@@ -325,6 +321,25 @@
                 {
                     Q.Cast(minion);
                 }
+                bool CE = Menu["l"]["e"].Enabled;
+                if (E.Ready && Player.ManaPercent() >= Menu["l"]["em"].As<MenuSlider>().Value && CE)
+                {
+                    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                    { 
+                    case 1:
+                        if (minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                        {
+                            E.Cast();
+                        }
+                        break;
+                    case 2:
+                        if (!minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                        {
+                            E.Cast();
+                        }
+                        break;
+                    }
+                }
             }
         }
 
@@ -380,7 +395,26 @@
 
                 if (Q.Ready && JQ && jungle.IsValidTarget(Q.Range) && Player.ManaPercent() >= JQM)
                 {
-                   Q.Cast(jungle);
+                    Q.Cast(jungle);
+                }
+                bool JE = Menu["l"]["e"].Enabled;
+                if (E.Ready && Player.ManaPercent() >= Menu["j"]["em"].As<MenuSlider>().Value && JE)
+                {
+                    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                    {
+                        case 1:
+                            if (jungle.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                            {
+                                E.Cast();
+                            }
+                            break;
+                        case 2:
+                            if (!jungle.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                            {
+                                E.Cast();
+                            }
+                            break;
+                    }
                 }
             }
         }

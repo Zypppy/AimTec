@@ -21,7 +21,7 @@
 
     internal class Garen
     {
-        public static Menu Menu = new Menu("Nidalee by Zypppy", "Nidalee by Zypppy", true);
+        public static Menu Menu = new Menu("Garen by Zypppy", "Garen by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, W, E, R;

@@ -154,7 +154,6 @@
                        Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
 
                    });
-
             }
         }
 

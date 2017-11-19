@@ -78,6 +78,9 @@
             var Drawings = new Menu("d", "Drawings");
             {
                 Drawings.Add(new MenuBool("q", "Draw Q"));
+                Drawings.Add(new MenuBool("w", "Draw W"));
+                Drawings.Add(new MenuBool("e", "Draw E"));
+                Drawings.Add(new MenuBool("r", "Draw R"));
             }
             Menu.Add(Drawings);
             Menu.Attach();

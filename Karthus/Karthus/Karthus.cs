@@ -153,7 +153,7 @@
                                                     : 0));
                     Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, heroUnit.Health < dmg ? Color.GreenYellow : Color.Orange);
 
-                    var basepos = new Vector2(0.20f * Render.Width, 0.30f * Render.Height);
+                    var basepos = new Vector2(0.50f * Render.Width, 0.30f * Render.Height);
 
                     if (heroUnit.Health <= dmg) //Killable
                     {

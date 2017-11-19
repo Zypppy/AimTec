@@ -245,7 +245,7 @@
             }
 
             bool CR = Menu["u"]["r"].Enabled;
-            if (R.Ready && CR && target.IsValidTarget(R.Range) && Player.HasBuff("XerathLocusOfPower2"))
+            if (CR && target.IsValidTarget(R.Range) && Player.HasBuff("XerathLocusOfPower2"))
             {
                 R.Cast(target);
             }

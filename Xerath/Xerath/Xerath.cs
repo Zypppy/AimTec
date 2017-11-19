@@ -161,6 +161,12 @@
             {
                 W.Cast(target);
             }
+
+            bool CE = Menu["c"]["e"].Enabled;
+            if (E.Ready && CE && target.IsValidTarget(E.Range))
+            {
+                E.Cast(target);
+            }
         }
     }
 }

@@ -201,12 +201,13 @@
             var target = GetBestEnemyHeroTargetInRange(1800);
             if (!target.IsValidSpellTarget())
             {
-                bool HQ = Menu["h"]["q"].Enabled;
-                float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
-                if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
-                {
-                    Q.Cast(target);
-                }
+                return;
+            }
+            bool HQ = Menu["h"]["q"].Enabled;
+            float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
+            if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
+            {
+                Q.Cast(target);
             }
         }
     }

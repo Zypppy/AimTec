@@ -138,7 +138,7 @@
                     .Where(h => h.IsValidTarget() && h.IsValidTarget(50000)))
                 {
                     int width = 103;
-                    int height = 20;
+                    int height = 8;
                     int xOffset = SxOffset(heroUnit);
                     int yOffset = SyOffset(heroUnit);
                     var barPos = heroUnit.FloatingHealthBarPosition;

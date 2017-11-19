@@ -114,7 +114,7 @@
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Pink);
             }
-            if (E.Ready && Menu["d"]["r"].Enabled)
+            if (E.Ready && Menu["d"]["e"].Enabled)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }

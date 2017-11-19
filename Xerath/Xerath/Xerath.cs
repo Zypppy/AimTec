@@ -108,6 +108,17 @@
                 }
             }
         }
+        private void XerathQ(Obj_AI_Base sender, Buff buff)
+        {
+            if (sender.IsMe)
+            {
+                if (buff.Name == "XerathArcanopulseChargeUp")
+                {
+                    Orbwalker.MovingEnabled = true;
+                    Orbwalker.AttackingEnabled = true;
+                }
+            }
+        }
 
         public static void DrawCircleOnMinimap(
             Vector3 center,

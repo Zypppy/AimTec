@@ -37,7 +37,7 @@
             E = new Spell(SpellSlot.E, 1050f);
             E.SetSkillshot(0.25f, 70f, 1400f, true, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 3520f);
-            R.SetSkillshot(0.25f, 150f, 500f, false, SkillshotType.Line);
+            R.SetSkillshot(0.25f, 150f, float.MaxValue, false, SkillshotType.Line);
         }
 
         public Xerath()

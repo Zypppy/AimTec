@@ -52,13 +52,16 @@
             Menu.Add(Combo);
             var Ult = new Menu("u", "Ultimate");
             {
-
+                Ult.Add(new MenuBool("r", "Use R Auto After Cast"));
+                //Ult.Add(new MenuList("ro", "R Combo Options", new[] { "Normal", "OnTap" }, 1));
             }
             Menu.Add(Ult);
             var Harass = new Menu("h", "Harass");
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
                 Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
+                Harass.Add(new MenuBool("w", "Use W"));
+                Harass.Add(new MenuSlider("wm", "Use W Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Harass);
             var LClear = new Menu("lc", "Lane Clear");
@@ -73,7 +76,8 @@
             Menu.Add(JClear);
             var Killsteal = new Menu("ks", "Killsteal");
             {
-
+                Killsteal.Add(new MenuBool("q", "Use Q"));
+                Killsteal.Add(new MenuBool("w", "Use W"));
             }
             Menu.Add(Killsteal);
             var Drawings = new Menu("d", "Drawings");
@@ -88,8 +92,21 @@
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            BuffManager.OnRemoveBuff += XerathR;
             LoadSpells();
             Console.WriteLine("Xerath by Zypppy - Loaded");
+        }
+
+        private void XerathR(Obj_AI_Base sender, Buff buff)
+        {
+            if (sender.IsMe)
+            {
+                if (buff.Name == "XerathLocusOfPower2")
+                {
+                    Orbwalker.MovingEnabled = true;
+                    Orbwalker.AttackingEnabled = true;
+                }
+            }
         }
         public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
         public static int SxOffset(Obj_AI_Hero target)
@@ -126,6 +143,11 @@
         }
         private void Game_OnUpdate()
         {
+            if (Player.HasBuff("XerathLocusOfPower2"))
+            {
+                Orbwalker.MovingEnabled = false;
+                Orbwalker.AttackingEnabled = false;
+            }
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;
@@ -139,13 +161,39 @@
                     Harass();
                     break;
                 case OrbwalkingMode.Laneclear:
-
                     break;
 
             }
             if (Player.GetSpell(SpellSlot.R).Level > 0)
             {
                 R.Range = 2200f + 1320f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
+            }
+            Killsteal();
+        }
+
+        public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
+            bool ignoreShields = false)
+        {
+            return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
+        }
+
+        private void Killsteal()
+        {
+            if (Q.Ready && Menu["ks"]["q"].Enabled)
+            {
+                var kill = GetBestKillableHero(Q, DamageType.Magical, false);
+                if (kill != null && Player.GetSpellDamage(kill, SpellSlot.Q) >= kill.Health && kill.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(kill);
+                }
+            }
+            if (W.Ready && Menu["ks"]["w"].Enabled)
+            {
+                var kill = GetBestKillableHero(W, DamageType.Magical, false);
+                if (kill != null && Player.GetSpellDamage(kill, SpellSlot.W) >= kill.Health && kill.IsValidTarget(W.Range))
+                {
+                    W.Cast(kill);
+                }
             }
         }
 
@@ -195,6 +243,12 @@
             {
                 E.Cast(target);
             }
+
+            bool CR = Menu["u"]["r"].Enabled;
+            if (R.Ready && CR && target.IsValidTarget(R.Range) && Player.HasBuff("XerathLocusOfPower2"))
+            {
+                R.Cast(target);
+            }
         }
         private void Harass()
         {
@@ -208,6 +262,12 @@
             if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
             {
                 Q.Cast(target);
+            }
+            bool HW = Menu["h"]["w"].Enabled;
+            float MW = Menu["h"]["wm"].As<MenuSlider>().Value;
+            if (W.Ready && HW && Player.ManaPercent() >= MW && target.IsValidTarget(W.Range))
+            {
+                W.Cast(target);
             }
         }
     }

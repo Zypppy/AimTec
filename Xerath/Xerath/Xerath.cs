@@ -98,7 +98,15 @@
         }
         private void Render_OnPresent()
         {
+            Vector2 gejus;
+            var heropos = Render.WorldToScreen(Player.Position, out gejus);
+            var xaOffset = (int)gejus.X;
+            var yaOffset = (int)gejus.Y;
 
+            if (Q.Ready && Menu["d"]["q"].Enabled)
+            {
+                Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
+            }
         }
         private void Game_OnUpdate()
         {

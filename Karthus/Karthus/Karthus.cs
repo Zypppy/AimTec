@@ -138,7 +138,7 @@
                     .Where(h => h.IsValidTarget() && h.IsValidTarget(50000)))
                 {
                     int width = 103;
-                    int height = 8;
+                    int height = 20;
                     int xOffset = SxOffset(heroUnit);
                     int yOffset = SyOffset(heroUnit);
                     var barPos = heroUnit.FloatingHealthBarPosition;
@@ -153,7 +153,7 @@
                                                     : 0));
                     Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, heroUnit.Health < dmg ? Color.GreenYellow : Color.Orange);
 
-                    var basepos = new Vector2(0.50f * Render.Width, 0.30f * Render.Height);
+                    var basepos = new Vector2(0.20f * Render.Width, 0.30f * Render.Height);
 
                     if (heroUnit.Health <= dmg) //Killable
                     {

@@ -57,7 +57,8 @@
             Menu.Add(Ult);
             var Harass = new Menu("h", "Harass");
             {
-
+                Harass.Add(new MenuBool("q", "Use Q"));
+                Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Harass);
             var LClear = new Menu("lc", "Lane Clear");
@@ -135,7 +136,7 @@
                     Combo();
                     break;
                 case OrbwalkingMode.Mixed:
-
+                    Harass();
                     break;
                 case OrbwalkingMode.Laneclear:
 
@@ -193,6 +194,19 @@
             if (E.Ready && CE && target.IsValidTarget(E.Range))
             {
                 E.Cast(target);
+            }
+        }
+        private void Harass()
+        {
+            var target = GetBestEnemyHeroTargetInRange(1800);
+            if (!target.IsValidSpellTarget())
+            {
+                bool HQ = Menu["h"]["q"].Enabled;
+                float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
+                if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(target);
+                }
             }
         }
     }

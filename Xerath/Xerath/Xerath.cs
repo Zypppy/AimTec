@@ -110,6 +110,15 @@
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Red);
             }
+            if (W.Ready && Menu["d"]["w"].Enabled)
+            {
+                Render.Circle(Player.Position, W.Range, 40, Color.Pink);
+            }
+            if (E.Ready && Menu["d"]["r"].Enabled)
+            {
+                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
+            }
+           
         }
         private void Game_OnUpdate()
         {

@@ -198,7 +198,7 @@
             }
             if (Player.GetSpell(SpellSlot.R).Level > 0)
             {
-                R.Range = 1850 + 1320 * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
+                R.Range = 1850 + 1300 * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
             Killsteal();
         }

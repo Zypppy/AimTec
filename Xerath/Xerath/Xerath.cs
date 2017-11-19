@@ -77,7 +77,7 @@
             Menu.Add(Killsteal);
             var Drawings = new Menu("d", "Drawings");
             {
-
+                Drawings.Add(new MenuBool("q", "Draw Q"));
             }
             Menu.Add(Drawings);
             Menu.Attach();

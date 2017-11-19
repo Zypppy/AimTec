@@ -144,16 +144,22 @@
 
         private void Combo()
         {
-            var t = GetBestEnemyHeroTargetInRange(1800);
-            if (!t.IsValidTarget())
+            var target = GetBestEnemyHeroTargetInRange(1800);
+            if (!target.IsValidTarget())
             {
                 return;
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && t.IsValidTarget(Q.ChargedMaxRange))
+            if (Q.Ready && CQ && target.IsValidTarget(Q.ChargedMaxRange))
             {
-                Q.Cast(t);
+                Q.Cast(target);
+            }
+
+            bool CW = Menu["c"]["w"].Enabled;
+            if (W.Ready && CW && target.IsValidTarget(W.Range))
+            {
+                W.Cast(target);
             }
         }
     }

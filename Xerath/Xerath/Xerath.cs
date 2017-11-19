@@ -156,6 +156,7 @@
             {
                 case OrbwalkingMode.Combo:
                     Combo();
+                    Ultimate();
                     break;
                 case OrbwalkingMode.Mixed:
                     Harass();
@@ -243,11 +244,18 @@
             {
                 E.Cast(target);
             }
-
+        }
+        private void Ultimate()
+        {
+            var target = GetBestEnemyHeroTargetInRange(6160);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
             bool CR = Menu["u"]["r"].Enabled;
             if (CR && target.IsValidTarget(R.Range) && Player.HasBuff("XerathLocusOfPower2"))
             {
-                R.Cast(R.GetPrediction(target).CastPosition);
+                R.Cast(target);
             }
         }
         private void Harass()

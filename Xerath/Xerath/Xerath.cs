@@ -247,7 +247,7 @@
             bool CR = Menu["u"]["r"].Enabled;
             if (CR && target.IsValidTarget(R.Range) && Player.HasBuff("XerathLocusOfPower2"))
             {
-                R.Cast(target);
+                R.Cast(R.GetPrediction(target).CastPosition);
             }
         }
         private void Harass()

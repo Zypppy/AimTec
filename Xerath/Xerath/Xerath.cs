@@ -118,7 +118,10 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-           
+            if (R.Ready && Menu["d"]["r"].Enabled)
+            {
+                Render.Circle(Player.Position, R.Range, 40, Color.White);
+            }
         }
         private void Game_OnUpdate()
         {
@@ -138,6 +141,10 @@
 
                     break;
 
+            }
+            if (Player.GetSpell(SpellSlot.R).Level > 0)
+            {
+                R.Range = 2200f + 1320f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
         }
 

@@ -343,7 +343,7 @@
 
         private void Combo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1800);
+            var target = GetBestEnemyHeroTargetInRange(1500);
             if (!target.IsValidTarget())
             {
                 return;

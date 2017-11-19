@@ -179,6 +179,11 @@
                 Orbwalker.MovingEnabled = false;
                 Orbwalker.AttackingEnabled = false;
             }
+            if (Player.HasBuff("XerathArcanopulseChargeUp"))
+            {
+                Orbwalker.MovingEnabled = true;
+                Orbwalker.AttackingEnabled = false;
+            }
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;

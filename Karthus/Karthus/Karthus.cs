@@ -89,8 +89,8 @@
                 Drawings.Add(new MenuBool("q", "Draw Q Range"));
                 Drawings.Add(new MenuBool("w", "Draw W Range"));
                 Drawings.Add(new MenuBool("e", "Draw E Range"));
-                Drawings.Add(new MenuBool("rd", "Draw R Damage"));
-                //Drawings.Add(new MenuBool("rdk", "Draw Killable Champs With R"));
+                //Drawings.Add(new MenuBool("rd", "Draw R Damage"));
+                Drawings.Add(new MenuBool("rdk", "Draw Killable Champs With R"));
             }
             Menu.Add(Drawings);
             Menu.Attach();
@@ -130,30 +130,38 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
             }
-            if (Menu["d"]["rd"].Enabled)
+            if (Menu["d"]["rdk"].Enabled)
             {
-                ObjectManager.Get<Obj_AI_Base>()
-                  .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(50000))
-                  .ToList()
-                  .ForEach(
-                   unit =>
-                   {
-                       var heroUnit = unit as Obj_AI_Hero;
-                       int width = 103;
-                       int height = 8;
-                       int xOffset = SxOffset(heroUnit);
-                       int yOffset = SyOffset(heroUnit);
-                       var barPos = unit.FloatingHealthBarPosition;
-                       barPos.X += xOffset;
-                       barPos.Y += yOffset;
+                int killablecount = 0;
 
-                       var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
-                       var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.R)
-                       ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
-                       : 0));
-                       Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
+                foreach (var heroUnit in ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(h => h.IsValidTarget() && h.IsValidTarget(50000)))
+                {
+                    int width = 103;
+                    int height = 8;
+                    int xOffset = SxOffset(heroUnit);
+                    int yOffset = SyOffset(heroUnit);
+                    var barPos = heroUnit.FloatingHealthBarPosition;
+                    barPos.X += xOffset;
+                    barPos.Y += yOffset;
 
-                   });
+                    var dmg = Player.GetSpellDamage(heroUnit, SpellSlot.R);
+
+                    var drawEndXPos = barPos.X + width * (heroUnit.HealthPercent() / 100);
+                    var drawStartXPos = (float)(barPos.X + (heroUnit.Health > dmg
+                                                    ? width * ((heroUnit.Health - (dmg)) / heroUnit.MaxHealth * 100 / 100)
+                                                    : 0));
+                    Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, heroUnit.Health < dmg ? Color.GreenYellow : Color.Orange);
+
+                    var basepos = new Vector2(0.20f * Render.Width, 0.30f * Render.Height);
+
+                    if (heroUnit.Health <= dmg) //Killable
+                    {
+                        var pos = basepos + new Vector2(0, 15 * killablecount);
+                        Render.Text($"{heroUnit.ChampionName} is killable! Press R!!", pos, RenderTextFlags.Center, Color.Red);
+                        killablecount += 1;
+                    }
+                }
             }
         }
 

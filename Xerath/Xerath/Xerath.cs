@@ -36,7 +36,7 @@
             W.SetSkillshot(0.7f, 125f, float.MaxValue, false, SkillshotType.Circle);
             E = new Spell(SpellSlot.E, 1050f);
             E.SetSkillshot(0.25f, 70f, 1400f, true, SkillshotType.Line);
-            R = new Spell(SpellSlot.R, 6160);
+            R = new Spell(SpellSlot.R, 6160f);
             R.SetSkillshot(0.7f, 130f, float.MaxValue, false, SkillshotType.Circle);
         }
 
@@ -164,17 +164,9 @@
                     break;
 
             }
-            if (Player.GetSpell(SpellSlot.R).Level == 1)
+            if (Player.GetSpell(SpellSlot.R).Level > 0)
             {
-                R.Range = 3520;
-            }
-            if (Player.GetSpell(SpellSlot.R).Level == 2)
-            {
-                R.Range = 4840;
-            }
-            if (Player.GetSpell(SpellSlot.R).Level == 3)
-            {
-                R.Range = 6160;
+                R.Range = 2200 + 1320 * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
             Killsteal();
         }

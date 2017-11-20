@@ -100,19 +100,7 @@
             LoadSpells();
             Console.WriteLine("Xerath by Zypppy - Loaded");
         }
-        
-        //private void XerathRR(Obj_AI_Base sender, Buff buff)
-        //{
-        //    if (sender.IsMe)
-        //    {
-        //        if (buff.Name == "XerathLocusOfPower2")
-        //        {
-        //            Orbwalker.MovingEnabled = false;
-        //            Orbwalker.AttackingEnabled = false;
-        //        }
-        //    }
-        //}
-        
+       
         public static void DrawCircleOnMinimap(
             Vector3 center,
             float radius,

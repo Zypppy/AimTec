@@ -111,17 +111,17 @@
                 }
             }
         }
-        private void XerathQ(Obj_AI_Base sender, Buff buff)
-        {
-            if (sender.IsMe)
-            {
-                if (buff.Name == "xerathqvfx")
-                {
-                    Orbwalker.MovingEnabled = true;
-                    Orbwalker.AttackingEnabled = true;
-                }
-            }
-        }
+        //private void XerathQ(Obj_AI_Base sender, Buff buff)
+        //{
+        //    if (sender.IsMe)
+        //    {
+        //        if (buff.Name == "xerathqvfx")
+        //        {
+        //            Orbwalker.MovingEnabled = true;
+        //            Orbwalker.AttackingEnabled = true;
+        //        }
+        //    }
+        //}
         
 
         public static void DrawCircleOnMinimap(
@@ -269,7 +269,21 @@
                 Orbwalker.MovingEnabled = false;
                 Orbwalker.AttackingEnabled = false;
             }
-            
+            //if (Player.HasBuff("xerathqvfx"))
+            //{
+            //    Orbwalker.MovingEnabled = true;
+            //    Orbwalker.AttackingEnabled = false;
+            //}
+
+            if (Q.IsCharging)
+            {
+                Orbwalker.AttackingEnabled = false;
+            }
+            if (!Q.IsCharging)
+            {
+                Orbwalker.AttackingEnabled = true;
+            }
+
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;

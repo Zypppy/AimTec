@@ -50,6 +50,7 @@
                 Combo.Add(new MenuBool("w", "Use W"));
                 Combo.Add(new MenuBool("e", "Use E"));
                 Combo.Add(new MenuList("eo", "E Options", new[] { "Always", "Only When Slowed", "Hard CC Targets" }, 1));
+                EGap.Gapcloser.Attach(Menu, "E Anti - GapClose");
             }
             Menu.Add(Combo);
             var Ult = new Menu("u", "Ultimate");
@@ -93,7 +94,6 @@
                 Drawings.Add(new MenuBool("r", "Draw R On Minimap"));
             }
             Menu.Add(Drawings);
-            EGap.Gapcloser.Attach(Menu, "E Anti - GapClose");
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;

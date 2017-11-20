@@ -296,7 +296,7 @@
                     Q.Cast(kill);
                 }
             }
-            if (W.Ready && Menu["ks"]["w"].Enabled)
+            if (W.Ready && Menu["ks"]["w"].Enabled && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 var kill = GetBestKillableHero(W, DamageType.Magical, false);
                 if (kill != null && Player.GetSpellDamage(kill, SpellSlot.W) >= kill.Health && kill.IsValidTarget(W.Range))
@@ -336,19 +336,19 @@
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && target.IsValidTarget(Q.ChargedMaxRange))
+            if (Q.Ready && CQ && target.IsValidTarget(Q.ChargedMaxRange) && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 Q.Cast(target);
             }
 
             bool CW = Menu["c"]["w"].Enabled;
-            if (W.Ready && CW && target.IsValidTarget(W.Range))
+            if (W.Ready && CW && target.IsValidTarget(W.Range) && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 W.Cast(target);
             }
 
             bool CE = Menu["c"]["e"].Enabled;
-            if (E.Ready && CE && target.IsValidTarget(E.Range))
+            if (E.Ready && CE && target.IsValidTarget(E.Range) && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 E.Cast(target);
             }

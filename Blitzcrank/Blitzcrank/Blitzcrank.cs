@@ -85,7 +85,7 @@
 
             if (Menu["drawings"]["drawq"].Enabled)
             {
-                Render.Circle(Player.Position, 950, 40, Color.CornflowerBlue);
+                Render.Circle(Player.Position, Q.Range, 40, Color.CornflowerBlue);
             }
 
             if (Menu["drawings"]["drawr"].Enabled)

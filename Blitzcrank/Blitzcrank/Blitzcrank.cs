@@ -28,7 +28,7 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1050);
+            Q = new Spell(SpellSlot.Q, 925);
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 300);
             R = new Spell(SpellSlot.R, 600);

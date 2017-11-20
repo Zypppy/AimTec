@@ -260,6 +260,7 @@
             if (!Q.IsCharging && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 Orbwalker.AttackingEnabled = true;
+                Orbwalker.MovingEnabled = true;
             }
             if (Player.HasBuff("XerathLocusOfPower2"))
             {
@@ -299,7 +300,7 @@
 
         private void Killsteal()
         {
-            if (Q.Ready && Menu["ks"]["q"].Enabled)
+            if (Q.Ready && Menu["ks"]["q"].Enabled && !Player.HasBuff("XerathLocusOfPower2"))
             {
                 var kill = GetBestKillableHero(Q, DamageType.Magical, false);
                 if (kill != null && Player.GetSpellDamage(kill, SpellSlot.Q) >= kill.Health && kill.IsValidTarget(Q.Range))

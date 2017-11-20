@@ -32,7 +32,7 @@
             W = new Spell(SpellSlot.W, 125);
             E = new Spell(SpellSlot.E, 300);
             R = new Spell(SpellSlot.R, 600);
-            Q.SetSkillshot(0.25f, 70f, 1801.029f, true, SkillshotType.Line, false, HitChance.High);
+            Q.SetSkillshot(0.5f, 70f, 1800f, true, SkillshotType.Line, false);
         }
 
         public Blitzcrank()
@@ -194,8 +194,6 @@
 
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useE = Menu["combo"]["usee"].Enabled;
-            //bool useFOTM = Menu["supportitems"]["usefotm"].Enabled;
-            //bool useSOLARI = Menu["supportitems"]["usesolari"].Enabled;
             var target = GetBestEnemyHeroTargetInRange(1500);
 
             if (!target.IsValidTarget())
@@ -205,19 +203,11 @@
 
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
-            if (E.Ready && useE && target.IsValidTarget(300))
+            if (E.Ready && useE && target.IsValidTarget(Player.AttackRange + target.BoundingRadius) || target.IsValidTarget(320))
             {
-
-                if (target != null)
-                {
-                    E.Cast();
-                }
+                E.Cast();
             }
           
 

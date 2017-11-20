@@ -96,6 +96,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             BuffManager.OnRemoveBuff += XerathR;
+            BuffManager.OnAddBuff += XerathRR;
             LoadSpells();
             Console.WriteLine("Xerath by Zypppy - Loaded");
         }
@@ -111,17 +112,18 @@
                 }
             }
         }
-        //private void XerathQ(Obj_AI_Base sender, Buff buff)
-        //{
-        //    if (sender.IsMe)
-        //    {
-        //        if (buff.Name == "xerathqvfx")
-        //        {
-        //            Orbwalker.MovingEnabled = true;
-        //            Orbwalker.AttackingEnabled = true;
-        //        }
-        //    }
-        //}
+        private void XerathRR(Obj_AI_Base sender, Buff buff)
+        {
+            if (sender.IsMe)
+            {
+                if (buff.Name == "XerathLocusOfPower2")
+                {
+                    Orbwalker.MovingEnabled = false;
+                    Orbwalker.AttackingEnabled = false;
+                }
+            }
+        }
+        
         
 
         public static void DrawCircleOnMinimap(
@@ -264,17 +266,7 @@
         }
         private void Game_OnUpdate()
         {
-            if (Player.HasBuff("XerathLocusOfPower2"))
-            {
-                //Orbwalker.MovingEnabled = false;
-                Console.WriteLine("Xerath Moving");
-                //Orbwalker.AttackingEnabled = false;
-            }
-            //if (Player.HasBuff("xerathqvfx"))
-            //{
-            //    Orbwalker.MovingEnabled = true;
-            //    Orbwalker.AttackingEnabled = false;
-            //}
+            
             
 
             if (Q.IsCharging)

@@ -266,14 +266,16 @@
         {
             if (Player.HasBuff("XerathLocusOfPower2"))
             {
-                Orbwalker.MovingEnabled = false;
-                Orbwalker.AttackingEnabled = false;
+                //Orbwalker.MovingEnabled = false;
+                Console.WriteLine("Xerath Moving");
+                //Orbwalker.AttackingEnabled = false;
             }
             //if (Player.HasBuff("xerathqvfx"))
             //{
             //    Orbwalker.MovingEnabled = true;
             //    Orbwalker.AttackingEnabled = false;
             //}
+            
 
             if (Q.IsCharging)
             {

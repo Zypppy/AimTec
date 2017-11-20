@@ -16,6 +16,7 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
+    using EGap;
 
     using Spell = Aimtec.SDK.Spell;
     using Aimtec.SDK.Events;
@@ -48,6 +49,7 @@
                 Combo.Add(new MenuBool("q", "Use Q"));
                 Combo.Add(new MenuBool("w", "Use W"));
                 Combo.Add(new MenuBool("e", "Use E"));
+                Combo.Add(new MenuList("eo", "E Options", new[] { "Always", "Only When Slowed", "Hard CC Targets" }, 1));
             }
             Menu.Add(Combo);
             var Ult = new Menu("u", "Ultimate");
@@ -64,16 +66,16 @@
                 Harass.Add(new MenuSlider("wm", "Use W Mana Percent >=", 60, 0, 100));
             }
             Menu.Add(Harass);
-            var LClear = new Menu("lc", "Lane Clear");
-            {
+            //var LClear = new Menu("lc", "Lane Clear");
+            //{
 
-            }
-            Menu.Add(LClear);
-            var JClear = new Menu("jc", "Jungle Clear");
-            {
+            //}
+            //Menu.Add(LClear);
+            //var JClear = new Menu("jc", "Jungle Clear");
+            //{
 
-            }
-            Menu.Add(JClear);
+            //}
+            //Menu.Add(JClear);
             var Killsteal = new Menu("ks", "Killsteal");
             {
                 Killsteal.Add(new MenuBool("q", "Use Q"));
@@ -91,16 +93,16 @@
                 Drawings.Add(new MenuBool("r", "Draw R On Minimap"));
             }
             Menu.Add(Drawings);
+            EGap.Gapcloser.Attach(Menu, "E Anti - GapClose");
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
-            //BuffManager.OnRemoveBuff += XerathR;
-            //BuffManager.OnAddBuff += XerathRR;
+            Gapcloser.OnGapcloser += OnGapCloser;
             LoadSpells();
             Console.WriteLine("Xerath by Zypppy - Loaded");
         }
-       
+
         public static void DrawCircleOnMinimap(
             Vector3 center,
             float radius,
@@ -128,6 +130,22 @@
                 Render.WorldToMinimap(b, out var bonScreen);
 
                 Render.Line(aonScreen, bonScreen, color);
+            }
+        }
+
+        private void OnGapCloser(Obj_AI_Hero target, EGap.GapcloserArgs Args)
+        {
+            if (Player.IsDead)
+            {
+                return;
+            }
+            if (target == null || !target.IsEnemy)
+            {
+                return;
+            }
+            if (E.Ready && Args.EndPosition.Distance(Player.ServerPosition) <= E.Range && target.IsValidTarget(E.Range))
+            {
+                E.Cast(Args.EndPosition);
             }
         }
 
@@ -348,9 +366,30 @@
             }
 
             bool CE = Menu["c"]["e"].Enabled;
-            if (E.Ready && CE && target.IsValidTarget(E.Range) && !Player.HasBuff("XerathLocusOfPower2"))
+
+            if (E.Ready && CE && !Player.HasBuff("XerathLocusOfPower2"))
             {
-                E.Cast(target);
+                switch (Menu["c"]["eo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (target.IsValidTarget(E.Range))
+                        {
+                            E.Cast(target);
+                        }
+                        break;
+                    case 1:
+                        if (target.IsValidTarget(E.Range) && target.HasBuffOfType(BuffType.Slow))
+                        {
+                            E.Cast(target);
+                        }
+                        break;
+                    case 2:
+                        if (target.IsValidTarget(E.Range) && target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Suppression) || target.HasBuffOfType(BuffType.Taunt))
+                        {
+                            E.Cast(target);
+                        }
+                        break;
+                }
             }
         }
         private void Ultimate()

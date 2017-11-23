@@ -172,7 +172,6 @@ namespace Malzahar
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-
             if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
             {
                 switch (Menu["c"]["qo"].As<MenuList>().Value)
@@ -192,7 +191,8 @@ namespace Malzahar
                     case 2:
                         if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Slow))
                         {
-                            Q.Cast(t);
+                            //Q.Cast(t);
+                            Console.WriteLine("Case2");
                         }
                         return;
                     case 3:
@@ -201,7 +201,8 @@ namespace Malzahar
                             t.HasBuffOfType(BuffType.Snare) || t.HasBuffOfType(BuffType.Stun) ||
                             t.HasBuffOfType(BuffType.Suppression) || t.HasBuffOfType(BuffType.Taunt))
                         {
-                            Q.Cast(t);
+                            //Q.Cast(t);
+                            Console.WriteLine("Case 3");
                         }
                         return;
                 }

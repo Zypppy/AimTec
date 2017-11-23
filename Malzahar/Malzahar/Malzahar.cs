@@ -46,10 +46,12 @@ namespace Malzahar
             var Combo = new Menu("c", "Combo");
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
+                Combo.Add(new MenuList("qo", "Q Options", new[] {"Always", "Only When Enemy Has E Buff", "Only When Enemy Slowed", "Only When Hard CC'ed"}, 1));
                 Combo.Add(new MenuBool("w", "Use W"));
-                Combo.Add(new MenuList("wo", "W Options", new[] { "Always", "Only  When Enemy Has E" }, 1));
+                Combo.Add(new MenuList("wo", "W Options", new[] {"Always", "Only When Enemy Has E Buff"}, 1));
                 Combo.Add(new MenuBool("e", "Use E"));
                 Combo.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
+                Combo.Add(new MenuList("ro", "R Options", new[] {"Always", "Only On Enemy That Has E Buff"}, 1));
             }
             Menu.Add(Combo);
             var Harass = new Menu("h", "Harass");
@@ -174,6 +176,39 @@ namespace Malzahar
             {
                 Q.Cast(t);
             }
+            if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
+            {
+                switch (Menu["c"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (t.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(t);
+                        }
+                        return;
+                    case 1:
+                        if (t.IsValidTarget(Q.Range) && t.HasBuff("MalzaharE"))
+                        {
+                            Q.Cast(t);
+                        }
+                        return;
+                    case 2:
+                        if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Slow))
+                        {
+                            Q.Cast(t);
+                        }
+                        return;
+                    case 3:
+                        if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Charm) ||
+                            t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Knockup) ||
+                            t.HasBuffOfType(BuffType.Snare) || t.HasBuffOfType(BuffType.Stun) ||
+                            t.HasBuffOfType(BuffType.Suppression) || t.HasBuffOfType(BuffType.Taunt))
+                        {
+                            Q.Cast(t);
+                        }
+                        return;
+                }
+            }
 
             bool CW = Menu["c"]["w"].Enabled;
             if (W.Ready && CW && !Player.HasBuff("malzaharrsound"))
@@ -203,12 +238,41 @@ namespace Malzahar
 
         private void Harass()
         {
+            var t = GetBestEnemyHeroTargetInRange(Q.Range);
+            if (!t.IsValidSpellTarget())
+            {
+                return;
+            }
 
+            bool HQ = Menu["h"]["q"].Enabled;
+            float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
+
+            if (Q.Ready && HQ && Player.ManaPercent() >= MQ && t.IsValidTarget(Q.Range) &&
+                !Player.HasBuff("malzaharrsound"))
+            {
+                Q.Cast(t);
+            }
         }
 
         private void ManualR()
         {
+            var t = GetBestEnemyHeroTargetInRange(R.Range);
 
+            if (R.Ready && t.IsValidTarget(R.Range))
+            {
+                switch (Menu["c"]["ro"].As<MenuList>().Value)
+                {
+                    case 0:
+                        R.Cast(t);
+                        return;
+                    case 1:
+                        if (t.HasBuff("MalzaharE"))
+                        {
+                            R.Cast(t);
+                        }
+                        return;
+                }
+            }
         }
     }
 }

@@ -172,7 +172,7 @@ namespace Malzahar
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
+            if (Q.Ready && CQ)
             {
                 switch (Menu["c"]["qo"].As<MenuList>().Value)
                 {

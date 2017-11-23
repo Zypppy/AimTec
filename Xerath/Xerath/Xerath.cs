@@ -143,9 +143,9 @@
             {
                 return;
             }
-            if (E.Ready && Args.EndPosition.Distance(Player.ServerPosition) <= E.Range && target.IsValidTarget(E.Range))
+            if (Args.EndPosition.Distance(Player) < E.Range && E.Ready && target.IsDashing() && target.IsValidTarget(E.Range))
             {
-                E.Cast(Args.EndPosition);
+                E.Cast(target);
             }
         }
 

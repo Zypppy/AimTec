@@ -1021,19 +1021,14 @@
 
         private static void OnUpdate()
         {
-            if (OnGapcloser == null)
+            if (Gapclosers.Values.Any(x => Game.TickCount - x.StartTick > 900 + Game.Ping))
+            {
+                Gapclosers.Clear();
+            }
+
+            if (OnGapcloser == null || Menu["GapcloserEnabled"].As<MenuBool>() == null || !Menu["GapcloserEnabled"].As<MenuBool>().Enabled)
             {
                 return;
-            }
-
-            foreach (var needToDeleteValue in Gapclosers.Where(x => Game.TickCount - x.Value.StartTick > 1500 + Game.Ping).ToList())
-            {
-                Gapclosers.Remove(needToDeleteValue.Key);
-            }
-
-            foreach (var args in Gapclosers.Where(x => x.Value.Unit.IsValidTarget()))
-            {
-                OnGapcloser(args.Value.Unit, args.Value);
             }
 
             foreach (

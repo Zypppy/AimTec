@@ -36,7 +36,7 @@ namespace Malzahar
             Q = new Spell(SpellSlot.Q, 900f);
             Q.SetSkillshot(0.5f, 100f, 1600f, false, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 650f);
-            E = new Spell(SpellSlot.E, 650f);//MalzaharE malzaharerecent
+            E = new Spell(SpellSlot.E, 650f);//MalzaharEmalzaharerecent
             R = new Spell(SpellSlot.R, 700f);//malzaharrsound
         }
 
@@ -172,7 +172,7 @@ namespace Malzahar
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-            
+
             if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
             {
                 switch (Menu["c"]["qo"].As<MenuList>().Value)
@@ -226,6 +226,7 @@ namespace Malzahar
                         break;
                 }
             }
+
             bool CE = Menu["c"]["e"].Enabled;
             if (E.Ready && CE && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
             {

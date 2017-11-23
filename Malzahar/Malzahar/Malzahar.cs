@@ -195,7 +195,7 @@ namespace Malzahar
                 }
             }
             bool CE = Menu["c"]["e"].Enabled;
-            if (E.Ready && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
+            if (E.Ready && CE && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
             {
                 E.Cast(t);
             }

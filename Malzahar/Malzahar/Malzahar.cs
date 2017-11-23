@@ -172,7 +172,7 @@ namespace Malzahar
             }
 
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
+            if (Q.Ready && CQ)
             {
                 switch (Menu["c"]["qo"].As<MenuList>().Value)
                 {
@@ -191,8 +191,8 @@ namespace Malzahar
                     case 2:
                         if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Slow))
                         {
-                            //Q.Cast(t);
-                            Player.SpellBook.CastSpell(SpellSlot.Q, t);
+                            Q.Cast(t);
+                            //Player.SpellBook.CastSpell(SpellSlot.Q, t);
                             //Console.WriteLine("Case2");
                         }
                         return;
@@ -232,7 +232,8 @@ namespace Malzahar
             bool CE = Menu["c"]["e"].Enabled;
             if (E.Ready && CE && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
             {
-                E.Cast(t);
+                //E.Cast(t);
+                Player.SpellBook.CastSpell(SpellSlot.E, t);
             }
             else
             {

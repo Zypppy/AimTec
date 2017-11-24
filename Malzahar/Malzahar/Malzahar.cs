@@ -46,7 +46,7 @@ namespace Malzahar
             var Combo = new Menu("c", "Combo");
             {
                 Combo.Add(new MenuBool("q", "Use Q"));
-                Combo.Add(new MenuList("qo", "Q Options", new[] {"Always", "Only When Enemy Has E Buff"}, 1));
+                //Combo.Add(new MenuList("qo", "Q Options", new[] {"Always", "Only When Enemy Has E Buff", "When Enemy Is Slowed", "When Enemy Is Hard CC'ed"}, 1));
                 Combo.Add(new MenuBool("w", "Use W"));
                 Combo.Add(new MenuList("wo", "W Options", new[] {"Always", "Only When Enemy Has E Buff"}, 1));
                 Combo.Add(new MenuBool("e", "Use E"));
@@ -174,39 +174,7 @@ namespace Malzahar
             bool CQ = Menu["c"]["q"].Enabled;
             if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
             {
-                switch (Menu["c"]["qo"].As<MenuList>().Value)
-                {
-                    case 0:
-                        if (t.IsValidTarget(Q.Range))
-                        {
-                            Q.Cast(t);
-                        }
-                        return;
-                    case 1:
-                        if (t.IsValidTarget(Q.Range) && t.HasBuff("MalzaharE"))
-                        {
-                            Q.Cast(t);
-                        }
-                        return;
-                    //case 2:
-                    //    if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Slow))
-                    //    {
-                    //        Q.Cast(t);
-                            //Player.SpellBook.CastSpell(SpellSlot.Q, t);
-                            //Console.WriteLine("Case2");
-                    //    }
-                    //    return;
-                    //case 3:
-                    //    if (t.IsValidTarget(Q.Range) && t.HasBuffOfType(BuffType.Charm) ||
-                    //        t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Knockup) ||
-                    //        t.HasBuffOfType(BuffType.Snare) || t.HasBuffOfType(BuffType.Stun) ||
-                    //        t.HasBuffOfType(BuffType.Suppression) || t.HasBuffOfType(BuffType.Taunt))
-                    //    {
-                    //        Q.Cast(t);
-                            //Console.WriteLine("Case 3");
-                    //    }
-                    //    return;
-                }
+               Q.Cast(t);
             }
 
             bool CW = Menu["c"]["w"].Enabled;
@@ -233,11 +201,6 @@ namespace Malzahar
             if (E.Ready && CE && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
             {
                 E.Cast(t);
-                //Player.SpellBook.CastSpell(SpellSlot.E, t);
-            }
-            else if (E.Ready)
-            {
-                Console.WriteLine("Something Broke");
             }
         }
 

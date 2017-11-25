@@ -394,7 +394,7 @@
         }
         private void Ultimate()
         {
-            var target = GetBestEnemyHeroTargetInRange(6160);
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
             if (!target.IsValidTarget())
             {
                 return;
@@ -414,7 +414,7 @@
             }
             bool HQ = Menu["h"]["q"].Enabled;
             float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
-            if (Q.Ready && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && !Q.IsCharging && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
             {
                 Q.Cast(target);
             }

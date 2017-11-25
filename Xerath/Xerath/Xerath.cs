@@ -62,7 +62,7 @@
             var Harass = new Menu("h", "Harass");
             {
                 Harass.Add(new MenuBool("q", "Use Q"));
-                Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >=", 60, 0, 100));
+                Harass.Add(new MenuSlider("qm", "Use Q Mana Percent >", 60, 0, 100));
                 Harass.Add(new MenuBool("w", "Use W"));
                 Harass.Add(new MenuSlider("wm", "Use W Mana Percent >=", 60, 0, 100));
             }
@@ -414,7 +414,7 @@
             }
             bool HQ = Menu["h"]["q"].Enabled;
             float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
-            if (Q.Ready && !Q.IsCharging && HQ && Player.ManaPercent() >= MQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && HQ && Player.ManaPercent() > MQ && target.IsValidTarget(Q.Range))
             {
                 Q.Cast(target);
             }

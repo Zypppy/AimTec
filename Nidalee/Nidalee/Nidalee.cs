@@ -299,7 +299,7 @@
 
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
+            var target = GetBestEnemyHeroTargetInRange(QH.Range);
             if (!target.IsValidTarget())
             {
                 return;

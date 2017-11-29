@@ -32,8 +32,8 @@
             Q.SetSkillshot(0.5f, 15f, float.MaxValue, false, SkillshotType.Line);
             Q2 = new Spell(SpellSlot.Q, 510f);//YasuoQ2 YasuoQ2W
             Q2.SetSkillshot(0.5f, 15f, float.MaxValue, false, SkillshotType.Line);
-            Q3 = new Spell(SpellSlot.Q, 900f);//YasuoQ3 YasuoQ3W
-            Q3.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.Line);
+            Q3 = new Spell(SpellSlot.Q, 1100f);//YasuoQ3 YasuoQ3W
+            Q3.SetSkillshot(0.5f, 90f, 1500f, false, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 600f);//YasuoWMovingWall
             W.SetSkillshot(0.25f, 100f, 850f, false, SkillshotType.Line);
             E = new Spell(SpellSlot.E, 475f);//YasuodashWrapper

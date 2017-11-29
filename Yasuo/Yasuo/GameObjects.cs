@@ -1,11 +1,10 @@
-﻿namespace Yasuo
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Aimtec;
+
+namespace Yasuo
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-
-    using Aimtec;
-
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.
     /// </summary>
@@ -99,6 +98,21 @@
         private static readonly List<Obj_AI_Minion> JungleSmallList = new List<Obj_AI_Minion>();
 
         /// <summary>
+        ///     The spawn points list.
+        /// </summary>
+        private static readonly List<GameObject> SpawnPointsList = new List<GameObject>();
+
+        /// <summary>
+        ///     The ally spawn points list.
+        /// </summary>
+        private static readonly List<GameObject> AllySpawnPointsList = new List<GameObject>();
+
+        /// <summary>
+        ///     The enemy spawn points list.
+        /// </summary>
+        private static readonly List<GameObject> EnemySpawnPointsList = new List<GameObject>();
+
+        /// <summary>
         ///     The large name regex list.
         /// </summary>
         private static readonly string[] LargeNameRegex =
@@ -136,7 +150,7 @@
         /// <summary>
         ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
         /// </summary>
-        private static bool initialized;
+        private static bool _initialized;
 
         #endregion
 
@@ -187,200 +201,92 @@
         /// <summary>
         ///     Gets the game objects.
         /// </summary>
-        public static IEnumerable<GameObject> AllGameObjects
-        {
-            get
-            {
-                return GameObjectsList;
-            }
-        }
+        public static IEnumerable<GameObject> AllGameObjects => GameObjectsList;
 
         /// <summary>
         ///     Gets the ally.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Ally
-        {
-            get
-            {
-                return AllyList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Base> Ally => AllyList;
 
         /// <summary>
         ///     Gets the ally heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> AllyHeroes
-        {
-            get
-            {
-                return AllyHeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> AllyHeroes => AllyHeroesList;
 
         /// <summary>
         ///     Gets the ally minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyMinions
-        {
-            get
-            {
-                return AllyMinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> AllyMinions => AllyMinionsList;
 
         /// <summary>
         ///     Gets the ally turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> AllyTurrets
-        {
-            get
-            {
-                return AllyTurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> AllyTurrets => AllyTurretsList;
 
         /// <summary>
         ///     Gets the ally wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyWards
-        {
-            get
-            {
-                return AllyWardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> AllyWards => AllyWardsList;
 
         /// <summary>
         ///     Gets the attackable units.
         /// </summary>
-        public static IEnumerable<AttackableUnit> AttackableUnits
-        {
-            get
-            {
-                return AttackableUnitsList;
-            }
-        }
+        public static IEnumerable<AttackableUnit> AttackableUnits => AttackableUnitsList;
 
         /// <summary>
         ///     Gets the enemy.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Enemy
-        {
-            get
-            {
-                return EnemyList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Base> Enemy => EnemyList;
 
         /// <summary>
         ///     Gets the enemy heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> EnemyHeroes
-        {
-            get
-            {
-                return EnemyHeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> EnemyHeroes => EnemyHeroesList;
 
         /// <summary>
         ///     Gets the enemy minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyMinions
-        {
-            get
-            {
-                return EnemyMinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> EnemyMinions => EnemyMinionsList;
 
         /// <summary>
         ///     Gets the enemy turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> EnemyTurrets
-        {
-            get
-            {
-                return EnemyTurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> EnemyTurrets => EnemyTurretsList;
 
         /// <summary>
         ///     Gets the enemy wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyWards
-        {
-            get
-            {
-                return EnemyWardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> EnemyWards => EnemyWardsList;
 
         /// <summary>
         ///     Gets the heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> Heroes
-        {
-            get
-            {
-                return HeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> Heroes => HeroesList;
 
         /// <summary>
         ///     Gets the jungle.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Jungle
-        {
-            get
-            {
-                return JungleList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Jungle => JungleList;
 
         /// <summary>
         ///     Gets the jungle large.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLarge
-        {
-            get
-            {
-                return JungleLargeList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleLarge => JungleLargeList;
 
         /// <summary>
         ///     Gets the jungle legendary.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLegendary
-        {
-            get
-            {
-                return JungleLegendaryList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleLegendary => JungleLegendaryList;
 
         /// <summary>
         ///     Gets the jungle small.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleSmall
-        {
-            get
-            {
-                return JungleSmallList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleSmall => JungleSmallList;
 
         /// <summary>
         ///     Gets the minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Minions
-        {
-            get
-            {
-                return MinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Minions => MinionsList;
 
         /// <summary>
         ///     Gets or sets the player.
@@ -390,24 +296,27 @@
         /// <summary>
         ///     Gets the turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> Turrets
-        {
-            get
-            {
-                return TurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> Turrets => TurretsList;
 
         /// <summary>
         ///     Gets the wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Wards
-        {
-            get
-            {
-                return WardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Wards => WardsList;
+
+        /// <summary>
+        ///     Gets the spawn points.
+        /// </summary>
+        public static IEnumerable<GameObject> SpawnPoints => SpawnPointsList;
+
+        /// <summary>
+        ///     Gets the ally spawn points.
+        /// </summary>
+        public static IEnumerable<GameObject> AllySpawnPoints => AllySpawnPointsList;
+
+        /// <summary>
+        ///     Gets the enemy spawn points.
+        /// </summary>
+        public static IEnumerable<GameObject> EnemySpawnPoints => EnemySpawnPointsList;
 
         #endregion
 
@@ -493,20 +402,21 @@
         /// </summary>
         internal static void Initialize()
         {
-            if (initialized)
+            if (_initialized)
             {
                 return;
             }
 
-            initialized = true;
+            _initialized = true;
 
             Player = Player;
 
             HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
             MinionsList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team != GameObjectTeam.Neutral && !o.Name.Contains("ward")));
             TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
-            JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse" && o.Name != "Barrel"));
+            JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse" && o.Name != "Barrel" && !o.Name.Contains("SRU_Plant_")));
             WardsList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Name.Contains("ward")));
+            SpawnPointsList.AddRange(ObjectManager.Get<GameObject>().Where(o => o.Type == GameObjectType.obj_SpawnPoint));
 
             GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
             AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
@@ -528,6 +438,9 @@
 
             AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
             EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
+
+            AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
+            EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
 
             GameObject.OnCreate += OnCreate;
             GameObject.OnDestroy += OnDelete;
@@ -632,6 +545,20 @@
                 {
                     AllyTurretsList.Add(turret);
                     AllyList.Add(turret);
+                }
+            }
+
+            var spawnPoint = sender;
+            if (spawnPoint.Type == GameObjectType.obj_SpawnPoint)
+            {
+                SpawnPointsList.Add(spawnPoint);
+                if (spawnPoint.IsAlly)
+                {
+                    AllySpawnPointsList.Add(spawnPoint);
+                }
+                else
+                {
+                    EnemySpawnPointsList.Add(spawnPoint);
                 }
             }
         }
@@ -755,6 +682,23 @@
                     {
                         AllyTurretsList.Remove(turretObject);
                         AllyList.Remove(turretObject);
+                    }
+                }
+            }
+
+            var spawnPoint = sender;
+            if (spawnPoint.Type == GameObjectType.obj_SpawnPoint)
+            {
+                foreach (var spawnPointObject in SpawnPointsList.Where(s => s.Compare(spawnPoint)).ToList())
+                {
+                    SpawnPointsList.Remove(spawnPointObject);
+                    if (spawnPoint.IsEnemy)
+                    {
+                        EnemySpawnPointsList.Remove(spawnPointObject);
+                    }
+                    else
+                    {
+                        AllySpawnPointsList.Remove(spawnPointObject);
                     }
                 }
             }

@@ -150,10 +150,6 @@
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
             }
-            if (Menu["drawings"]["drawegap"].Enabled)
-            {
-                Render.Circle(Player.Position, Menu["combo"]["useegap"].As<MenuSlider>().Value, 40, Color.BlueViolet);
-            }
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Chocolate);

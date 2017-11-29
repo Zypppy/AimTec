@@ -205,10 +205,12 @@
             }
             Killsteal();
         }
-        public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True, bool ignoreShields = false)
+        public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
+            bool ignoreShields = false)
         {
             return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
         }
+
         private void Killsteal()
         {
 
@@ -288,6 +290,7 @@
             }
             return null;
         }
+
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(Q3.Range);
@@ -402,7 +405,6 @@
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
         }
-
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
         {
             return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
@@ -492,34 +494,36 @@
         {
             return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
+
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q3.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
-                
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
+
                 if (Q.Ready)
                 {
 
                     bool useQ = Menu["jungleclear"]["useq"].Enabled;
                     bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
+                    if (useQ && jungle.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
                     {
-                        Q.Cast(minion);
+                        Q.Cast(jungle);
                     }
-                    else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+                    else if (useQ2 && jungle.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
                     {
-                        Q3.Cast(minion);
+                        Q3.Cast(jungle);
                     }
                 }
 
                 bool useE = Menu["jungleclear"]["usee"].Enabled;
-                if (E.Ready && useE && minion.IsValidTarget(E.Range))
+                if (E.Ready && useE && jungle.IsValidTarget(E.Range))
                 {
-                    E.Cast(minion);
+                    E.Cast(jungle);
                 }
             }
         }

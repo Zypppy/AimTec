@@ -422,7 +422,7 @@
                     bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
                     if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
                     {
-                        Q.Cast(minion);
+                        Q.CastOnUnit(minion);
                     }
                     if (useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
                     {

@@ -144,7 +144,7 @@
             }
             if (Menu["drawings"]["drawq2"].Enabled && Q2.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W")
             {
-                Render.Circle(Player.Position, Q2.Range, 40, Color.Beige);
+                Render.Circle(Player.Position, Q3.Range, 40, Color.Beige);
             }
             if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {

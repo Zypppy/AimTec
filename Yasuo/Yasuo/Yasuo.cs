@@ -29,9 +29,9 @@
         public void LoadSpells()
         {
             Q = new Spell(SpellSlot.Q, 510f);//YasuoQ YasuoQW
-            Q.SetSkillshot(0.5f, 15f, 5000f, false, SkillshotType.Line);
+            Q.SetSkillshot(0.5f, 15f, float.MaxValue, false, SkillshotType.Line);
             Q2 = new Spell(SpellSlot.Q, 510f);//YasuoQ2 YasuoQ2W
-            Q2.SetSkillshot(0.5f, 15f, 5000f, false, SkillshotType.Line);
+            Q2.SetSkillshot(0.5f, 15f, float.MaxValue, false, SkillshotType.Line);
             Q3 = new Spell(SpellSlot.Q, 900f);//YasuoQ3 YasuoQ3W
             Q3.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.Line);
             W = new Spell(SpellSlot.W, 600f);//YasuoWMovingWall

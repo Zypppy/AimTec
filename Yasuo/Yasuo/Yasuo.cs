@@ -25,17 +25,19 @@
         public static Menu Menu = new Menu("Yasuo by Zypppy", "Yasuo by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, Q2, W, E, R, Ignite;
+        public static Spell Q, Q2, Q3, W, E, R, Ignite;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 500f);
-            Q.SetSkillshot(0.4f, 50f, 1500f, false, SkillshotType.Line);
-            Q2 = new Spell(SpellSlot.Q, 1100);
-            Q2.SetSkillshot(0.333f, 90f, 1203f, false, SkillshotType.Line);
-            W = new Spell(SpellSlot.W, 400);
+            Q = new Spell(SpellSlot.Q, 510f);//YasuoQ YasuoQW
+            Q.SetSkillshot(0.5f, 15f, 5000f, false, SkillshotType.Line);
+            Q2 = new Spell(SpellSlot.Q, 510f);//YasuoQ2 YasuoQ2W
+            Q2.SetSkillshot(0.5f, 15f, 5000f, false, SkillshotType.Line);
+            Q3 = new Spell(SpellSlot.Q, 900f);//YasuoQ3 YasuoQ3W
+            Q3.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.Line);
+            W = new Spell(SpellSlot.W, 600f);//YasuoWMovingWall
             W.SetSkillshot(0.25f, 100f, 850f, false, SkillshotType.Line);
-            E = new Spell(SpellSlot.E, 475);
-            R = new Spell(SpellSlot.R, 1200);
+            E = new Spell(SpellSlot.E, 475f);//YasuodashWrapper
+            R = new Spell(SpellSlot.R, 1200f);//YasuoRDummySpell YasuoRKnockUpComboW
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -49,9 +51,6 @@
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usee", "Use E"));
-                Combo.Add(new MenuBool("useem", "Use E On Minions"));
-                Combo.Add(new MenuBool("useefgap", "Use E GapClose On Minions"));
-                Combo.Add(new MenuSlider("useegap", "Use E-GapCloser When Enemy In Range >=", 475, 375, 1300));
                 Combo.Add(new MenuBool("usersmart", "Use Smart R"));
                 Combo.Add(new MenuSlider("userhp", "When Enemy Hp <= %", 70, 0, 100));
                 Combo.Add(new MenuSlider("userhit", "Or When Kocked Up Enemy >=", 2, 0, 5));
@@ -77,7 +76,7 @@
             var LastHit = new Menu("lasthit", "Last Hit");
             {
                 LastHit.Add(new MenuBool("useq", "Use Q To Last Hit"));
-                LastHit.Add(new MenuBool("useq2", "Use Tornade Q To Last Hit"));
+                LastHit.Add(new MenuBool("useq2", "Use Tornado Q To Last Hit"));
                 LastHit.Add(new MenuBool("usee", "Use E To Last Hit"));
             }
             Menu.Add(LastHit);
@@ -102,7 +101,6 @@
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
                 Drawings.Add(new MenuBool("drawq2", "Draw Tornado Q"));
                 Drawings.Add(new MenuBool("drawe", "Draw E"));
-                Drawings.Add(new MenuBool("drawegap", "Draw E GapClosing Range"));
                 Drawings.Add(new MenuBool("drawr", "Draw R"));
                 Drawings.Add(new MenuBool("drawdmg", "Draw DMG"));
             }
@@ -217,30 +215,36 @@
         }
         private void Killsteal()
         {
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
+
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                var QPrediction = Q.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(besttarget);
                 }
             }
+
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W")
+            {
+                var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q.Range))
+                {
+                    Q2.Cast(besttarget);
+                }
+            }
+
             if (Q.Ready && Menu["killsteal"]["useq2"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                var Q2Prediction = Q2.GetPrediction(besttarget);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q2.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q3.Range))
                 {
-                    if (Q2Prediction.HitChance >= HitChance.High)
                     {
-                        Q2.Cast(Q2Prediction.CastPosition);
+                        Q3.Cast(besttarget);
                     }
                 }
             }
+
             if (E.Ready && Menu["killsteal"]["usee"].Enabled)
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Mixed, false);
@@ -249,6 +253,7 @@
                     E.Cast(besttarget);
                 }
             }
+
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Physical, false);
@@ -257,6 +262,7 @@
                     R.Cast();
                 }
             }
+
             if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
             {
                 var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
@@ -288,94 +294,48 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useq"].Enabled;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useEM = Menu["combo"]["useem"].Enabled;
-            bool useEGap = Menu["combo"]["useefgap"].Enabled;
-            float distanceE = Menu["combo"]["useegap"].As<MenuSlider>().Value;
-            bool useSmartR = Menu["combo"]["usersmart"].Enabled;
-            float tRHP = Menu["combo"]["userhp"].As<MenuSlider>().Value;
-            float hitR = Menu["combo"]["userhit"].As<MenuSlider>().Value;
-            bool useR = Menu["combo"]["userauto"].Enabled;
-            float hittR = Menu["combo"]["userautohit"].As<MenuSlider>().Value;
-            float aroundTR = Menu["combo"]["useraround"].As<MenuSlider>().Value;
-            float selfhpR = Menu["combo"]["usermyhp"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
-            var Q2Prediction = Q2.GetPrediction(target);
-
+            var target = GetBestEnemyHeroTargetInRange(Q3.Range);
             if (!target.IsValidTarget())
             {
                 return;
             }
 
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuQW" && !Player.IsDashing())
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+               Q.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(375) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
+            {
+                Q2.Cast(target);
+            }
+
+            bool useQ2 = Menu["combo"]["useq"].Enabled;
+            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+            {
+                Q3.Cast(target);
+            }
+            if (Q.Ready && target.IsValidTarget(375) && useQ2 && Player.IsDashing())
             {
                 Q.Cast();
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {
-                if (Q2Prediction.HitChance >= HitChance.Medium)
-                {
-                    Q2.Cast(Q2Prediction.CastPosition);
-                }
+                E.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(375) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
-            {
-                Q2.Cast();
-            }
-            if (E.Ready && target.IsValidTarget(E.Range))
-            {
-                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
-                {
-                    if (useE && !target.HasBuff("YasuoDashWrapper"))
-                    {
-                        E.Cast(target);
-                    }
-                    else if (useE && target.HasBuff("YasuoDashWrapper") && minion.Distance(target) <= Q.Range && useEM)
-                    {
-                        E.CastOnUnit(minion);
-                    }
-                }
-            }
-            //if (useEGap && E.Ready && target.IsValidTarget(distanceE))
-            //{
-            //    if (target.Distance(Player) > E.Range)
-            //    {
-            //foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
-            // {
-            //  if (minion.IsValidTarget(E.Range) && minion != null)
-            //{
-            //if (minion.Distance(Player) <= E.Range && minion.Distance(target) <= distanceE && target.Distance(Player) > E.Range)
-            //{
-            //E.CastOnUnit(minion);
-            //}
-            //}
-            //}
-            //}
-            //}
-            if (E.Ready && useEGap && Player.Distance(target) > Player.GetFullAttackRange(target))
-            {
-                var validMinions = GetEnemyLaneMinionsTargetsInRange(E.Range).Where(m => !m.HasBuff("YasuoDashWrapper"));
-                foreach (var minion in validMinions)
-                {
-                    var distanceToMinionAfterDash = E.Range - Player.Distance(minion);
-                    if (Player.ServerPosition.Extend(minion.ServerPosition, distanceToMinionAfterDash).Distance(target) < Player.Distance(target))
-                    {
-                        E.CastOnUnit(minion);
-                    }
-                }
-            }
+
             if (R.Ready && target.IsValidTarget(R.Range))
             {
+                bool useSmartR = Menu["combo"]["usersmart"].Enabled;
+                float tRHP = Menu["combo"]["userhp"].As<MenuSlider>().Value;
+                float hitR = Menu["combo"]["userhit"].As<MenuSlider>().Value;
+
+                bool useR = Menu["combo"]["userauto"].Enabled;
+                float hittR = Menu["combo"]["userautohit"].As<MenuSlider>().Value;
+                float aroundTR = Menu["combo"]["useraround"].As<MenuSlider>().Value;
+                float selfhpR = Menu["combo"]["usermyhp"].As<MenuSlider>().Value;
                 if (useSmartR)
                 {
                     var KockedUp = GameObjects.EnemyHeroes
@@ -383,7 +343,7 @@
                     .Where(x => x.HasBuffOfType(BuffType.Knockback) || x.HasBuffOfType(BuffType.Knockup));
 
                     var enemies = KockedUp as IList<Obj_AI_Hero> ?? KockedUp.ToList();
-                    if (enemies.Count >= hittR)
+                    if (enemies.Count >= hitR)
                     {
                         R.CastOnUnit(enemies.FirstOrDefault());
                     }
@@ -416,36 +376,30 @@
         }
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["harass"]["useq"].Enabled;
-            bool useQ2 = Menu["harass"]["useq2"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
-            var Q2Prediction = Q2.GetPrediction(target);
+            var target = GetBestEnemyHeroTargetInRange(Q3.Range);
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
+
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+                Q.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(375) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
+            {
+                Q2.Cast(target);
+            }
+
+            bool useQ2 = Menu["harass"]["useq2"].Enabled;
+            if (Q.Ready && target.IsValidTarget(375) && useQ || useQ2 && Player.IsDashing())
             {
                 Q.Cast();
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
             {
-                if (Q2Prediction.HitChance >= HitChance.Medium)
-                {
-                    Q2.Cast(Q2Prediction.CastPosition);
-                }
-            }
-            if (Q.Ready && target.IsValidTarget(375) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
-            {
-                Q2.Cast();
+                Q3.Cast(target);
             }
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
@@ -459,84 +413,77 @@
         }
         private void OnLaneClear()
         {
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q2.Range))
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q3.Range))
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
-                var QPrediction = Q.GetPrediction(minion);
-                var Q2Prediction = Q2.GetPrediction(minion);
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
                 if (Q.Ready)
                 {
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
+
+                    bool useQ = Menu["laneclear"]["useq"].Enabled;
+                    bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
                     {
-                        if (QPrediction.HitChance >= HitChance.High)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
+                        Q.Cast(minion);
                     }
-                    else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+                    if (useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
                     {
-                        if (Q2Prediction.HitChance >= HitChance.Medium)
-                        {
-                            Q2.Cast(Q2Prediction.CastPosition);
-                        }
+                        Q2.Cast(minion);
                     }
-                    else if (useQ2 && minion.IsValidTarget(375) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && Player.IsDashing())
+                    else if (useQ2 && minion.IsValidTarget(Q3.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
                     {
-                        Q2.Cast();
+                        Q3.Cast(minion);
+                    }
+                    else if (useQ2 || useQ && minion.IsValidTarget(375) && Player.IsDashing())
+                    {
+                        Q.Cast();
                     }
                     else if (Menu["lasthit"]["useq"].Enabled && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
                     {
-                        if (QPrediction.HitChance >= HitChance.High)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
+                        Q.Cast(minion);
                     }
                 }
+
+                bool useE = Menu["laneclear"]["usee"].Enabled;
                 if (E.Ready && useE && minion.IsValidTarget(E.Range))
                 {
-                    E.CastOnUnit(minion);
+                    E.Cast(minion);
                 }
             }
         }
         private void OnLastHit()
         {
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q2.Range))
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q3.Range))
             {
-                bool useQ = Menu["lasthit"]["useq"].Enabled;
-                bool useQ2 = Menu["lasthit"]["useq2"].Enabled;
-                bool useE = Menu["lasthit"]["usee"].Enabled;
-                var QPrediction = Q.GetPrediction(minion);
-                var Q2Prediction = Q2.GetPrediction(minion);
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
                 if (Q.Ready)
                 {
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+
+                    bool useQ = Menu["lasthit"]["useq"].Enabled;
+                    bool useQ2 = Menu["lasthit"]["useq2"].Enabled;
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.IsDashing())
                     {
-                        if (QPrediction.HitChance >= HitChance.High)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
+                        Q.Cast(minion);
                     }
-                    else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.IsDashing())
                     {
-                        if (Q2Prediction.HitChance >= HitChance.Medium)
-                        {
-                            Q2.Cast(QPrediction.CastPosition);
-                        }
+                        Q2.Cast(minion);
+                    }
+                    else if (useQ2 && minion.IsValidTarget(Q3.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing() && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                    {
+                        Q3.Cast(minion);
                     }
                 }
+
+                bool useE = Menu["lasthit"]["usee"].Enabled;
                 if (E.Ready && useE && minion.IsValidTarget(E.Range) && Player.GetSpellDamage(minion, SpellSlot.E) >= minion.Health)
                 {
-                    E.CastOnUnit(minion);
+                    E.Cast(minion);
                 }
             }
         }
@@ -551,37 +498,32 @@
         }
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q2.Range)).ToList())
+            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(Q3.Range)).ToList())
             {
-                bool useQ = Menu["jungleclear"]["useq"].Enabled;
-                bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
-                bool useE = Menu["jungleclear"]["usee"].Enabled;
-                var QPrediction = Q.GetPrediction(minion);
-                var Q2Prediction = Q2.GetPrediction(minion);
+                
                 if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
                 {
                     return;
                 }
                 if (Q.Ready)
                 {
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W")
+
+                    bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                    bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.IsDashing())
                     {
-                        if (QPrediction.HitChance >= HitChance.High)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
+                        Q.Cast(minion);
                     }
                     else if (useQ2 && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
                     {
-                        if (Q2Prediction.HitChance >= HitChance.Medium)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
+                        Q3.Cast(minion);
                     }
                 }
+
+                bool useE = Menu["jungleclear"]["usee"].Enabled;
                 if (E.Ready && useE && minion.IsValidTarget(E.Range))
                 {
-                    E.CastOnUnit(minion);
+                    E.Cast(minion);
                 }
             }
         }

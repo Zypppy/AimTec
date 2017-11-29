@@ -212,7 +212,7 @@
         private void Killsteal()
         {
 
-            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW")
+            if (Q.Ready && Menu["killsteal"]["useq"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q.Range))
@@ -297,7 +297,7 @@
             }
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuQW" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ" && !Player.IsDashing())
             {
                Q.Cast(target);
             }
@@ -379,7 +379,7 @@
             }
 
             bool useQ = Menu["harass"]["useq"].Enabled;
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ" && !Player.IsDashing())
             {
                 Q.Cast(target);
             }
@@ -420,7 +420,7 @@
 
                     bool useQ = Menu["laneclear"]["useq"].Enabled;
                     bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ" && !Player.IsDashing())
                     {
                         Q.Cast(minion);
                     }
@@ -462,7 +462,7 @@
 
                     bool useQ = Menu["lasthit"]["useq"].Enabled;
                     bool useQ2 = Menu["lasthit"]["useq2"].Enabled;
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.IsDashing())
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.IsDashing())
                     {
                         Q.Cast(minion);
                     }

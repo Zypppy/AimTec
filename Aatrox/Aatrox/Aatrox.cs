@@ -24,22 +24,19 @@
         public static Menu Menu = new Menu("Aatrox by Zypppy", "Aatrox by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, Q2, W, E, R, Flash, Ignite;
+        public static Spell Q, Q2, W, E, R, Ignite;
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 650);
-            Q2 = new Spell(SpellSlot.Q, 650);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 1075);
-            R = new Spell(SpellSlot.R, 550);
-            Q.SetSkillshot(0.6f, 250, 2000, false, SkillshotType.Circle);
-            Q2.SetSkillshot(0.6f, 150, 2000, false, SkillshotType.Circle);
-            E.SetSkillshot(0.25f, 40, 1254, false, SkillshotType.Line);
-            if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
-                Flash = new Spell(SpellSlot.Summoner1, 425);
-            if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerFlash")
-                Flash = new Spell(SpellSlot.Summoner2, 425);
+            Q = new Spell(SpellSlot.Q, 650f); //AatroxQ
+            Q.SetSkillshot(0.6f, 270f, 2000f, false, SkillshotType.Circle);
+            Q2 = new Spell(SpellSlot.Q, 650f); //AatroxQ
+            Q2.SetSkillshot(0.6f, 150f, 2000f, false, SkillshotType.Circle);
+            W = new Spell(SpellSlot.W); //AatroxW AatroxW2
+            E = new Spell(SpellSlot.E, 1075f); //AatroxE
+            E.SetSkillshot(0.5f, 40f, 1200f, false, SkillshotType.Line);
+            R = new Spell(SpellSlot.R, 550f); // AatroxR
+           
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -51,8 +48,8 @@
             Orbwalker.Attach(Menu);
             var ComboMenu = new Menu("combo", "Combo");
             {
-                ComboMenu.Add(new MenuBool("useq", "Use Outer Q"));
-                ComboMenu.Add(new MenuBool("useq2", "Use Inner Q"));
+                ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuList("qco", "Q Combo Options", new[] { "Outer Q", "Inner Q" }, 1));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuSlider("whp", "Switch To Heal if Hp <", 60, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
@@ -63,8 +60,8 @@
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
             {
-                HarassMenu.Add(new MenuBool("useq", "Use Outer Q"));
-                HarassMenu.Add(new MenuBool("useq2", "Use Inner Q"));
+                HarassMenu.Add(new MenuBool("useq", "Use Q"));
+                HarassMenu.Add(new MenuList("qho", "Q Harass Options", new[] { "Outer Q", "Inner Q" }, 1));
                 HarassMenu.Add(new MenuSlider("qhp", "If HP >=", 60, 0, 100));
                 HarassMenu.Add(new MenuBool("usee", "Use E"));
             }
@@ -72,7 +69,7 @@
             var LaneClearMenu = new Menu("laneclear", "Lane Clear");
             {
                 LaneClearMenu.Add(new MenuBool("useq", "Use Outer Q"));
-                LaneClearMenu.Add(new MenuBool("useq2", "Use Inner Q"));
+                LaneClearMenu.Add(new MenuList("qlo", "Q Lane Clear Options", new[] { "Outer Q", "Inner Q" }, 1));
                 LaneClearMenu.Add(new MenuBool("usew", "Use W"));
                 LaneClearMenu.Add(new MenuSlider("whp", "Switch To Heal If Hp <", 50, 0, 100));
                 LaneClearMenu.Add(new MenuBool("usee", "Use E"));
@@ -81,7 +78,7 @@
             var JungleClearMenu = new Menu("jungleclear", "Jungle Clear");
             {
                 JungleClearMenu.Add(new MenuBool("useq", "Use Q"));
-                JungleClearMenu.Add(new MenuBool("useq2", "Use Inner Q"));
+                JungleClearMenu.Add(new MenuList("qjo", "Q Jungle Clear Options", new[] { "Outer Q", "Inner Q" }, 1));
                 JungleClearMenu.Add(new MenuBool("usew", "Use W"));
                 JungleClearMenu.Add(new MenuSlider("whp", "Switch To Heal If Hp <", 50, 0, 100));
                 JungleClearMenu.Add(new MenuBool("usee", "Use E"));
@@ -209,10 +206,11 @@
             }
             if (Menu["flee"]["key"].Enabled)
             {
-               Flee();
+                Flee();
             }
             Killsteal();
         }
+
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
         {
@@ -231,36 +229,29 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                var QPrediction = Q2.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q2.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q2.Cast(QPrediction.CastPosition);
-                    }
+                    Q2.Cast(besttarget);
                 }
             }
             if (E.Ready && Menu["killsteal"]["usee"].Enabled)
             {
                 var besttarget = GetBestKillableHero(E, DamageType.Physical, false);
-                var EPrediction = E.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.E) >= besttarget.Health && besttarget.IsValidTarget(E.Range))
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
+                    E.Cast(besttarget);
                 }
             }
             if (Menu["killsteal"]["ignite"].Enabled && Ignite != null)
             {
                 var besttarget = GetBestKillableHero(Ignite, DamageType.True, false);
-                if (besttarget != null && IgniteDamages-100 >= besttarget.Health && besttarget.IsValidTarget(Ignite.Range))
+                if (besttarget != null && IgniteDamages - 100 >= besttarget.Health && besttarget.IsValidTarget(Ignite.Range))
                 {
                     Ignite.CastOnUnit(besttarget);
                 }
             }
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -281,54 +272,62 @@
             }
             return null;
         }
+
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useq2"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            float hpW = Menu["combo"]["whp"].As<MenuSlider>().Value;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float thpR = Menu["combo"]["rhp"].As<MenuSlider>().Value;
-            float thR = Menu["combo"]["rce"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
-            var Q2Prediction = Q2.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
-
+            
+           
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ)
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (QPrediction.HitChance >= HitChance.Medium)
+                switch (Menu["combo"]["qco"].As<MenuSlider>().Value)
                 {
-                    Q.Cast(QPrediction.CastPosition);
+                    case 0:
+                        Q.Cast(target);
+                        break;
+                    case 1:
+                        Q2.Cast(target);
+                        break;
+                } 
+
+            }
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            float hpW = Menu["combo"]["whp"].As<MenuSlider>().Value;
+            if (W.Ready && useW && target.IsValidTarget(500))
+            {
+                switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                {
+                    case 1:
+                        if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
+                        {
+                            W.Cast();
+                        }
+                        break;
+                    case 2:
+                        if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
+                        {
+                            W.Cast();
+                        }
+                        break;
                 }
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2)
-            {
-                if (Q2Prediction.HitChance >= HitChance.Medium)
-                {
-                    Q2.Cast(Q2Prediction.CastPosition);
-                }
-            }
-            if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
-            {
-                W.Cast();
-            }
-            if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
-            {
-                W.Cast();
-            }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
             if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {
-                if (EPrediction.HitChance >= HitChance.High)
-                {
-                    E.Cast(EPrediction.CastPosition);
-                }
+                E.Cast(target);
             }
+
+            bool useR = Menu["combo"]["user"].Enabled;
+            float thpR = Menu["combo"]["rhp"].As<MenuSlider>().Value;
+            float thR = Menu["combo"]["rce"].As<MenuSlider>().Value;
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= thR || target.HealthPercent() < thpR)
             {
                 R.Cast();
@@ -337,92 +336,92 @@
         private void OnHarass()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
-            bool useQ = Menu["harass"]["useq"].Enabled;
-            bool useQ2 = Menu["harass"]["useq2"].Enabled;
-            float hpQ = Menu["harass"]["qhp"].As<MenuSlider>().Value;
-            bool useE = Menu["harass"]["usee"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
-            var Q2Prediction = Q2.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.HealthPercent() >= hpQ)
+
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float hpQ = Menu["harass"]["qhp"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && Player.HealthPercent() >= hpQ && target.IsValidTarget(Q.Range))
             {
-                if (QPrediction.HitChance >= HitChance.Medium)
+                switch (Menu["harass"]["qho"].As<MenuSlider>().Value)
                 {
-                    Q.Cast(QPrediction.CastPosition);
+                    case 0:
+                        Q.Cast(target);
+                        break;
+                    case 1:
+                        Q2.Cast(target);
+                        break;
                 }
+
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.HealthPercent() >= hpQ)
-            {
-                if (Q2Prediction.HitChance >= HitChance.Medium)
-                {
-                    Q2.Cast(Q2Prediction.CastPosition);
-                }
-            }
+
+            bool useE = Menu["harass"]["usee"].Enabled;
             if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {
-                if (EPrediction.HitChance >= HitChance.High)
-                {
-                    E.Cast(EPrediction.CastPosition);
-                }
+                E.Cast(target);
             }
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
         }
-
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
         {
             return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
         }
+
         private void OnLaneClear()
         {
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                bool priorityW = Menu["laneclear"]["wpriority"].Enabled;
-                float hpW = Menu["laneclear"]["whp"].As<MenuSlider>().Value;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
-                var QPrediction = Q.GetPrediction(minion);
-                var Q2Prediction = Q2.GetPrediction(minion);
-                var EPrediction = E.GetPrediction(minion);
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
-                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ)
+
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.Medium)
+                    switch (Menu["laneclear"]["qlo"].As<MenuSlider>().Value)
                     {
-                        Q.Cast(QPrediction.CastPosition);
+                        case 0:
+                            Q.Cast(minion);
+                            break;
+                        case 1:
+                            Q2.Cast(minion);
+                            break;
+                    }
+
+                }
+
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float hpW = Menu["laneclear"]["whp"].As<MenuSlider>().Value;
+                if (W.Ready && useW && minion.IsValidTarget(500))
+                {
+                    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                    {
+                        case 1:
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
+                            {
+                                W.Cast();
+                            }
+                            break;
+                        case 2:
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
+                            {
+                                W.Cast();
+                            }
+                            break;
                     }
                 }
-                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2)
-                {
-                    if (Q2Prediction.HitChance >= HitChance.Medium)
-                    {
-                        Q2.Cast(Q2Prediction.CastPosition);
-                    }
-                }
-                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
-                {
-                    W.Cast();
-                }
-                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
-                {
-                    W.Cast();
-                }
+
+                bool useE = Menu["laneclear"]["usee"].Enabled;
                 if (E.Ready && minion.IsValidTarget(E.Range) && useE)
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
+                    E.Cast(minion);
                 }
 
             }
@@ -436,50 +435,57 @@
         {
             return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
+
+    
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
-                bool useQ = Menu["jungleclear"]["useq"].Enabled;
-                bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
-                bool useW = Menu["jungleclear"]["usew"].Enabled;
-                float hpW = Menu["jungleclear"]["whp"].As<MenuSlider>().Value;
-                bool useE = Menu["jungleclear"]["usee"].Enabled;
-                var QPrediction = Q.GetPrediction(minion);
-                var Q2Prediction = Q2.GetPrediction(minion);
-                var EPrediction = E.GetPrediction(minion);
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
-                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ)
+
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                if (Q.Ready && useQ && jungle.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.Medium)
+                    switch (Menu["jungleclear"]["qjo"].As<MenuSlider>().Value)
                     {
-                        Q.Cast(QPrediction.CastPosition);
+                        case 0:
+                            Q.Cast(jungle);
+                            break;
+                        case 1:
+                            Q2.Cast(jungle);
+                            break;
+                    }
+
+                }
+
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float hpW = Menu["jungleclear"]["whp"].As<MenuSlider>().Value;
+                if (W.Ready && useW && jungle.IsValidTarget(500))
+                {
+                    switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
+                    {
+                        case 1:
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
+                            {
+                                W.Cast();
+                            }
+                            break;
+                        case 2:
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
+                            {
+                                W.Cast();
+                            }
+                            break;
                     }
                 }
-                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2)
+
+                bool useE = Menu["jungleclear"]["usee"].Enabled;
+                if (E.Ready && jungle.IsValidTarget(E.Range) && useE)
                 {
-                    if (Q2Prediction.HitChance >= HitChance.Medium)
-                    {
-                        Q2.Cast(Q2Prediction.CastPosition);
-                    }
-                }
-                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
-                {
-                    W.Cast();
-                }
-                if (W.Ready && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
-                {
-                    W.Cast();
-                }
-                if (E.Ready && minion.IsValidTarget(E.Range) && useE)
-                {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
+                    E.Cast(jungle);
                 }
             }
         }
@@ -487,20 +493,17 @@
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
             Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
+
             bool useQ = Menu["flee"]["useq"].Enabled;
-            bool useE = Menu["flee"]["usee"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
             if (useQ && Q.Ready)
             {
                 Q.Cast(Game.CursorPos);
             }
+
+            bool useE = Menu["flee"]["usee"].Enabled;
             if (useE && E.Ready && target.IsValidTarget(E.Range))
             {
-                if (EPrediction.HitChance >= HitChance.High)
-                {
-                    E.Cast(EPrediction.CastPosition);
-                }
+                E.Cast(target);
             }
         }
     }

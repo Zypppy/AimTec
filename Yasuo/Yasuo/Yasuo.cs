@@ -402,7 +402,7 @@ namespace Yasuo
                 if (Q.Ready)
                 {
                     Console.WriteLine(Player.SpellBook.GetSpell(SpellSlot.Q).Name);
-                    Console.WriteLine(Player.SpellBook.GetSpell(SpellSlot.Q).SpellData);
+                    Console.WriteLine(Player.SpellBook.GetSpell(SpellSlot.Q).SpellData.AISpeed);
                 }
             }
         }

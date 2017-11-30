@@ -60,8 +60,6 @@
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
             {
-                HarassMenu.Add(new MenuBool("useq", "Use Q"));
-                HarassMenu.Add(new MenuSlider("qhp", "If HP >=", 60, 0, 100));
                 HarassMenu.Add(new MenuBool("usee", "Use E"));
             }
             Menu.Add(HarassMenu);
@@ -339,7 +337,7 @@
             {
                 return;
             }
-            
+
             bool useE = Menu["harass"]["usee"].Enabled;
             if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {

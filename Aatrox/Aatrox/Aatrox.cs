@@ -61,7 +61,6 @@
             var HarassMenu = new Menu("harass", "Harass");
             {
                 HarassMenu.Add(new MenuBool("useq", "Use Q"));
-                // HarassMenu.Add(new MenuList("qho", "Q Harass Options", new[] { "Outer Q", "Inner Q" }, 1));
                 HarassMenu.Add(new MenuSlider("qhp", "If HP >=", 60, 0, 100));
                 HarassMenu.Add(new MenuBool("usee", "Use E"));
             }
@@ -340,14 +339,7 @@
             {
                 return;
             }
-
-            bool useQ = Menu["harass"]["useq"].Enabled;
-            float hpQ = Menu["harass"]["qhp"].As<MenuList>().Value;
-            if (Q.Ready && useQ && Player.HealthPercent() >= hpQ && target.IsValidTarget(Q.Range))
-            {
-                Q2.Cast(target);
-            }
-
+            
             bool useE = Menu["harass"]["usee"].Enabled;
             if (E.Ready && target.IsValidTarget(E.Range) && useE)
             {

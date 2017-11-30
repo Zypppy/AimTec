@@ -178,7 +178,6 @@
                        Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
 
                    });
-
             }
         }
         private void Game_OnUpdate()
@@ -213,6 +212,7 @@
         {
             return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
         }
+
         private void Killsteal()
         {
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
@@ -273,8 +273,8 @@
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
-            
-           
+
+
             if (!target.IsValidTarget())
             {
                 return;
@@ -291,7 +291,7 @@
                     case 1:
                         Q2.Cast(target);
                         break;
-                } 
+                }
 
             }
 
@@ -330,6 +330,7 @@
                 R.Cast();
             }
         }
+
         private void OnHarass()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);
@@ -407,6 +408,7 @@
 
             }
         }
+
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
             return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
@@ -417,7 +419,6 @@
             return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
 
-    
         private void OnJungleClear()
         {
             foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
@@ -470,6 +471,7 @@
                 }
             }
         }
+
         private void Flee()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);

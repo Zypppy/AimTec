@@ -404,13 +404,13 @@
                     switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                     {
                         case 1:
-                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 || Player.SpellBook.GetSpell(SpellSlot.W).Name == "AatroxW" && Player.HealthPercent() > hpW)
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 1 && Player.HealthPercent() > hpW)
                             {
                                 W.Cast();
                             }
                             break;
                         case 2:
-                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 || Player.SpellBook.GetSpell(SpellSlot.W).Name == "AatroxW2" && Player.HealthPercent() < hpW)
+                            if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2 && Player.HealthPercent() < hpW)
                             {
                                 W.Cast();
                             }

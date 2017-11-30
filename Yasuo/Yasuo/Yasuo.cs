@@ -100,8 +100,8 @@ namespace Yasuo
             Menu.Add(Killsteal);
             var Debug = new Menu("de", "Debug");
             {
-                Debug.Add(new MenuBool("dbe", "Debug E", false));
                 Debug.Add(new MenuBool("dbq", "Debug Q", false));
+                Debug.Add(new MenuBool("dbe", "Debug E", false));
             }
             Menu.Add(Debug);
             var Drawings = new Menu("drawings", "Drawings");

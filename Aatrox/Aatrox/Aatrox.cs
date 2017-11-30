@@ -286,7 +286,7 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                switch (Menu["combo"]["qco"].As<MenuSlider>().Value)
+                switch (Menu["combo"]["qco"].As<MenuList>().Value)
                 {
                     case 0:
                         Q.Cast(target);

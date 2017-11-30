@@ -1,4 +1,6 @@
-﻿namespace Yasuo
+﻿using System.Runtime.CompilerServices;
+
+namespace Yasuo
 {
     using System;
     using System.Collections.Generic;
@@ -208,6 +210,7 @@
                     break;
             }
             Killsteal();
+            Debug();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
@@ -294,7 +297,7 @@
             }
             return null;
         }
-        
+
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(Q3.Range);
@@ -307,25 +310,13 @@
             if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
             {
                 Q.Cast(target);
-                
+
             }
             if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
             {
                 Q2.Cast(target);
             }
 
-            if (Menu["de"]["dbe"].Enabled)
-            {
-                if (Player.IsDashing())
-                {
-                    Console.WriteLine("Dashing");
-                }
-                else if (!Player.IsDashing())
-                {
-                    Console.WriteLine("Not Dashing");
-                }
-            }
-            
             bool useQ2 = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
             {
@@ -387,6 +378,21 @@
                     {
                         R.Cast();
                     }
+                }
+            }
+        }
+
+        private void Debug()
+        {
+            if (Menu["de"]["dbe"].Enabled)
+            {
+                if (Player.IsDashing())
+                {
+                    Console.WriteLine("Dashing");
+                }
+                else if (!Player.IsDashing())
+                {
+                    Console.WriteLine("Not Dashing");
                 }
             }
         }

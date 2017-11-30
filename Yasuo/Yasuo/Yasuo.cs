@@ -101,6 +101,7 @@ namespace Yasuo
             var Debug = new Menu("de", "Debug");
             {
                 Debug.Add(new MenuBool("dbe", "Debug E", false));
+                Debug.Add(new MenuBool("dbq", "Debug Q", false));
             }
             Menu.Add(Debug);
             var Drawings = new Menu("drawings", "Drawings");
@@ -394,6 +395,13 @@ namespace Yasuo
                 else if (!Player.IsDashing())
                 {
                     Console.WriteLine("Not Dashing");
+                }
+            }
+            if (Menu["de"]["dbq"].Enabled)
+            {
+                if (Q.Ready)
+                {
+                    Console.WriteLine(Player.SpellBook.GetSpell(SpellSlot.Q).Name);
                 }
             }
         }

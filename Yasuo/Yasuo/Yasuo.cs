@@ -235,7 +235,7 @@
             if (Q.Ready && Menu["killsteal"]["useq2"].Enabled && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W")
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Physical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.IsDashing() && besttarget.IsValidTarget(Q3.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && !Player.HasBuff("YasuoDashScalar") && besttarget.IsValidTarget(Q3.Range))
                 {
                     {
                         Q3.Cast(besttarget);
@@ -300,17 +300,17 @@
             }
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.HasBuff("YasuoDashScalar"))
             {
                Q.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.HasBuff("YasuoDashScalar"))
             {
                 Q2.Cast(target);
             }
 
             bool useQ2 = Menu["combo"]["useq"].Enabled;
-            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
+            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("YasuoDashScalar"))
             {
                 Q3.Cast(target);
             }
@@ -382,21 +382,21 @@
             }
 
             bool useQ = Menu["harass"]["useq"].Enabled;
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.HasBuff("yasuodashscalar"))
+            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.HasBuff("YasuoDashScalar"))
             {
                 Q.Cast(target);
             }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.HasBuff("yasuodashscalar"))
+            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.HasBuff("YasuoDashScalar"))
             {
                 Q2.Cast(target);
             }
 
             bool useQ2 = Menu["harass"]["useq2"].Enabled;
-            if (Q.Ready && target.IsValidTarget(375) && useQ || useQ2 && Player.HasBuff("yasuodashscalar"))
+            if (Q.Ready && target.IsValidTarget(375) && useQ || useQ2 && Player.HasBuff("YasuoDashScalar"))
             {
                 Q.Cast();
             }
-            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("yasuodashscalar"))
+            if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("YasuoDashScalar"))
             {
                 Q3.Cast(target);
             }
@@ -422,19 +422,19 @@
 
                     bool useQ = Menu["laneclear"]["useq"].Enabled;
                     bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.HasBuff("yasuodashscalar"))
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q.CastOnUnit(minion);
                     }
-                    if (useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.HasBuff("yasuodashscalar"))
+                    if (useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q2.Cast(minion);
                     }
-                    else if (useQ2 && minion.IsValidTarget(Q3.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("yasuodashscalar"))
+                    else if (useQ2 && minion.IsValidTarget(Q3.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q3.Cast(minion);
                     }
-                    else if (useQ2 || useQ && minion.IsValidTarget(375) && Player.HasBuff("yasuodashscalar"))
+                    else if (useQ2 || useQ && minion.IsValidTarget(375) && Player.HasBuff("YasuoDashScalar"))
                     {
                         Q.Cast();
                     }
@@ -464,11 +464,11 @@
 
                     bool useQ = Menu["lasthit"]["useq"].Enabled;
                     bool useQ2 = Menu["lasthit"]["useq2"].Enabled;
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.HasBuff("yasuodashscalar"))
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q.Cast(minion);
                     }
-                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.HasBuff("yasuodashscalar"))
+                    if (useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q2.Cast(minion);
                     }
@@ -510,11 +510,11 @@
 
                     bool useQ = Menu["jungleclear"]["useq"].Enabled;
                     bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
-                    if (useQ && jungle.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.HasBuff("yasuodashscalar"))
+                    if (useQ && jungle.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "YasuoQ3W" && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q.Cast(jungle);
                     }
-                    else if (useQ2 && jungle.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("yasuodashscalar"))
+                    else if (useQ2 && jungle.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.HasBuff("YasuoDashScalar"))
                     {
                         Q3.Cast(jungle);
                     }

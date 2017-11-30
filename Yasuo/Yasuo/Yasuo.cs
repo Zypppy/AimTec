@@ -96,6 +96,10 @@
                 Killsteal.Add(new MenuBool("ignite", "Use Ignite To Killsteal"));
             }
             Menu.Add(Killsteal);
+            var Debug = new Menu("de", "Debug");
+            {
+                Debug.Add(new MenuBool("dbe", "Debug E"));
+            }
             var Drawings = new Menu("drawings", "Drawings");
             {
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));
@@ -310,11 +314,18 @@
                 Q2.Cast(target);
             }
 
-            if (Player.IsDashing())
+            if (Menu["de"]["dbe"].Enabled)
             {
-                Console.WriteLine("Dashing");
+                if (Player.IsDashing())
+                {
+                    Console.WriteLine("Dashing");
+                }
+                else if (!Player.IsDashing())
+                {
+                    Console.WriteLine("Not Dashing");
+                }
             }
-
+            
             bool useQ2 = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && target.IsValidTarget(Q3.Range) && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ3W" && !Player.IsDashing())
             {

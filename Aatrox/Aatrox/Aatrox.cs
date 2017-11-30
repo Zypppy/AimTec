@@ -342,7 +342,7 @@
             }
 
             bool useQ = Menu["harass"]["useq"].Enabled;
-            float hpQ = Menu["harass"]["qhp"].As<MenuSlider>().Value;
+            float hpQ = Menu["harass"]["qhp"].As<MenuList>().Value;
             if (Q.Ready && useQ && Player.HealthPercent() >= hpQ && target.IsValidTarget(Q.Range))
             {
                 switch (Menu["harass"]["qho"].As<MenuSlider>().Value)
@@ -385,7 +385,7 @@
                 bool useQ = Menu["laneclear"]["useq"].Enabled;
                 if (Q.Ready && useQ && minion.IsValidTarget(Q.Range))
                 {
-                    switch (Menu["laneclear"]["qlo"].As<MenuSlider>().Value)
+                    switch (Menu["laneclear"]["qlo"].As<MenuList>().Value)
                     {
                         case 0:
                             Q.Cast(minion);
@@ -449,7 +449,7 @@
                 bool useQ = Menu["jungleclear"]["useq"].Enabled;
                 if (Q.Ready && useQ && jungle.IsValidTarget(Q.Range))
                 {
-                    switch (Menu["jungleclear"]["qjo"].As<MenuSlider>().Value)
+                    switch (Menu["jungleclear"]["qjo"].As<MenuList>().Value)
                     {
                         case 0:
                             Q.Cast(jungle);

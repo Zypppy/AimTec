@@ -102,6 +102,7 @@ namespace Yasuo
             {
                 Debug.Add(new MenuBool("dbe", "Debug E"));
             }
+            Menu.Add(Debug);
             var Drawings = new Menu("drawings", "Drawings");
             {
                 Drawings.Add(new MenuBool("drawq", "Draw Q"));

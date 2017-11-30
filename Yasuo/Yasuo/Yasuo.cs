@@ -290,7 +290,7 @@
             }
             return null;
         }
-
+        
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(Q3.Range);
@@ -302,11 +302,17 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQW" && !Player.IsDashing())
             {
-               Q.Cast(target);
+                Q.Cast(target);
+                
             }
             if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "YasuoQ2W" && !Player.IsDashing())
             {
                 Q2.Cast(target);
+            }
+
+            if (Player.IsDashing())
+            {
+                Console.WriteLine("Dashing");
             }
 
             bool useQ2 = Menu["combo"]["useq"].Enabled;

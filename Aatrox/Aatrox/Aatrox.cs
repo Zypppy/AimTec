@@ -180,6 +180,7 @@
                    });
             }
         }
+        
         private void Game_OnUpdate()
         {
             if (Player.IsDead || MenuGUI.IsChatOpen())
@@ -248,7 +249,7 @@
                 }
             }
         }
-
+        
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);

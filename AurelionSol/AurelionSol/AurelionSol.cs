@@ -169,7 +169,6 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    WLock();
                     OnCombo();
                     break;
                 case OrbwalkingMode.Mixed:
@@ -183,6 +182,7 @@
                 ManualR();
             }
             Killsteal();
+            WLock();
         }
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)

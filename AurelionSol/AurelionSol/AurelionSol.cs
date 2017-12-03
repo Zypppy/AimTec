@@ -309,22 +309,23 @@
                         break;
                 }
             }
+            
+            bool AA = Menu["misc"]["aa"].Enabled;
+            if (AA)
+            {
+                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
+                {
+                    Orbwalker.AttackingEnabled = false;
+                }
+                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "aurelionSolQ")
+                {
+                    Orbwalker.AttackingEnabled = true;
+                }
+            }
 
             bool useW = Menu["combo"]["usew"].Enabled;
-            bool AA = Menu["misc"]["aa"].Enabled;
             if (W.Ready && useW)
             {
-                if (AA)
-                {
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
-                    {
-                        Orbwalker.AttackingEnabled = false;
-                    }
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name != "AurelionSolWToggleOff")
-                    {
-                        Orbwalker.AttackingEnabled = true;
-                    }
-                }
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:

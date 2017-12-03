@@ -39,7 +39,7 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock"));
+                ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock", false));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
@@ -53,10 +53,11 @@
                 HarassMenu.Add(new MenuSlider("manaw", "Minimum Mana To Use W", 70, 0, 100));
             }
             Menu.Add(HarassMenu);
-            //var MiscMenu = new Menu("misc", "Misc");
-            //{
-            //    MiscMenu.Add(new MenuBool("aa", "Dusable AA When W Enabled"));
-            //}
+            var MiscMenu = new Menu("misc", "Misc");
+            {
+                MiscMenu.Add(new MenuBool("aa", "Dusable AA Combo When W Enabled"));
+                MiscMenu.Add(new MenuBool("aa2", "Dusable AA Harass When W Enabled"));
+            }
             //Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("killsteal", "Killsteal");
             {
@@ -310,8 +311,20 @@
             }
 
             bool useW = Menu["combo"]["usew"].Enabled;
+            bool AA = Menu["misc"]["aa"].Enabled;
             if (W.Ready && useW)
             {
+                if (AA)
+                {
+                    if (Player.HasBuff("aurelionsolwactive"))
+                    {
+                        Orbwalker.AttackingEnabled = false;
+                    }
+                    if (!Player.HasBuff("aurelionsolwactive"))
+                    {
+                        Orbwalker.AttackingEnabled = true;
+                    }
+                }
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:
@@ -367,9 +380,21 @@
             }
 
             bool useW = Menu["harass"]["usew"].Enabled;
+            bool AA = Menu["misc"]["aa2"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
             if (W.Ready && useW)
             {
+                if (AA)
+                {
+                    if (Player.HasBuff("aurelionsolwactive"))
+                    {
+                        Orbwalker.AttackingEnabled = false;
+                    }
+                    if (!Player.HasBuff("aurelionsolwactive"))
+                    {
+                        Orbwalker.AttackingEnabled = true;
+                    }
+                }
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:

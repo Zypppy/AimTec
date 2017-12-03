@@ -282,10 +282,8 @@
         }
         private void OnCombo()
         {
-            var targetQ = GetBestEnemyHeroTargetInRange(Q.Range);
-            var targetW = GetBestEnemyHeroTargetInRange(W.Range);
-            var targetR = GetBestEnemyHeroTargetInRange(R.Range);
-            if (!targetQ.IsValidTarget() || !targetW.IsValidTarget() || !targetW.IsValidTarget())
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -296,13 +294,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState)
                 {
                     case 1:
-                        if (targetQ.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                        if (target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
                         {
-                            Q.Cast(targetQ);
+                            Q.Cast(target);
                         }
                         break;
                     case 2:
-                        if (missiles != null && targetQ.IsValidTarget(200f, false, false, missiles.Position) &&
+                        if (missiles != null && target.IsValidTarget(200f, false, false, missiles.Position) &&
                             Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                         {
                             Q.Cast();
@@ -317,13 +315,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:
-                        if (targetW.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
+                        if (target.IsValidTarget(W2.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
                         {
                             W2.Cast();
                         }
                         break;
                     case 2:
-                        if (targetW.IsValidTarget(W.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                        if (target.IsValidTarget(W.Range) && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                         {
                             W.Cast();
                         }
@@ -332,17 +330,16 @@
             }
             
             bool useR = Menu["combo"]["user"].Enabled;
-            if (R.Ready && targetR.IsValidTarget(R.Range) && useR && R.CastIfWillHit(targetR,  Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
+            if (R.Ready && target.IsValidTarget(R.Range) && useR && R.CastIfWillHit(target,  Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
             {
-                R.Cast(targetR);
+                R.Cast(target);
             }
         }
         private void OnHarass()
         {
-            var targetQ = GetBestEnemyHeroTargetInRange(Q.Range);
-            var targetW = GetBestEnemyHeroTargetInRange(W.Range);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
 
-            if (!targetQ.IsValidTarget() || !targetW.IsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -354,13 +351,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState)
                 {
                     case 1:
-                        if (targetQ.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                        if (target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ && Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 1)
                         {
-                            Q.Cast(targetQ);
+                            Q.Cast(target);
                         }
                         break;
                     case 2:
-                        if (missiles != null && targetQ.IsValidTarget(200f, false, false, missiles.Position) &&
+                        if (missiles != null && target.IsValidTarget(200f, false, false, missiles.Position) &&
                             Player.SpellBook.GetSpell(SpellSlot.Q).ToggleState == 2)
                         {
                             Q.Cast();
@@ -376,13 +373,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:
-                        if (targetW.IsValidTarget(W2.Range) && Player.ManaPercent() >= manaW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
+                        if (target.IsValidTarget(W2.Range) && Player.ManaPercent() >= manaW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
                         {
                             W2.Cast();
                         }
                         break;
                     case 2:
-                        if (targetW.IsValidTarget(W.Range) || !targetW.IsValidTarget(W2.Range) || Player.ManaPercent() < manaW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                        if (target.IsValidTarget(W.Range) || !target.IsValidTarget(W2.Range) || Player.ManaPercent() < manaW && Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                         {
                             W.Cast();
                         }

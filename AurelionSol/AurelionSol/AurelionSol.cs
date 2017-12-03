@@ -247,11 +247,11 @@
         {
             if (Menu["combo"]["usewlock"].Enabled)
             {
-                if (Player.HasBuff("aurelionsolwactive"))
+                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
                 {
                     Orbwalker.AttackingEnabled = false;
                 }
-                if (!Player.HasBuff("aurelionsolwactive"))
+                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
                 {
                     Orbwalker.AttackingEnabled = true;
                 }
@@ -316,11 +316,11 @@
             {
                 if (AA)
                 {
-                    if (Player.HasBuff("aurelionsolwactive"))
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
                     {
                         Orbwalker.AttackingEnabled = false;
                     }
-                    if (!Player.HasBuff("aurelionsolwactive"))
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
                     {
                         Orbwalker.AttackingEnabled = true;
                     }
@@ -386,11 +386,11 @@
             {
                 if (AA)
                 {
-                    if (Player.HasBuff("aurelionsolwactive"))
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
                     {
                         Orbwalker.AttackingEnabled = false;
                     }
-                    if (!Player.HasBuff("aurelionsolwactive"))
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
                     {
                         Orbwalker.AttackingEnabled = true;
                     }

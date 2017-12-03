@@ -55,10 +55,10 @@
             Menu.Add(HarassMenu);
             var MiscMenu = new Menu("misc", "Misc");
             {
-                MiscMenu.Add(new MenuBool("aa", "Dusable AA Combo When W Enabled"));
-                MiscMenu.Add(new MenuBool("aa2", "Dusable AA Harass When W Enabled"));
+                MiscMenu.Add(new MenuBool("aa", "Dusable AA Combo When W Enabled", false));
+                MiscMenu.Add(new MenuBool("aa2", "Dusable AA Harass When W Enabled", false));
             }
-            //Menu.Add(MiscMenu);
+            Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("killsteal", "Killsteal");
             {
                 KillstealMenu.Add(new MenuBool("RKS", "Use R to Killsteal"));

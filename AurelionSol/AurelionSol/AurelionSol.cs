@@ -55,8 +55,8 @@
             var MiscMenu = new Menu("misc", "Misc");
             {
                 MiscMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock", false));
-                MiscMenu.Add(new MenuBool("aa", "Dusable AA Combo When W Enabled", false));
-                MiscMenu.Add(new MenuBool("aa2", "Dusable AA Harass When W Enabled", false));
+                MiscMenu.Add(new MenuBool("aa", "Disable AA Combo When W Enabled", false));
+                MiscMenu.Add(new MenuBool("aa2", "Disable AA Harass When W Enabled", false));
             }
             Menu.Add(MiscMenu);
             var KillstealMenu = new Menu("killsteal", "Killsteal");

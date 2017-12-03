@@ -39,7 +39,6 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock", false));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "R Minimum Enemeies Hit", 3, 1, 5));
                 ComboMenu.Add(new MenuKeyBind("key", "Manual R Key:", KeyCode.T, KeybindType.Press));
@@ -55,6 +54,7 @@
             Menu.Add(HarassMenu);
             var MiscMenu = new Menu("misc", "Misc");
             {
+                MiscMenu.Add(new MenuBool("usewlock", "Use Outer W Movement Lock", false));
                 MiscMenu.Add(new MenuBool("aa", "Dusable AA Combo When W Enabled", false));
                 MiscMenu.Add(new MenuBool("aa2", "Dusable AA Harass When W Enabled", false));
             }
@@ -245,13 +245,13 @@
         
         private void WLock()
         {
-            if (Menu["combo"]["usewlock"].Enabled)
+            if (Menu["misc"]["usewlock"].Enabled)
             {
-                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
+                if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
                 {
                     Orbwalker.AttackingEnabled = false;
                 }
-                if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
+                if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
                 {
                     Orbwalker.AttackingEnabled = true;
                 }

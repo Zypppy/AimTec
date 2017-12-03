@@ -311,7 +311,7 @@
             }
             
             bool AA = Menu["misc"]["aa"].Enabled;
-            if (AA)
+            if (AA && target.IsValidAutoRange())
             {
                 if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
                 {

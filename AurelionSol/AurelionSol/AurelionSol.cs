@@ -380,22 +380,23 @@
                 }
             }
 
-            bool useW = Menu["harass"]["usew"].Enabled;
             bool AA = Menu["misc"]["aa2"].Enabled;
+            if (AA && target.IsValidAutoRange())
+            {
+                if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 2)
+                {
+                    Orbwalker.AttackingEnabled = false;
+                }
+                if (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState == 0)
+                {
+                    Orbwalker.AttackingEnabled = true;
+                }
+            }
+
+            bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
             if (W.Ready && useW)
             {
-                if (AA)
-                {
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolWToggleOff")
-                    {
-                        Orbwalker.AttackingEnabled = false;
-                    }
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
-                    {
-                        Orbwalker.AttackingEnabled = true;
-                    }
-                }
                 switch (Player.SpellBook.GetSpell(SpellSlot.W).ToggleState)
                 {
                     case 0:

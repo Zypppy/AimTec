@@ -320,7 +320,7 @@
                     {
                         Orbwalker.AttackingEnabled = false;
                     }
-                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name == "AurelionSolW")
+                    if (Player.SpellBook.GetSpell(SpellSlot.W).Name != "AurelionSolWToggleOff")
                     {
                         Orbwalker.AttackingEnabled = true;
                     }

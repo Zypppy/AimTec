@@ -373,9 +373,10 @@
                   return;
                }
                 bool useQ = Menu["lclear"]["useql"].Enabled;
+                float Qhit = Menu["lclear"]["minmq"].As<MenuSlider>().Value;
                 float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
 
-                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range) && Q.CastIfWillHit(minion, Menu["lclear"]["miniq"].As<MenuSlider>().Value -1))
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(Q.Range, false, false, minion.ServerPosition)) >= Qhit)
                 {
                     Q.Cast(minion);
                 }
@@ -406,7 +407,7 @@
                 
                 
 
-                if (useQ && Player.ManaPercent() >= Qmana && jungle.IsValidTarget(Q.Range) && Q.CastIfWillHit(jungle, Menu["lclear"]["miniq"].As<MenuSlider>().Value - 1))
+                if (useQ && Player.ManaPercent() >= Qmana && jungle.IsValidTarget(Q.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(Q.Range, false, false, jungle.ServerPosition)) >= Qhit)
                 {
                     Q.Cast(jungle);
                 }
@@ -414,7 +415,7 @@
                 bool useW = Menu["jclear"]["usewj"].Enabled;
                 float Whit = Menu["jclear"]["minmw"].As<MenuSlider>().Value;
                 float Wmana = Menu["jclear"]["minmanaw"].As<MenuSlider>().Value;
-                if (useW && Player.ManaPercent() >= Wmana && jungle.IsValidTarget(W.Range) && Q.CastIfWillHit(jungle, Menu["lclear"]["miniq"].As<MenuSlider>().Value - 1))
+                if (useW && Player.ManaPercent() >= Wmana && jungle.IsValidTarget(W.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(W.Range, false, false, jungle.ServerPosition)) >= Whit)
                 {
                     W.Cast(jungle);
                 }

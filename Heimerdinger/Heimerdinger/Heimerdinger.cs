@@ -141,17 +141,17 @@
             }
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQR = Menu["combo"]["useqr"].Enabled;
-
             if (Q.Ready && target.IsValidTarget(650) && useQ && !Player.HasBuff("HeimerdingerR"))
             {
                 Q.Cast(Player.Position.Extend(target.Position, +300));
             }
 
+            bool useQR = Menu["combo"]["useqr"].Enabled;
+            float hitQR = Menu["combo"]["useqhit"].As<MenuSlider>().Value;
             if (R.Ready && Q.Ready && useR && useQR && target.IsValidTarget(650))
             {
                 if (Player.HasBuff("HeimerdingerR") &&
-                    Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
+                    Player.CountEnemyHeroesInRange(550) >= hitQR)
                 {
                     Q.Cast(Player.Position.Extend(target.Position, +300));
                 }

@@ -64,7 +64,6 @@ namespace Heimerdinger
                 Drawings.Add(new MenuBool("drawe", "Draw E"));
             }
             Menu.Add(Drawings);
-            Menu.Add(Drawings);
             Menu.Attach();
 
             Render.OnPresent += Render_OnPresent;

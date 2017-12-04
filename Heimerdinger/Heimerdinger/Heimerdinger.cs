@@ -143,23 +143,24 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useQR = Menu["combo"]["useqr"].Enabled;
 
-            if (Q.Ready && target.IsValidTarget(650))
+            if (Q.Ready && target.IsValidTarget(650) && useQ && !Player.HasBuff("HeimerdingerR"))
             {
-                if (useQ && !Player.HasBuff("HeimerdingerR"))
+                Q.Cast(Player.Position.Extend(target.Position, +300));
+            }
+
+            if (R.Ready && Q.Ready && useR && useQR && target.IsValidTarget(650))
+            {
+                if (Player.HasBuff("HeimerdingerR") &&
+                    Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
                 {
                     Q.Cast(Player.Position.Extend(target.Position, +300));
                 }
-                if (R.Ready && useQR && useR && !Player.HasBuff("HeimerdingerR") &&
-                         QR.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
+                else if (!Player.HasBuff("HeimerdingerR"))
                 {
                     R.Cast();
                 }
-                if (useQR && Player.HasBuff("HeimerdingerR"))
-                {
-                    QR.Cast(Player.Position.Extend(target.Position, +300));
-                }
             }
-
+            
             bool useW = Menu["combo"]["usew"].Enabled;
             bool useWR = Menu["combo"]["usewr"].Enabled;
             float useWRHit = Menu["combo"]["usewhit"].As<MenuSlider>().Value;

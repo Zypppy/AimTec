@@ -25,22 +25,22 @@
         public static Menu Menu = new Menu("Heimerdinger by Zypppy", "Heimerdinger by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, W, W2, E, E2, E3, R;
+        public static Spell Q, QR, W, WR, E, ER, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 325);
-            Q.SetSkillshot(0.5f, 40f, 1100f, true, SkillshotType.Line);
-            W = new Spell(SpellSlot.W, 1100);
-            W.SetSkillshot(0.5f, 40f, 3000f, true, SkillshotType.Line);
-            W2 = new Spell(SpellSlot.W, 1100);
-            W2.SetSkillshot(0.5f, 40f, 3000f, true, SkillshotType.Line);
-            E = new Spell(SpellSlot.E, 925);
-            E.SetSkillshot(0.5f, 120f, 1200f, false, SkillshotType.Circle);
-            E2 = new Spell(SpellSlot.E, 1125);
-            E2.SetSkillshot(0.25f + E.Delay, 120f, 1200f, false, SkillshotType.Circle);
-            E3 = new Spell(SpellSlot.E, 1325);
-            E3.SetSkillshot(0.3f + E2.Delay, 120f, 1200f, false, SkillshotType.Circle);
-            R = new Spell(SpellSlot.R, 100);
+            Q = new Spell(SpellSlot.Q, 350f);//HeimerdingerQ
+            Q.SetSkillshot(0.5f, 400f, 1450f, false, SkillshotType.Circle);
+            QR = new Spell(SpellSlot.Q, 350f);
+            QR.SetSkillshot(0.5f, 400f, 1450f, false, SkillshotType.Circle);
+            W = new Spell(SpellSlot.W, 1250f);//HeimerdingerW
+            W.SetSkillshot(0.5f, 100f, 750f, true, SkillshotType.Line);
+            WR = new Spell(SpellSlot.W, 1250f);
+            WR.SetSkillshot(0.5f, 200f, 750f, true, SkillshotType.Line);
+            E = new Spell(SpellSlot.E, 925f);//HeimerdingerE
+            E.SetSkillshot(0.5f, 100f, 1200f, false, SkillshotType.Circle);
+            ER = new Spell(SpellSlot.E, 1000f);//HeimerdingerEUlt
+            ER.SetSkillshot(0.5f, 120f, 1400f, false, SkillshotType.Circle);
+            R = new Spell(SpellSlot.R, 280f);//HeimerdingerR ToggleState == 1 Togglestate == 2
         }
         public Heimerdinger()
         {
@@ -108,6 +108,7 @@
                     break;
             }
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -128,71 +129,65 @@
             }
             return null;
         }
+
         private void OnCombo()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useqr"].Enabled;
-            float useQ2Hit = Menu["combo"]["useqhit"].As<MenuSlider>().Value;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            var WPrediction = W.GetPrediction(target);
-            bool useW2 = Menu["combo"]["usewr"].Enabled;
-            float useW2Hit = Menu["combo"]["usewhit"].As<MenuSlider>().Value;
-            var W2Prediction = W2.GetPrediction(target);
-            bool useE = Menu["combo"]["usee"].Enabled;
-            var EPrediction = E.GetPrediction(target);
-            bool useE2 = Menu["combo"]["useer"].Enabled;
-            float useE2Hit = Menu["combo"]["useehit"].As<MenuSlider>().Value;
-            var E2Prediction = E2.GetPrediction(target);
             bool useR = Menu["combo"]["user"].Enabled;
 
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && target.IsValidTarget(650) && useQ)
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            bool useQR = Menu["combo"]["useqr"].Enabled;
+
+            if (Q.Ready && target.IsValidTarget(650))
             {
-                Q.Cast(Player.Position + 300);
-            }
-            if (Q.Ready && useQ2 && useR && target.IsValidTarget(650) && Player.CountEnemyHeroesInRange(Q.Range + 300) >= useQ2Hit)
-            {
-                R.Cast();
-                Q.Cast(Player.Position + 300);
-            }
-            if (W.Ready)
-            {
-                if (useW && target.IsValidTarget(W.Range - 20))
+                if (useQ)
                 {
-                    if (WPrediction.HitChance >= HitChance.High)
-                    {
-                        W.Cast(WPrediction.CastPosition);
-                    }
+                    Q.Cast(Player.Position + 350);
                 }
-                else if (useW2 && useR && target.IsValidTarget(W2.Range - 15) && Player.CountEnemyHeroesInRange(W2.Range) >= useW2Hit)
+                else if (useQR && R.Ready && useR &&
+                         Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
                 {
-                    if (W2Prediction.HitChance >= HitChance.High)
-                    {
-                        R.Cast();
-                        W2.Cast(W2Prediction.CastPosition);
-                    }
+                    R.Cast();
+                    QR.Cast(Player.Position + 350);
                 }
             }
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            bool useWR = Menu["combo"]["usewr"].Enabled;
+            float useWRHit = Menu["combo"]["usewhit"].As<MenuSlider>().Value;
+            if (W.Ready && target.IsValidTarget(W.Range))
+            {
+                if (useW)
+                {
+                    W.Cast(target);
+                }
+                else if (useWR && R.Ready && useR && 
+                    Player.CountEnemyHeroesInRange(WR.Range) >= useWRHit)
+                {
+                    R.Cast();
+                    WR.Cast(target);
+                }
+            }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            bool useER = Menu["combo"]["useer"].Enabled;
+            float useE2Hit = Menu["combo"]["useehit"].As<MenuSlider>().Value;
             if (E.Ready)
             {
                 if (useE && target.IsValidTarget(E.Range))
                 {
-                    if (EPrediction.HitChance >= HitChance.High)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
+                    E.Cast(target);
                 }
-                else if (useE && useR && target.IsValidTarget(E2.Range) && Player.CountEnemyHeroesInRange(E2.Range) >= useE2Hit)
+                else if (useER && useR && R.Ready && target.IsValidTarget(ER.Range) &&
+                         ER.CastIfWillHit(target, Menu["combo"]["useehit"].As<MenuSlider>().Value - 1))
                 {
-                    if (E2Prediction.HitChance >= HitChance.High)
-                    {
-                        R.Cast();
-                        E2.Cast(E2Prediction.CastPosition);
-                    }
+                    R.Cast();
+                    ER.Cast(target);
                 }
             }
         }

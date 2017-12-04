@@ -216,9 +216,10 @@
                     Q.Cast(target);
                 }
             }
+            var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
             bool autoR = Menu["misc"]["autor"].Enabled;
             float hpR = Menu["misc"]["minhp"].As<MenuSlider>().Value;
-            if (R.Ready && autoR && Player.HealthPercent() <= hpR)
+            if (R.Ready && EkkoR != null && autoR && Player.HealthPercent() <= hpR)
             {
                 R.Cast();
             }
@@ -249,7 +250,7 @@
             {
                 var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
-                if (bestTarget != null && EkkoR.CountEnemyHeroesInRange(350) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
+                if (bestTarget != null && EkkoR != null && EkkoR.CountEnemyHeroesInRange(350) >= Menu["killsteal"]["minrhks"].As<MenuSlider>().Value &&
                     Player.GetSpellDamage(bestTarget, SpellSlot.R) >= bestTarget.Health &&
                     bestTarget.IsValidTarget(R.Range))
                 {

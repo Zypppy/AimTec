@@ -37,7 +37,7 @@ namespace Heimerdinger
             W = new Spell(SpellSlot.W, 1250f);//HeimerdingerW
             W.SetSkillshot(0.5f, 100f, 750f, true, SkillshotType.Line);
             WR = new Spell(SpellSlot.W, 1250f);
-            WR.SetSkillshot(0.5f, 200f, 750f, true, SkillshotType.Line);
+            WR.SetSkillshot(0.5f, 100f, 750f, true, SkillshotType.Line);
             E = new Spell(SpellSlot.E, 925f);//HeimerdingerE
             E.SetSkillshot(0.5f, 100f, 1200f, false, SkillshotType.Circle);
             ER = new Spell(SpellSlot.E, 1500f);//HeimerdingerEUlt

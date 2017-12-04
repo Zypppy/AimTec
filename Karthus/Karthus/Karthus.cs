@@ -155,7 +155,7 @@
 
                     var basepos = new Vector2(0.20f * Render.Width, 0.30f * Render.Height);
 
-                    if (heroUnit.Health <= dmg) //Killable
+                    if (heroUnit.Health <= dmg && R.Ready) //Killable
                     {
                         var pos = basepos + new Vector2(0, 15 * killablecount);
                         Render.Text($"{heroUnit.ChampionName} is killable! Press R!!", pos, RenderTextFlags.Center, Color.Red);

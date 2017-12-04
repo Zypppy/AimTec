@@ -155,7 +155,7 @@ namespace Heimerdinger
                 E.Cast(target);
             }
 
-            if (useR && R.Ready)
+            if (R.Ready)
             {
                 switch (Menu["combo"]["ro"].As<MenuList>().Value)
                 {
@@ -166,7 +166,7 @@ namespace Heimerdinger
                         {
                             Q.Cast(Player.Position.Extend(target.Position, +300));
                         }
-                        else if (!Player.HasBuff("HeimerdingerR"))
+                        else if (!Player.HasBuff("HeimerdingerR") && useR)
                         {
                             R.Cast();
                         }
@@ -176,7 +176,7 @@ namespace Heimerdinger
                         {
                             W.Cast(target);
                         }
-                        else if (!Player.HasBuff("HeimerdingerR"))
+                        else if (!Player.HasBuff("HeimerdingerR") && useR)
                         {
                             R.Cast();
                         }
@@ -186,7 +186,7 @@ namespace Heimerdinger
                         {
                             ER.Cast(target);
                         }
-                        else if (!Player.HasBuff("HeimerdingerR"))
+                        else if (!Player.HasBuff("HeimerdingerR") && useR)
                         {
                             R.Cast();
                         }

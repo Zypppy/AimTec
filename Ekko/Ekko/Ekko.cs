@@ -27,14 +27,14 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 950f);
-            Q.SetSkillshot(0.251f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.High);
-            W = new Spell(SpellSlot.W, 1600f);
-            W.SetSkillshot(3.3f, 200f, 1308f, false, SkillshotType.Circle, false, HitChance.Medium);
-            E = new Spell(SpellSlot.E, 600f);
-            E.SetSkillshot(0.25f, 60f, 1650f, false, SkillshotType.Line, false, HitChance.Low);
-            R = new Spell(SpellSlot.R, 1600f);
-            R.SetSkillshot(0.333f, 350f, 4800f, false, SkillshotType.Circle, false, HitChance.High);
+            Q = new Spell(SpellSlot.Q, 950f); //EkkoQ
+            Q.SetSkillshot(0.5f, 60f, 1200f, false, SkillshotType.Line, false);
+            W = new Spell(SpellSlot.W, 1600f); //EkkoW
+            W.SetSkillshot(3.3f, 200f, 1500f, false, SkillshotType.Circle, false);
+            E = new Spell(SpellSlot.E, 600f); //EkkoE
+            E.SetSkillshot(0.25f, 100f, 1650f, false, SkillshotType.Line, false, HitChance.Low);
+            R = new Spell(SpellSlot.R, 1600f); //EkkoR Ekko_Base_R_TrailEnd.troy
+            R.SetSkillshot(0.333f, 350f, 4800f, false, SkillshotType.Circle, false);
         }
 
         public Ekko()
@@ -45,7 +45,7 @@
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
-                ComboMenu.Add(new MenuBool("usewslow", "Use W Only When Slowed"));
+                ComboMenu.Add(new MenuList("wo", "W Options", new[] { "Always", "Only When Slowed", "Hard CC Targets" }, 1));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("minrh", "Min enemies to Use R", 0, 1, 5));
             }
@@ -101,6 +101,7 @@
                 DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
+                DrawMenu.Add(new MenuBool("drawdmg", "Draw Damage"));
             }
 
             Menu.Add(DrawMenu);
@@ -113,13 +114,23 @@
             Console.WriteLine("Ekko by Zypppy - Loaded");
         }
 
+        public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
+        public static int SxOffset(Obj_AI_Hero target)
+        {
+            return SpecialChampions.Contains(target.ChampionName) ? 1 : 10;
+        }
+        public static int SyOffset(Obj_AI_Hero target)
+        {
+            return SpecialChampions.Contains(target.ChampionName) ? 3 : 20;
+        }
+
         private void Render_OnPresent()
         {
-            Vector2 maybeworks;
-            var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
+            Vector2 gejus;
+            var heropos = Render.WorldToScreen(Player.Position, out gejus);
             var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
-            var xaOffset = (int)maybeworks.X;
-            var yaOffset = (int)maybeworks.Y;
+            var xaOffset = (int)gejus.X;
+            var yaOffset = (int)gejus.Y;
 
             if (Q.Ready && Menu["drawings"]["drawq"].Enabled)
             {
@@ -141,6 +152,31 @@
                 {
                     Render.Circle(EkkoR.Position, 350, 40, Color.DeepPink);
                 }
+            }
+            if (Menu["drawings"]["drawdmg"].Enabled)
+            {
+                ObjectManager.Get<Obj_AI_Base>()
+                    .Where(h => h is Obj_AI_Hero && h.IsValidTarget() && h.IsValidTarget(1500))
+                    .ToList()
+                    .ForEach(
+                        unit =>
+                        {
+                            var heroUnit = unit as Obj_AI_Hero;
+                            int width = 103;
+                            int height = 8;
+                            int xOffset = SxOffset(heroUnit);
+                            int yOffset = SyOffset(heroUnit);
+                            var barPos = unit.FloatingHealthBarPosition;
+                            barPos.X += xOffset;
+                            barPos.Y += yOffset;
+
+                            var drawEndXPos = barPos.X + width * (unit.HealthPercent() / 100);
+                            var drawStartXPos = (float)(barPos.X + (unit.Health > Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R)
+                                                            ? width * ((unit.Health - (Player.GetSpellDamage(unit, SpellSlot.Q)) + (Player.GetSpellDamage(unit, SpellSlot.E)) + (Player.GetSpellDamage(unit, SpellSlot.R))) / unit.MaxHealth * 100 / 100)
+                                                            : 0));
+                            Render.Line(drawStartXPos, barPos.Y, drawEndXPos, barPos.Y, height, true, unit.Health < Player.GetSpellDamage(unit, SpellSlot.Q) + Player.GetSpellDamage(unit, SpellSlot.E) + Player.GetSpellDamage(unit, SpellSlot.R) ? Color.GreenYellow : Color.Orange);
+
+                        });
             }
         }
 
@@ -188,16 +224,11 @@
             }
         }
 
-
-
-
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
         {
             return TargetSelector.Implementation.GetOrderedTargets(spell.Range).FirstOrDefault(t => t.IsValidTarget());
         }
-
-
 
 
         private void Killsteal()
@@ -227,9 +258,6 @@
             }
         }
 
-
-
-
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -251,18 +279,9 @@
             return null;
         }
 
-
-
-
         private void OnCombo()
         {
-
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            bool useWSlow = Menu["combo"]["usewslow"].Enabled;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float hitR = Menu["combo"]["minrh"].As<MenuSlider>().Value;
+            
             var target = GetBestEnemyHeroTargetInRange(2000);
             var EkkoR = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Ekko_Base_R_TrailEnd.troy");
 
@@ -270,44 +289,54 @@
             {
                 return;
             }
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
-            if (W.Ready)
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
-                if (useW && target.IsValidTarget(W.Range))
+                switch (Menu["combo"]["wo"].As<MenuList>().Value)
                 {
-                    W.Cast(target);
-                }
-                else if (useWSlow && target.IsValidTarget(W.Range) && target.HasBuffOfType(BuffType.Slow))
-                {
-                    W.Cast(target);
+                    case 0:
+                           W.Cast(target);
+                        break;
+                    case 1:
+                        if (target.HasBuffOfType(BuffType.Slow))
+                        {
+                            W.Cast(target);
+                        }
+                        break;
+                    case 2:
+                        if (target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Knockup) ||
+                            target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Stun) ||
+                            target.HasBuffOfType(BuffType.Suppression))
+                        {
+                            W.Cast(target);
+                        }
+                        break;
                 }
             }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
             if (E.Ready && useE && target.IsValidTarget(E.Range))
             {
-                if (target != null)
-                {
-                    E.Cast(target);
-                }
+                E.Cast(target);
             }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR.CountEnemyHeroesInRange(350f) >= hitR)
+            
+            bool useR = Menu["combo"]["user"].Enabled;
+            float hitR = Menu["combo"]["minrh"].As<MenuSlider>().Value;
+            if (R.Ready && useR && target.IsValidTarget(R.Range) && EkkoR != null && EkkoR.CountEnemyHeroesInRange(350f) >= hitR)
             {
-                if (target != null)
-                {
-                    R.Cast();
-                }
+                R.Cast();
             }
 
         }
 
-
-
-
+        
         private void OnHarass()
         {
 
@@ -322,42 +351,37 @@
             }
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
             {
-                if (target != null)
-                {
-                    Q.Cast(target);
-                }
+                Q.Cast(target);
             }
         }
-
-
 
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
         }
-
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
         {
             return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
         }
+
         private void OnLaneClear()
         {
-            bool useQ = Menu["lclear"]["useql"].Enabled;
-            float QHit = Menu["lclear"]["minmq"].As<MenuSlider>().Value;
-            float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
-            if (manaQ <= Player.ManaPercent() && useQ)
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
-                foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+               if (!minion.IsValidTarget())
+               {
+                  return;
+               }
+                bool useQ = Menu["lclear"]["useql"].Enabled;
+                float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
+
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range) && Q.CastIfWillHit(minion, Menu["lclear"]["miniq"].As<MenuSlider>().Value -1))
                 {
-                    if (minion.IsValidTarget(Q.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(Q.Range, false, false, minion.ServerPosition)) >= QHit && minion != null)
-                    {
-                        Q.Cast(minion);
-                    }
+                    Q.Cast(minion);
                 }
             }
 
         }
-
 
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
@@ -366,33 +390,40 @@
 
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
         {
-            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range))
-                .ToList();
+            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
         private void OnJungleClear()
         {
-            foreach (var jungle in GetGenericJungleMinionsTargetsInRange(Q.Range))
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
             {
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
+                {
+                    return;
+                }
                 bool useQ = Menu["jclear"]["useqj"].Enabled;
                 float Qhit = Menu["jclear"]["minmq"].As<MenuSlider>().Value;
                 float Qmana = Menu["jclear"]["minmanaq"].As<MenuSlider>().Value;
+                
+                
+
+                if (useQ && Player.ManaPercent() >= Qmana && jungle.IsValidTarget(Q.Range) && Q.CastIfWillHit(jungle, Menu["lclear"]["miniq"].As<MenuSlider>().Value - 1))
+                {
+                    Q.Cast(jungle);
+                }
+
                 bool useW = Menu["jclear"]["usewj"].Enabled;
                 float Whit = Menu["jclear"]["minmw"].As<MenuSlider>().Value;
                 float Wmana = Menu["jclear"]["minmanaw"].As<MenuSlider>().Value;
+                if (useW && Player.ManaPercent() >= Wmana && jungle.IsValidTarget(W.Range) && Q.CastIfWillHit(jungle, Menu["lclear"]["miniq"].As<MenuSlider>().Value - 1))
+                {
+                    W.Cast(jungle);
+                }
+
                 bool useE = Menu["jclear"]["useej"].Enabled;
                 float Emana = Menu["jclear"]["minmanae"].As<MenuSlider>().Value;
-
-                if (useQ && Player.ManaPercent() >= Qmana && jungle.IsValidTarget(Q.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(Q.Range, false, false, jungle.ServerPosition)) >= Qhit && jungle != null)
+                if (useE && Player.ManaPercent() >= Emana && jungle.IsValidTarget(E.Range))
                 {
-                    Q.CastOnUnit(jungle);
-                }
-                if (useW && Player.ManaPercent() >= Wmana && jungle.IsValidTarget(W.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(W.Range, false, false, jungle.ServerPosition)) >= Whit && jungle != null)
-                {
-                    W.CastOnUnit(jungle);
-                }
-                if (useE && Player.ManaPercent() >= Emana && jungle.IsValidTarget(E.Range) && jungle != null)
-                {
-                    E.CastOnUnit(jungle);
+                    E.Cast(jungle);
                 }
             }
         }

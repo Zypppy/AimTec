@@ -149,7 +149,7 @@
                 {
                     Q.Cast(Player.Position + 350);
                 }
-                else if (useQR && R.Ready && useR &&
+                else if (useQR && R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 &&
                          Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast();
@@ -166,7 +166,7 @@
                 {
                     W.Cast(target);
                 }
-                else if (useWR && R.Ready && useR && 
+                else if (useWR && R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 && 
                     Player.CountEnemyHeroesInRange(WR.Range) >= useWRHit)
                 {
                     R.Cast();
@@ -183,7 +183,7 @@
                 {
                     E.Cast(target);
                 }
-                else if (useER && useR && R.Ready && target.IsValidTarget(ER.Range) &&
+                else if (useER && useR && R.Ready && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 && target.IsValidTarget(ER.Range) &&
                          ER.CastIfWillHit(target, Menu["combo"]["useehit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast();

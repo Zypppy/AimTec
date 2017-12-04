@@ -61,7 +61,7 @@
             var LaneClearMenu = new Menu("lclear", "Lane Clear");
             {
                 LaneClearMenu.Add(new MenuBool("useql", "Use Q"));
-                LaneClearMenu.Add(new MenuSlider("minmq", "Minimum Minions To Hit", 1, 1, 10));
+                //LaneClearMenu.Add(new MenuSlider("minmq", "Minimum Minions To Hit", 1, 1, 10));
                 LaneClearMenu.Add(new MenuSlider("minmanaq", "Minimum Mana To Farm", 20, 0, 100));
             }
             Menu.Add(LaneClearMenu);
@@ -372,11 +372,11 @@
                {
                   return;
                }
-                bool useQ = Menu["lclear"]["useql"].Enabled;
-                float Qhit = Menu["lclear"]["minmq"].As<MenuSlider>().Value;
-                float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
 
-                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range) && GameObjects.Jungle.Count(h => h.IsValidTarget(Q.Range, false, false, minion.ServerPosition)) >= Qhit)
+                bool useQ = Menu["lclear"]["useql"].Enabled;
+                //float Qhit = Menu["lclear"]["minmq"].As<MenuSlider>().Value;
+                float manaQ = Menu["lclear"]["minmanaq"].As<MenuSlider>().Value;
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
                 {
                     Q.Cast(minion);
                 }

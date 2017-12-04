@@ -213,7 +213,7 @@
 
         private void Combo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
             if (!target.IsValidTarget())
             {
                 return;
@@ -261,7 +261,7 @@
 
         private void Harass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
             if (!target.IsValidTarget())
             {
                 return;

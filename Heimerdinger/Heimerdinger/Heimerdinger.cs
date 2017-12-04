@@ -82,15 +82,15 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled)
+            if (Q.Ready && Menu["drawings"]["drawq"].Enabled)
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Cornsilk);
             }
-            if (Menu["drawings"]["draww"].Enabled)
+            if (W.Ready && Menu["drawings"]["draww"].Enabled)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Aquamarine);
             }
-            if (Menu["drawings"]["drawe"].Enabled && E.Ready)
+            if (E.Ready && Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
                 Render.Circle(Player.Position, E.Range, 40, Color.Beige);
             }
@@ -179,7 +179,6 @@
 
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useER = Menu["combo"]["useer"].Enabled;
-            float useE2Hit = Menu["combo"]["useehit"].As<MenuSlider>().Value;
             if (E.Ready)
             {
                 if (useE && target.IsValidTarget(E.Range))

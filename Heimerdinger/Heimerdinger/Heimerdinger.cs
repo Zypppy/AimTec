@@ -40,7 +40,7 @@
             E.SetSkillshot(0.5f, 100f, 1200f, false, SkillshotType.Circle);
             ER = new Spell(SpellSlot.E, 1000f);//HeimerdingerEUlt
             ER.SetSkillshot(0.5f, 120f, 1400f, false, SkillshotType.Circle);
-            R = new Spell(SpellSlot.R, 280f);//HeimerdingerR ToggleState == 1 Togglestate == 2
+            R = new Spell(SpellSlot.R, 280f);//HeimerdingerR ToggleState == 1 Togglestate == 2  Buff == HeimerdingerR
         }
         public Heimerdinger()
         {
@@ -145,18 +145,18 @@
 
             if (Q.Ready && target.IsValidTarget(650))
             {
-                if (useQ)
+                if (useQ && !Player.HasBuff("HeimerdingerR"))
                 {
-                    Q.Cast(Player.Position + 50);
+                    Q.Cast(Player.Position.Extend(target.Position, +300));
                 }
-                if (R.Ready && useQR && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 &&
+                if (R.Ready && useQR && useR && !Player.HasBuff("HeimerdingerR") &&
                          QR.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast();
                 }
-                if (useQR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 2)
+                if (useQR && Player.HasBuff("HeimerdingerR"))
                 {
-                    QR.Cast(Player.Position + 50);
+                    QR.Cast(Player.Position.Extend(target.Position, +300));
                 }
             }
 

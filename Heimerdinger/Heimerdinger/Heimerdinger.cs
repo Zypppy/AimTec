@@ -147,13 +147,13 @@
             {
                 if (useQ)
                 {
-                    Q.Cast(Player.Position + 350);
+                    Q.Cast(target.Position + 350);
                 }
                 else if (useQR && R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 &&
                          Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast();
-                    QR.Cast(Player.Position + 350);
+                    QR.Cast(target.Position + 350);
                 }
             }
 

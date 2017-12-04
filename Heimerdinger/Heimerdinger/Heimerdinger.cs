@@ -40,7 +40,7 @@ namespace Heimerdinger
             WR.SetSkillshot(0.5f, 200f, 750f, true, SkillshotType.Line);
             E = new Spell(SpellSlot.E, 925f);//HeimerdingerE
             E.SetSkillshot(0.5f, 100f, 1200f, false, SkillshotType.Circle);
-            ER = new Spell(SpellSlot.E, 1000f);//HeimerdingerEUlt
+            ER = new Spell(SpellSlot.E, 1500f);//HeimerdingerEUlt
             ER.SetSkillshot(0.5f, 120f, 1400f, false, SkillshotType.Circle);
             R = new Spell(SpellSlot.R, 280f);//HeimerdingerR ToggleState == 1 Togglestate == 2  Buff == HeimerdingerR
         }

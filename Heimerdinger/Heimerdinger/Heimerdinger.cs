@@ -147,7 +147,7 @@
             {
                 if (useQ)
                 {
-                    Q.Cast(target);
+                    Q.Cast(target.Position - Player.Position);
                 }
                 else if (useQR && R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 &&
                          Q.CastIfWillHit(target, Menu["combo"]["useqhit"].As<MenuSlider>().Value - 1))

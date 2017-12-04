@@ -162,19 +162,22 @@
             }
             
             bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW && target.IsValidTarget(W.Range) && !Player.HasBuff("HeimerdingerR"))
+            {
+                W.Cast(target);
+            }
+
             bool useWR = Menu["combo"]["usewr"].Enabled;
             float useWRHit = Menu["combo"]["usewhit"].As<MenuSlider>().Value;
-            if (W.Ready && target.IsValidTarget(W.Range))
+            if (W.Ready && R.Ready && useWR && useR && target.IsValidTarget(WR.Range))
             {
-                if (useW)
+                if (Player.CountEnemyHeroesInRange(WR.Range) >= useWRHit && Player.HasBuff("HeimerdingerR"))
                 {
-                    W.Cast(target);
+                    WR.Cast(target);
                 }
-                else if (useWR && R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 && 
-                    Player.CountEnemyHeroesInRange(WR.Range) >= useWRHit)
+                else if (!Player.HasBuff("HeimerdingerR"))
                 {
                     R.Cast();
-                    WR.Cast(target);
                 }
             }
 

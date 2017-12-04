@@ -1,4 +1,6 @@
-﻿namespace Heimerdinger
+﻿using System.Diagnostics;
+
+namespace Heimerdinger
 {
     using System;
     using System.Collections.Generic;
@@ -48,15 +50,11 @@
             var Combo = new Menu("combo", "Combo");
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
-                Combo.Add(new MenuBool("useqr", "Use Upgraded Q"));
                 Combo.Add(new MenuSlider("useqhit", "Minimum Enemies Around You For Upgraded Q", 3, 1, 5));
                 Combo.Add(new MenuBool("usew", "Use W"));
-                Combo.Add(new MenuBool("usewr", "Use Upgraded W"));
-                Combo.Add(new MenuSlider("usewhit", "Minimum Enemies Around You For Upgraded W", 2, 1, 5));
                 Combo.Add(new MenuBool("usee", "Use E"));
-                Combo.Add(new MenuBool("useer", "Use Upgraded E"));
-                Combo.Add(new MenuSlider("useehit", "Minimum Enemies Around You For Upgraded E", 4, 1, 5));
                 Combo.Add(new MenuBool("user", "Use R"));
+                Combo.Add(new MenuList("ro", "R Mode", new[] { "Use Q", "Use W", "Use E" }, 0));
             }
             Menu.Add(Combo);
             var Drawings = new Menu("drawings", "Drawings");
@@ -146,54 +144,54 @@
                 Q.Cast(Player.Position.Extend(target.Position, +300));
             }
 
-            bool useQR = Menu["combo"]["useqr"].Enabled;
-            float hitQR = Menu["combo"]["useqhit"].As<MenuSlider>().Value;
-            if (R.Ready && Q.Ready && useR && useQR && target.IsValidTarget(650))
-            {
-                if (Player.HasBuff("HeimerdingerR") &&
-                    Player.CountEnemyHeroesInRange(550) >= hitQR)
-                {
-                    Q.Cast(Player.Position.Extend(target.Position, +300));
-                }
-                else if (!Player.HasBuff("HeimerdingerR"))
-                {
-                    R.Cast();
-                }
-            }
-            
             bool useW = Menu["combo"]["usew"].Enabled;
             if (W.Ready && useW && target.IsValidTarget(W.Range) && !Player.HasBuff("HeimerdingerR"))
             {
                 W.Cast(target);
             }
 
-            bool useWR = Menu["combo"]["usewr"].Enabled;
-            float useWRHit = Menu["combo"]["usewhit"].As<MenuSlider>().Value;
-            if (W.Ready && R.Ready && useWR && useR && target.IsValidTarget(WR.Range))
+            bool useE = Menu["combo"]["usee"].Enabled;
+            if (E.Ready && useE && target.IsValidTarget(E.Range) && !Player.HasBuff("HeimerdingerR"))
             {
-                if (Player.CountEnemyHeroesInRange(WR.Range) >= useWRHit && Player.HasBuff("HeimerdingerR"))
-                {
-                    WR.Cast(target);
-                }
-                else if (!Player.HasBuff("HeimerdingerR"))
-                {
-                    R.Cast();
-                }
+                E.Cast(target);
             }
 
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useER = Menu["combo"]["useer"].Enabled;
-            if (E.Ready)
+            if (useR && R.Ready)
             {
-                if (useE && target.IsValidTarget(E.Range))
+                switch (Menu["combo"]["ro"].As<MenuList>().Value)
                 {
-                    E.Cast(target);
-                }
-                else if (useER && useR && R.Ready && Player.SpellBook.GetSpell(SpellSlot.R).ToggleState == 1 && target.IsValidTarget(ER.Range) &&
-                         ER.CastIfWillHit(target, Menu["combo"]["useehit"].As<MenuSlider>().Value - 1))
-                {
-                    R.Cast();
-                    ER.Cast(target);
+                    case 0:
+                        float hitQR = Menu["combo"]["useqhit"].As<MenuSlider>().Value;
+                        if (target.IsValidTarget(QR.Range) && Q.Ready && Player.CountEnemyHeroesInRange(550) >= hitQR &&
+                            Player.HasBuff("HeimerdingerR"))
+                        {
+                            Q.Cast(Player.Position.Extend(target.Position, +300));
+                        }
+                        else if (!Player.HasBuff("HeimerdingerR"))
+                        {
+                            R.Cast();
+                        }
+                        break;
+                    case 1:
+                        if (target.IsValidTarget(WR.Range) && W.Ready && Player.HasBuff("HeimerdingerR"))
+                        {
+                            W.Cast(target);
+                        }
+                        else if (!Player.HasBuff("HeimerdingerR"))
+                        {
+                            R.Cast();
+                        }
+                        break;
+                    case 2:
+                        if (target.IsValidTarget(ER.Range) && E.Ready && Player.HasBuff("HeimerdingerR"))
+                        {
+                            ER.Cast(target);
+                        }
+                        else if (!Player.HasBuff("HeimerdingerR"))
+                        {
+                            R.Cast();
+                        }
+                        break;
                 }
             }
         }

@@ -29,15 +29,15 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 325);
-            Q2 = new Spell(SpellSlot.Q, 375);
-            W = new Spell(SpellSlot.W, 1025);
-            E = new Spell(SpellSlot.E, 700);
-            E2 = new Spell(SpellSlot.E, 1200);
-            R = new Spell(SpellSlot.R, 400);
-            W.SetSkillshot(0.250f, 70f, 1699f, true, SkillshotType.Line);
-            E.SetSkillshot(0.538f, 120f, 1000f, false, SkillshotType.Circle);
-            E2.SetSkillshot(0.538f, 120f, 1000f, false, SkillshotType.Circle);
+            Q = new Spell(SpellSlot.Q, 325f);//KhazixQ
+            Q2 = new Spell(SpellSlot.Q, 375f);//KhazixQLong
+            W = new Spell(SpellSlot.W, 1025f);//KhazixW
+            W.SetSkillshot(0.5f, 60f, 1700f, true, SkillshotType.Line);
+            E = new Spell(SpellSlot.E, 700f);//KhazixE
+            E.SetSkillshot(0.5f, 200f, 1000f, false, SkillshotType.Circle, false, HitChance.Medium);
+            E2 = new Spell(SpellSlot.E, 1200f);//KhazixELong
+            E2.SetSkillshot(0.5f, 200f, 1000f, false, SkillshotType.Circle, false, HitChance.Medium);
+            R = new Spell(SpellSlot.R, 400);//KhazixR
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -134,25 +134,31 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong")
+            if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Q.Range, 40, Color.Beige);
-            }
-            if (Menu["drawings"]["drawq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
-            {
-                Render.Circle(Player.Position, Q2.Range, 40, Color.Beige);
+                if (Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQ")
+                {
+                    Render.Circle(Player.Position, Q.Range, 40, Color.Beige);
+                }
+                else if (Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+                {
+                    Render.Circle(Player.Position, Q2.Range, 40, Color.Beige);
+                }
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.BlueViolet);
             }
-            if (Menu["drawings"]["drawe"].Enabled && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+            if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
-            }
-            if (Menu["drawings"]["drawe"].Enabled && E.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
-            {
-                Render.Circle(Player.Position, E2.Range, 40, Color.BlueViolet);
+                if (Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixE")
+                {
+                    Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
+                }
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+                {
+                    Render.Circle(Player.Position, E2.Range, 40, Color.BlueViolet);
+                }
             }
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
@@ -221,50 +227,46 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float enemiesR = Menu["combo"]["usercombocount"].As<MenuSlider>().Value;
-            var WPrediction = W.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
-            var E2Prediction = E2.GetPrediction(target);
-            bool UseTiamat = Menu["combo"]["useitems"].Enabled;
-
+            var target = GetBestEnemyHeroTargetInRange(1200);
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong")
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            if (Q.Ready && useQ)
             {
-                Q.Cast(target);
+                if (target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQ")
+                {
+                    Q.Cast(target);
+                }
+                else if (target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+                {
+                    Q2.Cast(target);
+                }
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
-            {
-                Q2.Cast(target);
-            }
+
+            bool useW = Menu["combo"]["usew"].Enabled;
             if (W.Ready && target.IsValidTarget(W.Range) && useW)
             {
-                if (WPrediction.HitChance >= HitChance.Medium)
-                {
-                    W.Cast(WPrediction.CastPosition);
-                }
+                W.Cast(target);
             }
-            if (E.Ready && target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong")
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            if (E.Ready && useE)
             {
-                if (EPrediction.HitChance >= HitChance.Medium)
+                if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixE")
                 {
-                    E.Cast(EPrediction.CastPosition);
+                    E.Cast(target);
+                }
+                else if (target.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+                {
+                    E2.Cast(target);
                 }
             }
-            if (E.Ready && target.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
-            {
-                if (E2Prediction.HitChance >= HitChance.Medium)
-                {
-                    E2.Cast(E2Prediction.CastPosition);
-                }
-            }
+
+            bool useR = Menu["combo"]["user"].Enabled;
+            float enemiesR = Menu["combo"]["usercombocount"].As<MenuSlider>().Value;
             if (R.Ready)
             {
                 if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= enemiesR)
@@ -272,6 +274,8 @@
                     R.Cast();
                 }
             }
+
+            bool UseTiamat = Menu["combo"]["useitems"].Enabled;
             var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
             if (ItemTiamatHydra != null)
             {
@@ -282,6 +286,7 @@
                 }
             }
         }
+
         private void ManualR()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
@@ -291,92 +296,93 @@
                 R.Cast();
             }
         }
+
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["harass"]["useq"].Enabled;
-            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
-            bool useW = Menu["harass"]["usew"].Enabled;
-            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
-            var WPrediction = W.GetPrediction(target);
+            var target = GetBestEnemyHeroTargetInRange(E2.Range);
 
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+
+            bool useQ = Menu["harass"]["useq"].Enabled;
+            float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
             {
-                Q.Cast(target);
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
-            {
-                Q2.Cast(target);
-            }
-            if (W.Ready && target.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
-            {
-                if (WPrediction.HitChance >= HitChance.Medium)
+                if (target.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQ")
                 {
-                    W.Cast(WPrediction.CastPosition);
+                    Q.Cast(target);
+                }
+                else if (target.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+                {
+                    Q2.Cast(target);
                 }
             }
-            
+
+            bool useW = Menu["harass"]["usew"].Enabled;
+            float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+            if (W.Ready && target.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
+            {
+                W.Cast(target);
+            }
+
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
         }
-
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
         {
             return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
         }
+
         private void OnLaneClear()
         {
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E2.Range))
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["laneclear"]["usew"].Enabled;
-                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
-                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
-                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
-                var WPrediction = W.GetPrediction(minion);
-                var EPrediction = E.GetPrediction(minion);
-                var E2Prediction = E2.GetPrediction(minion);
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
                 {
-                    Q.Cast(minion);
+                    if (minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQ")
+                    {
+                        Q.Cast(minion);
+                    }
+                    else if (minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+                    {
+                        Q2.Cast(minion);
+                    }
                 }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
-                {
-                    Q2.Cast(minion);
-                }
+
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
                 if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
                 {
-                    if (WPrediction.HitChance >= HitChance.Medium)
-                    {
-                        W.Cast(WPrediction.CastPosition);
-                    }
+                    W.Cast(minion);
                 }
-                if (E.Ready && minion.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
+
+                bool useE = Menu["laneclear"]["usee"].Enabled;
+                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
+                if (E.Ready && useE && Player.ManaPercent() >= manaE)
                 {
-                    if (EPrediction.HitChance >= HitChance.Medium)
+                    if (minion.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixE")
                     {
-                        E.Cast(EPrediction.CastPosition);
+                        E.Cast(minion);
+                    }
+                    else if (minion.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+                    {
+                        E2.Cast(minion);
                     }
                 }
-                if (E.Ready && minion.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
-                {
-                    if (E2Prediction.HitChance >= HitChance.Medium)
-                    {
-                        E2.Cast(E2Prediction.CastPosition);
-                    }
-                }
+
+                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
                 var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
                 if (ItemTiamatHydra != null)
                 {
@@ -388,6 +394,7 @@
                 }
             }
         }
+
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
             return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
@@ -397,58 +404,57 @@
         {
             return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
+
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E2.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(Q.Range)).ToList())
             {
-                bool useQ = Menu["jungleclear"]["useq"].Enabled;
-                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["jungleclear"]["usew"].Enabled;
-                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
-                bool useE = Menu["jungleclear"]["usee"].Enabled;
-                float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
-                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
-                var WPrediction = W.GetPrediction(minion);
-                var EPrediction = E.GetPrediction(minion);
-                var E2Prediction = E2.GetPrediction(minion);
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "KhazixQLong" && Player.ManaPercent() >= manaQ)
+
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
                 {
-                    Q.Cast(minion);
-                }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong" && Player.ManaPercent() >= manaQ)
-                {
-                    Q2.Cast(minion);
-                }
-                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
-                {
-                    if (WPrediction.HitChance >= HitChance.Medium)
+                    if (jungle.IsValidTarget(Q.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQ")
                     {
-                        W.Cast(WPrediction.CastPosition);
+                        Q.Cast(jungle);
+                    }
+                    else if (jungle.IsValidTarget(Q2.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "KhazixQLong")
+                    {
+                        Q2.Cast(jungle);
                     }
                 }
-                if (E.Ready && minion.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name != "KhazixELong" && Player.ManaPercent() >= manaE)
+
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
+                if (W.Ready && jungle.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
                 {
-                    if (EPrediction.HitChance >= HitChance.Medium)
+                    W.Cast(jungle);
+                }
+
+                bool useE = Menu["jungleclear"]["usee"].Enabled;
+                float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
+                if (E.Ready && useE && Player.ManaPercent() >= manaE)
+                {
+                    if (jungle.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixE")
                     {
-                        E.Cast(EPrediction.CastPosition);
+                        E.Cast(jungle);
+                    }
+                    else if (jungle.IsValidTarget(E2.Range) && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong")
+                    {
+                        E2.Cast(jungle);
                     }
                 }
-                if (E.Ready && minion.IsValidTarget(E2.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "KhazixELong" && Player.ManaPercent() >= manaE)
-                {
-                    if (E2Prediction.HitChance >= HitChance.Medium)
-                    {
-                        E2.Cast(E2Prediction.CastPosition);
-                    }
-                }
+
+                bool UseTiamat = Menu["laneclear"]["useitems"].Enabled;
                 var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
                 if (ItemTiamatHydra != null)
                 {
                     Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
-                    if (UseTiamat && Tiamat.Ready && minion.IsValidTarget(Tiamat.Range))
+                    if (UseTiamat && Tiamat.Ready && jungle.IsValidTarget(Tiamat.Range))
                     {
                         Tiamat.Cast();
                     }

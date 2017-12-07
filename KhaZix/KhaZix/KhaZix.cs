@@ -37,7 +37,7 @@
             E.SetSkillshot(0.5f, 200f, 1000f, false, SkillshotType.Circle, false, HitChance.Medium);
             E2 = new Spell(SpellSlot.E, 1200f);//KhazixELong
             E2.SetSkillshot(0.5f, 200f, 1000f, false, SkillshotType.Circle, false, HitChance.Medium);
-            R = new Spell(SpellSlot.R, 400);//KhazixR
+            R = new Spell(SpellSlot.R, 400f);//KhazixR
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")

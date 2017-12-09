@@ -31,7 +31,7 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 700f);//LissandraQ
+            Q = new Spell(SpellSlot.Q, 825f);//LissandraQ
             Q.SetSkillshot(0.5f, 75f, 2200f, false, SkillshotType.Line, false);
             W = new Spell(SpellSlot.W, 450f);//LissandraW
             E = new Spell(SpellSlot.E, 1025f);//LissandraE Toggle == 1

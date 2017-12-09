@@ -26,21 +26,18 @@
         public static Menu Menu = new Menu("Lissandra by Zypppy", "Lissandra by Zypppy", true);
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
-        public static Spell Q, Q2, W, E, E2, R;
+        public static Spell Q, W, E, E2, R;
         private MissileClient missiles;
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 700);
-            Q2 = new Spell(SpellSlot.Q, 850);
-            W = new Spell(SpellSlot.W, 450);
-            E = new Spell(SpellSlot.E, 1025);
-            E2 = new Spell(SpellSlot.E, 2000);
-            R = new Spell(SpellSlot.R, 700);
-            Q.SetSkillshot(0.251f, 75f, 2201f, false, SkillshotType.Line, false);
-            Q2.SetSkillshot(0.333f, 90, 2217f, false, SkillshotType.Line, false);
-            E.SetSkillshot(0.250f, 125, 848f, false, SkillshotType.Line, false);
-            //E2.SetSkillshot(0.25f, 400, 850, false, SkillshotType.Circle, false);
+            Q = new Spell(SpellSlot.Q, 700f);//LissandraQ
+            Q.SetSkillshot(0.5f, 75f, 2200f, false, SkillshotType.Line, false);
+            W = new Spell(SpellSlot.W, 450f);//LissandraW
+            E = new Spell(SpellSlot.E, 1025f);//LissandraE Toggle == 1
+            E.SetSkillshot(0.5f, 125f, 850f, false, SkillshotType.Line, false);
+            E2 = new Spell(SpellSlot.E, 2000f);//Toggle == 2
+            R = new Spell(SpellSlot.R, 700f);//LissandraR
         }
         public Lissandra()
         {
@@ -81,7 +78,6 @@
             var DrawingsMenu = new Menu("drawings", "Drawings");
             {
                 DrawingsMenu.Add(new MenuBool("drawq", "Draw Q Range"));
-                DrawingsMenu.Add(new MenuBool("drawq2", "Draw Extended Q Range"));
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawingsMenu.Add(new MenuBool("drawepath", "Draw E Path"));
@@ -174,31 +170,27 @@
             {
                 Render.Circle(Player.Position, Q.Range, 40, Color.Indigo);
             }
-            if (Q.Ready && Menu["drawings"]["drawq2"].Enabled)
-            {
-                Render.Circle(Player.Position, Q2.Range, 40, Color.Indigo);
-            }
             if (W.Ready && Menu["drawings"]["draww"].Enabled)
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
             }
-            if (E.Ready && Menu["drawings"]["drawe"].Enabled)
+            if (E.Ready)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
-            }
-            if (E.Ready && Menu["drawings"]["drawepath"].Enabled)
-            {
-                if (missiles != null)
+                if (Menu["drawings"]["drawe"].Enabled)
+                {
+                    Render.Circle(Player.Position, E.Range, 40, Color.Indigo);
+                }
+                else if (Menu["drawings"]["drawepath"].Enabled && missiles != null)
                 {
                     Render.Circle(missiles.ServerPosition, 300, 40, Color.DeepPink);
                 }
-                
             }
             if (R.Ready && Menu["drawings"]["drawr"].Enabled)
             {
               Render.Circle(Player.Position, R.Range, 40, Color.Indigo);
             }
         }
+
         private void Game_OnUpdate()
         {
             if (Player.IsDead || MenuGUI.IsChatOpen())
@@ -229,15 +221,12 @@
             if (Q.Ready && Menu["ks"]["QKS"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(Q, DamageType.Magical, false);
-                var QPrediction = Q.GetPrediction(bestTarget);
                 if (bestTarget != null && Player.GetSpellDamage(bestTarget, SpellSlot.Q) >= bestTarget.Health && bestTarget.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(bestTarget);
                 }
             }
+
             if (W.Ready && Menu["ks"]["WKS"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(W, DamageType.Magical, false);
@@ -246,6 +235,7 @@
                     W.Cast();
                 }
             }
+
             if (R.Ready && Menu["ks"]["RKS"].Enabled)
             {
                 var bestTarget = GetBestKillableHero(R, DamageType.Magical, false);
@@ -255,6 +245,7 @@
                 }
             }
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -277,54 +268,41 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
-            var Q2Prediction = Q2.GetPrediction(target);
-            bool useE = Menu["combo"]["usee"].Enabled;
-            var EPrediction = E.GetPrediction(target);
-            bool useEGap = Menu["combo"]["useegap"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
-            float REnemies = Menu["combo"]["defr"].As<MenuSlider>().Value;
-            
+            var target = GetBestEnemyHeroTargetInRange(E.Range);
             if (!target.IsValidTarget())
             {
                 return;
             }
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+                Q.Cast(target);
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range))
-            {
-                if (Q2Prediction.HitChance >= HitChance.Medium)
-                {
-                    Q2.Cast(Q2Prediction.CastPosition);
-                }
-            }
+
+            bool useW = Menu["combo"]["usew"].Enabled;
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
                W.Cast();
             }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            bool useEGap = Menu["combo"]["useegap"].Enabled;
             if (E.Ready)
             {
                 if (target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
-                    if (EPrediction.HitChance >= HitChance.Medium)
-                    {
-                        E.Cast(EPrediction.CastPosition);
-                    }
+                    E.Cast(target);
                 }
                 else if (missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                 {
                     E.Cast();
                 }
             }
+
+            bool useR = Menu["combo"]["user"].Enabled;
+            float RHp = Menu["combo"]["rhp"].As<MenuSlider>().Value;
+            float REnemies = Menu["combo"]["defr"].As<MenuSlider>().Value;
             if (R.Ready && useR && Player.HealthPercent() <= RHp && target.IsValidTarget(R.Range))
             {
                 R.Cast(Player);
@@ -336,23 +314,20 @@
         }
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(Q2.Range);
-            bool useQ = Menu["harass"]["useqh"].Enabled;
-            float manaQ = Menu["harass"]["qmanah"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
-
+            var target = GetBestEnemyHeroTargetInRange(E.Range);
             if (!target.IsValidTarget())
             {
                 return;
             }
-            if (Q.Ready && useQ && target.IsValidTarget(Q2.Range) && Player.ManaPercent() >= manaQ)
+
+            bool useQ = Menu["harass"]["useqh"].Enabled;
+            float manaQ = Menu["harass"]["qmanah"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+                Q.Cast(target);
             }
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
@@ -364,24 +339,24 @@
         }
         private void OnLaneClear()
         {
-            bool useQ = Menu["laneclear"]["useqlc"].Enabled;
-            float manaQ = Menu["laneclear"]["qmanalc"].As<MenuSlider>().Value;
-            bool useW = Menu["laneclear"]["usewlc"].Enabled;
-            float manaW = Menu["laneclear"]["wmanalc"].As<MenuSlider>().Value;
-            float hitW = Menu["laneclear"]["wmhitlc"].As<MenuSlider>().Value;
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q2.Range))
+            
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
-                var QPrediction = Q.GetPrediction(minion);
+                if (!minion.IsValidTarget())
+                {
+                    return;
+                }
+
+                bool useQ = Menu["laneclear"]["useqlc"].Enabled;
+                float manaQ = Menu["laneclear"]["qmanalc"].As<MenuSlider>().Value;
                 if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
                 {
-                    if (minion != null)
-                    {
-                        if (QPrediction.HitChance >= HitChance.High)
-                        {
-                            Q.Cast(QPrediction.CastPosition);
-                        }
-                    }
+                    Q.Cast(minion);
                 }
+
+                bool useW = Menu["laneclear"]["usewlc"].Enabled;
+                float manaW = Menu["laneclear"]["wmanalc"].As<MenuSlider>().Value;
+                float hitW = Menu["laneclear"]["wmhitlc"].As<MenuSlider>().Value;
                 if (W.Ready && useW && Player.ManaPercent() >= manaW && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(W.Range, false, false, minion.ServerPosition)) >= hitW)
                 {
                     if (minion != null)

@@ -95,7 +95,7 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             GameObject.OnCreate += LuxECreate;
-           // GameObject.OnDestroy += LuxEDestroy;
+            GameObject.OnDestroy += LuxEDestroy;
 
             LoadSpells();
             Console.WriteLine("Lux by Zypppy - Loaded");
@@ -108,13 +108,13 @@
                 Console.WriteLine(obj.Name);
             }
         }
-        //private void LuxEDestroy(GameObject sender)
-        //{
-        //    if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
-        //    {
-        //        LuxE.Remove(sender);
-        //    }
-        //}
+        private void LuxEDestroy(GameObject obj)
+        {
+            if (obj == null && obj.IsValid)
+            {
+                Console.WriteLine("LuxE Gone");
+            }
+        }
 
         public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
         public static int SxOffset(Obj_AI_Hero target)

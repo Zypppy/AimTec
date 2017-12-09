@@ -125,16 +125,10 @@
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
             }
-            if (E.Ready)
+            if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
-                if (Menu["drawings"]["drawe"].Enabled)
-                {
-                    Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
-                }
-                else if (Menu["drawings"]["drawe2"].Enabled && LuxE != null)
-                {
-                    Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
-                }
+                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
+                Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
             }
             if (R.Ready)
             {

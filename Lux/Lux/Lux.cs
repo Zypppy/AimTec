@@ -323,7 +323,7 @@
                 {
                     case 0:
                         var etarget = GetBestEnemyHeroTargetInRange(E.Range);
-                        if (missiles == null && etarget!= null)
+                        if (etarget!= null)
                         {
                             if (etarget.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                             {

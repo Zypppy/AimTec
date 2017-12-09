@@ -95,27 +95,26 @@
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
             GameObject.OnCreate += LuxECreate;
-            GameObject.OnDestroy += LuxEDestroy;
+           // GameObject.OnDestroy += LuxEDestroy;
 
             LoadSpells();
             Console.WriteLine("Lux by Zypppy - Loaded");
         }
-
-        public  List<GameObject> LuxE = new List<GameObject>();
-        private void LuxECreate(GameObject sender)
+        
+        private void LuxECreate(GameObject obj)
         {
-            if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
+            if (obj != null && obj.IsValid)
             {
-                LuxE.Add(sender);
+                Console.WriteLine(obj.Name);
             }
         }
-        private void LuxEDestroy(GameObject sender)
-        {
-            if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
-            {
-                LuxE.Remove(sender);
-            }
-        }
+        //private void LuxEDestroy(GameObject sender)
+        //{
+        //    if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
+        //    {
+        //        LuxE.Remove(sender);
+        //    }
+        //}
 
         public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
         public static int SxOffset(Obj_AI_Hero target)
@@ -148,16 +147,16 @@
                 {
                     Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
                 }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE.Count > 0 && LuxE != null)
-                {
-                    foreach (var luxe in LuxE)
-                    {
-                        if (luxe.CountEnemyHeroesInRange(330) != 0)
-                        {
-                            Render.Circle(luxe.ServerPosition, 330, 20, Color.Red);
-                        }
-                    }
-                }
+                //else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE.Count > 0 && LuxE != null)
+                //{
+                //    foreach (var luxe in LuxE)
+                //    {
+                //        if (luxe.CountEnemyHeroesInRange(330) != 0)
+                //        {
+                //            Render.Circle(luxe.ServerPosition, 330, 20, Color.Red);
+                //        }
+                //    }
+                //}
             }
             if (R.Ready)
             {

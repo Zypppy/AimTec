@@ -29,15 +29,15 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1300f);
-            Q.SetSkillshot(0.27f, 70f, 1200f, true, SkillshotType.Line);
-            W = new Spell(SpellSlot.W, 1175f);
-            W.SetSkillshot(0.361f, 110f, 1077f, false, SkillshotType.Line);
-            E = new Spell(SpellSlot.E, 1300f);
-            E.SetSkillshot(0.25f, 300f, 800f, false, SkillshotType.Line);
-            E2 = new Spell(SpellSlot.E, 2000f);
-            R = new Spell(SpellSlot.R, 3300f);
-            R.SetSkillshot(1.1f, 60f, float.MaxValue, false, SkillshotType.Line);
+            Q = new Spell(SpellSlot.Q, 1300f);//LuxLightBinding
+            Q.SetSkillshot(0.5f, 80f, 1200f, true, SkillshotType.Line);
+            W = new Spell(SpellSlot.W, 1175f);//LuxPrismaticWave
+            W.SetSkillshot(0.5f, 110f, 1077f, false, SkillshotType.Line);
+            E = new Spell(SpellSlot.E, 1300f);//LuxLightStrikeKugel Toggle == 0
+            E.SetSkillshot(0.5f, 300f, 1300f, false, SkillshotType.Line);
+            E2 = new Spell(SpellSlot.E, 20000f);//LuxLightStriketoggle Toggle == 1
+            R = new Spell(SpellSlot.R, 3400f);
+            R.SetSkillshot(1.5f, 200f, float.MaxValue, false, SkillshotType.Line);
         }
         public Lux()
         {
@@ -125,15 +125,15 @@
             {
                 Render.Circle(Player.Position, W.Range, 40, Color.Indigo);
             }
-            if (E.Ready && Menu["drawings"]["drawe"].Enabled)
+            if (E.Ready)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
-            }
-            if (E.Ready && Menu["drawings"]["drawe2"].Enabled)
-            {
-                if (LuxE != null)
+                if (Menu["drawings"]["drawe"].Enabled)
                 {
-                    Render.Circle(LuxE.ServerPosition, 335, 40, Color.DeepPink);
+                    Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
+                }
+                else if (Menu["drawings"]["drawe2"].Enabled && LuxE != null)
+                {
+                    Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
                 }
             }
             if (R.Ready)
@@ -203,29 +203,22 @@
             if (Q.Ready && Menu["killsteal"]["useq"].Enabled)
             {
                 var besttarget = GetBestKillableHero(Q, DamageType.Magical, false);
-                var QPrediction = Q.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.Q) >= besttarget.Health && besttarget.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(besttarget);
                 }
             }
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Magical, false);
-                var RPrediction = R.GetPrediction(besttarget);
                 if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range))
                 {
-                    if (RPrediction.HitChance >= HitChance.High)
-                    {
-                        R.Cast(RPrediction.CastPosition);
-                    }
+                    R.Cast(besttarget);
                 }
             }
             
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -246,25 +239,30 @@
             }
             return null;
         }
+
         private void Combo()
         {
-            var target = GetBestEnemyHeroTargetInRange(2500);
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
+            
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && useQ)
             {
-                Q.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target != null)
+                {
+                    Q.Cast(target);
+                }
             }
 
             bool useW = Menu["combo"]["usew"].Enabled;
             float useWhp = Menu["combo"]["usewhp"].As<MenuSlider>().Value;
-            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.HealthPercent() <= useWhp)
+            if (W.Ready && useW && Player.HealthPercent() <= useWhp)
             {
-                W.Cast();
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target != null)
+                {
+                    W.Cast();
+                }
             }
 
             bool useE = Menu["combo"]["usee"].Enabled;
@@ -274,29 +272,33 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 0:
-                        if (LuxE == null)
+                        var Etarget = GetBestEnemyHeroTargetInRange(E.Range);
+                        if (LuxE == null && Etarget!= null)
                         {
-                            if (target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                            if (Etarget.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                             {
-                                E.Cast(target);
+                                E.Cast(Etarget);
                             }
                         }
                         break;
                     case 2:
-                        if (LuxE != null)
+                        var target = GetBestEnemyHeroTargetInRange(E2.Range);
+                        if (LuxE != null && target != null)
                         {
-                            if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                            if (target.IsValidTarget(E2.Width, false, false, LuxE.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                             {
-                                E2.Cast(target);
+                                E2.Cast();
                             }
                         }
                         break;
                 }
             }
+
             bool useR = Menu["combo"]["user"].Enabled;
-            if (R.Ready && useR && target.IsValidTarget(R.Range))
+            if (R.Ready && useR)
             {
-               if (R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value - 1))
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
+                if (target != null && R.CastIfWillHit(target, Menu["combo"]["userhit"].As<MenuSlider>().Value - 1))
                 {
                     R.Cast(target);
                 }
@@ -305,14 +307,10 @@
         private void ManualR()
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);
-            var RPrediction = R.GetPrediction(target);
 
             if (R.Ready && target.IsValidTarget(R.Range))
             {
-                if (RPrediction.HitChance >= HitChance.High)
-                {
-                    R.Cast(RPrediction.CastPosition);
-                }
+                R.Cast(target);
             }
         }
         private void Harass()

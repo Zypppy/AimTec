@@ -200,7 +200,11 @@
             switch (Orbwalker.Mode)
             {
                 case OrbwalkingMode.Combo:
-                    OnCombo();
+                    QCombo();
+                    WCombo();
+                    ECombo();
+                    E2Combo();
+                    RCombo();
                     break;
                 case OrbwalkingMode.Mixed:
                     OnHarass();
@@ -266,9 +270,10 @@
             }
             return null;
         }
-        private void OnCombo()
+
+        private void QCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(E.Range);
+            var target = GetBestEnemyHeroTargetInRange(Q.Range);
             if (!target.IsValidTarget())
             {
                 return;
@@ -280,24 +285,63 @@
                 Q.Cast(target);
             }
 
+        }
+
+        private void WCombo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(W.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+
             bool useW = Menu["combo"]["usew"].Enabled;
             if (W.Ready && useW && target.IsValidTarget(W.Range))
             {
-               W.Cast();
+                W.Cast();
+            }
+
+        }
+
+        private void ECombo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(E.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
             }
 
             bool useE = Menu["combo"]["usee"].Enabled;
-            bool useEGap = Menu["combo"]["useegap"].Enabled;
             if (E.Ready)
             {
                 if (target.IsValidTarget(E.Range) && useE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
                     E.Cast(target);
                 }
-                else if (missiles != null && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
-                {
-                    E.Cast();
-                }
+            }
+        }
+
+        private void E2Combo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(E2.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
+            }
+            
+            bool useEGap = Menu["combo"]["useegap"].Enabled;
+            if (missiles != null && E.Ready && target.IsValidTarget(300f, false, false, missiles.ServerPosition) && useEGap && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+            {
+                E.Cast();
+            }
+        }
+
+        private void RCombo()
+        {
+            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            if (!target.IsValidTarget())
+            {
+                return;
             }
 
             bool useR = Menu["combo"]["user"].Enabled;
@@ -309,9 +353,12 @@
             }
             if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range - 50) >= REnemies)
             {
-                 R.Cast(Player);
+                R.Cast(Player);
             }
+
         }
+
+        
         private void OnHarass()
         {
             var target = GetBestEnemyHeroTargetInRange(E.Range);

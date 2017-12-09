@@ -127,8 +127,14 @@
             }
             if (E.Ready && Menu["drawings"]["drawe"].Enabled)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
-                Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
+                if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                {
+                    Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
+                }
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                {
+                    Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
+                }
             }
             if (R.Ready)
             {

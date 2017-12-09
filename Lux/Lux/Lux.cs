@@ -68,14 +68,6 @@
                 LaneClear.Add(new MenuSlider("manae", "E Lane clear if Mana % >=", 60, 0, 100));
             }
             Menu.Add(LaneClear);
-            var JungleClear = new Menu("jungleclear", "Jungle Clear");
-            {
-                JungleClear.Add(new MenuBool("useq", "Use Q"));
-                JungleClear.Add(new MenuSlider("manaq", "Q Jungle Clear if Mana % >=", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usee", "Use E"));
-                JungleClear.Add(new MenuSlider("manae", "E Jungle clear if Mana % >=", 60, 0, 100));
-            }
-            Menu.Add(JungleClear);
             var Killsteal = new Menu("killsteal", "Killsteal");
             {
                 Killsteal.Add(new MenuBool("useq", "Use Q"));
@@ -234,7 +226,6 @@
                     break;
                 case OrbwalkingMode.Laneclear:
                     LaneClear();
-                    JungleClear();
                     break;
 
             }
@@ -334,7 +325,7 @@
                         var target = GetBestEnemyHeroTargetInRange(E2.Range);
                         if (missiles != null && target != null)
                         {
-                            if (target.IsValidTarget(330f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                            if (target.IsValidTarget(350f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                             {
                                 E2.Cast();
                             }
@@ -386,7 +377,7 @@
                         var target = GetBestEnemyHeroTargetInRange(E2.Range);
                         if (missiles != null && target != null)
                         {
-                            if (target.IsValidTarget(330f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                            if (target.IsValidTarget(350f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                             {
                                 E2.Cast(target);
                             }
@@ -395,6 +386,7 @@
                 }
             }
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
@@ -407,85 +399,27 @@
         {
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
             {
-                var useQ = Menu["laneclear"]["useq"].Enabled;
-                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
-                var QPrediction = Q.GetPrediction(minion);
-                var useE = Menu["laneclear"]["usee"].Enabled;
-                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
-                var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
-                var EPrediction = E.GetPrediction(minion);
-
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
 
+                var useQ = Menu["laneclear"]["useq"].Enabled;
+                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
                 if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
                 {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
+                    Q.Cast(minion);
                 }
+
+                var useE = Menu["laneclear"]["usee"].Enabled;
+                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
                 if (E.Ready && useE)
                 {
-                    if (minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
+                    if (minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                     {
-                        if (EPrediction.HitChance >= HitChance.High)
-                        {
-                            E.Cast(EPrediction.CastPosition);
-                        }
+                        E.Cast(minion);
                     }
-                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range))
-                    {
-                        E2.Cast();
-                    }
-                }
-            }
-        }
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
-        {
-            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
-        {
-            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
-        }
-        private void JungleClear()
-        {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
-            {
-                var useQ = Menu["jungleclear"]["useq"].Enabled;
-                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
-                var QPrediction = Q.GetPrediction(minion);
-                var useE = Menu["jungleclear"]["usee"].Enabled;
-                float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
-                var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
-                var EPrediction = E.GetPrediction(minion);
-
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
-                {
-                    return;
-                }
-
-                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ && minion.IsValidTarget(Q.Range))
-                {
-                    if (QPrediction.HitChance >= HitChance.High)
-                    {
-                        Q.Cast(QPrediction.CastPosition);
-                    }
-                }
-                if (E.Ready && useE)
-                {
-                    if (minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 2)
-                    {
-                        if (EPrediction.HitChance >= HitChance.High)
-                        {
-                            E.Cast(EPrediction.CastPosition);
-                        }
-                    }
-                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState != 1 && minion.IsValidTarget(E2.Range))
+                    else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && minion.IsValidTarget(350f, false, false, missiles.ServerPosition))
                     {
                         E2.Cast();
                     }

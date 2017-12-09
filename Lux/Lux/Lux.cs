@@ -318,7 +318,6 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             if (E.Ready && useE)
             {
-
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 0:
@@ -365,11 +364,7 @@
         }
         private void Harass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
+            
             bool useE = Menu["combo"]["usee"].Enabled;
             float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
             if (E.Ready && useE)
@@ -378,18 +373,20 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 0:
-                        if (LuxE == null)
+                        var etarget = GetBestEnemyHeroTargetInRange(E.Range);
+                        if (etarget != null)
                         {
-                            if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                            if (etarget.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                             {
-                                E.Cast(target);
+                                E.Cast(etarget);
                             }
                         }
                         break;
                     case 2:
-                        if (LuxE != null)
+                        var target = GetBestEnemyHeroTargetInRange(E2.Range);
+                        if (missiles != null && target != null)
                         {
-                            if (LuxE.CountEnemyHeroesInRange(335f) >= 1 && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                            if (target.IsValidTarget(330f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                             {
                                 E2.Cast(target);
                             }

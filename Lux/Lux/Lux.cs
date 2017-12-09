@@ -26,6 +26,7 @@
         public static Orbwalker Orbwalker = new Orbwalker();
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
         public static Spell Q, W, E, E2, R;
+        private MissileClient missiles;
 
         public void LoadSpells()
         {
@@ -94,25 +95,58 @@
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
-            GameObject.OnCreate += LuxECreate;
-            GameObject.OnDestroy += LuxEDestroy;
+            GameObject.OnCreate += OnCreate;
+            GameObject.OnDestroy += OnDestroy;
 
             LoadSpells();
             Console.WriteLine("Lux by Zypppy - Loaded");
         }
-        
-        private void LuxECreate(GameObject obj)
+
+        public void OnCreate(GameObject obj)
         {
-            if (obj != null && obj.IsValid)
+            var missile = obj as MissileClient;
+            if (missile == null)
             {
-                Console.WriteLine(obj.Name);
+                return;
             }
-        }
-        private void LuxEDestroy(GameObject obj)
-        {
-            if (obj == null && obj.IsValid)
+
+            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
+                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
             {
-                Console.WriteLine("LuxE Gone");
+                return;
+            }
+            var hero = missile.SpellCaster as Obj_AI_Hero;
+            if (hero == null)
+            {
+                return;
+            }
+            if (missile.SpellData.Name == "LissandraEMissile")
+            {
+                missiles = missile;
+            }
+
+        }
+        private void OnDestroy(GameObject obj)
+        {
+            var missile = obj as MissileClient;
+            if (missile == null || !missile.IsValid)
+            {
+                return;
+            }
+
+            if (missile.SpellCaster == null || !missile.SpellCaster.IsValid ||
+                missile.SpellCaster.Team != ObjectManager.GetLocalPlayer().Team)
+            {
+                return;
+            }
+            var hero = missile.SpellCaster as Obj_AI_Hero;
+            if (hero == null)
+            {
+                return;
+            }
+            if (missile.SpellData.Name == "LissandraEMissile")
+            {
+                missiles = null;
             }
         }
 
@@ -147,16 +181,10 @@
                 {
                     Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
                 }
-                //else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE.Count > 0 && LuxE != null)
-                //{
-                //    foreach (var luxe in LuxE)
-                //    {
-                //        if (luxe.CountEnemyHeroesInRange(330) != 0)
-                //        {
-                //            Render.Circle(luxe.ServerPosition, 330, 20, Color.Red);
-                //        }
-                //    }
-                //}
+                else if (missiles != null && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                {
+                    Render.Circle(missiles.ServerPosition, 330, 40, Color.Red);
+                }
             }
             if (R.Ready)
             {
@@ -290,24 +318,24 @@
             bool useE = Menu["combo"]["usee"].Enabled;
             if (E.Ready && useE)
             {
-                var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 0:
-                        var Etarget = GetBestEnemyHeroTargetInRange(E.Range);
-                        if (LuxE == null && Etarget!= null)
+                        var etarget = GetBestEnemyHeroTargetInRange(E.Range);
+                        if (missiles == null && etarget!= null)
                         {
-                            if (Etarget.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
+                            if (etarget.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 0)
                             {
-                                E.Cast(Etarget);
+                                E.Cast(etarget);
                             }
                         }
                         break;
                     case 2:
                         var target = GetBestEnemyHeroTargetInRange(E2.Range);
-                        if (LuxE != null && target != null)
+                        if (missiles != null && target != null)
                         {
-                            if (target.IsValidTarget(E2.Width, false, false, LuxE.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                            if (target.IsValidTarget(330f, false, false, missiles.ServerPosition) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                             {
                                 E2.Cast();
                             }

@@ -252,7 +252,7 @@
             if (R.Ready && Menu["killsteal"]["user"].Enabled)
             {
                 var besttarget = GetBestKillableHero(R, DamageType.Magical, false);
-                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && besttarget.IsValidTarget(R.Range))
+                if (besttarget != null && Player.GetSpellDamage(besttarget, SpellSlot.R) >= besttarget.Health && !besttarget.IsValidTarget(Q.Range) && besttarget.IsValidTarget(R.Range))
                 {
                     R.Cast(besttarget);
                 }

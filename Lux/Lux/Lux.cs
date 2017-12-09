@@ -321,7 +321,7 @@
                             }
                         }
                         break;
-                    case 2:
+                    case 1:
                         var target = GetBestEnemyHeroTargetInRange(E2.Range);
                         if (missiles != null && target != null)
                         {
@@ -373,7 +373,7 @@
                             }
                         }
                         break;
-                    case 2:
+                    case 1:
                         var target = GetBestEnemyHeroTargetInRange(E2.Range);
                         if (missiles != null && target != null)
                         {

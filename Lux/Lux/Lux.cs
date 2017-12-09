@@ -120,7 +120,7 @@
             {
                 return;
             }
-            if (missile.SpellData.Name == "LissandraEMissile")
+            if (missile.SpellData.Name == "LuxLightStrikeKugel")
             {
                 missiles = missile;
             }
@@ -144,7 +144,7 @@
             {
                 return;
             }
-            if (missile.SpellData.Name == "LissandraEMissile")
+            if (missile.SpellData.Name == "LuxLightStrikeKugel")
             {
                 missiles = null;
             }

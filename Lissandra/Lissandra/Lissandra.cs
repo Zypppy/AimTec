@@ -37,7 +37,7 @@
             E = new Spell(SpellSlot.E, 1025f);//LissandraE Toggle == 1
             E.SetSkillshot(0.5f, 125f, 850f, false, SkillshotType.Line, false);
             E2 = new Spell(SpellSlot.E, 2000f);//Toggle == 2
-            R = new Spell(SpellSlot.R, 650f);//LissandraR
+            R = new Spell(SpellSlot.R, 550f);//LissandraR
         }
         public Lissandra()
         {

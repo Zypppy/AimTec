@@ -131,9 +131,9 @@
                 {
                     Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
                 }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE != null)
                 {
-                    Render.Circle(LuxE.ServerPosition, 330, 40, Color.DeepPink);
+                    Render.Circle(LuxE.ServerPosition, 330f, 40, Color.DeepPink);
                 }
             }
             if (R.Ready)

@@ -94,11 +94,29 @@
 
             Render.OnPresent += Render_OnPresent;
             Game.OnUpdate += Game_OnUpdate;
+            GameObject.OnCreate += LuxECreate;
+            GameObject.OnDestroy += LuxEDestroy;
 
             LoadSpells();
             Console.WriteLine("Lux by Zypppy - Loaded");
         }
-        
+
+        public  List<GameObject> LuxE = new List<GameObject>();
+        private void LuxECreate(GameObject sender)
+        {
+            if (sender.Name.Contains("Lux_Base_E_mis.troy"))
+            {
+                LuxE.Add(sender);
+            }
+        }
+        private void LuxEDestroy(GameObject sender)
+        {
+            if (sender.Name.Contains("Lux_Base_E_tar_nova.troy"))
+            {
+                LuxE.Remove(sender);
+            }
+        }
+
         public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
         public static int SxOffset(Obj_AI_Hero target)
         {
@@ -113,7 +131,6 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_mis.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
@@ -131,9 +148,15 @@
                 {
                     Render.Circle(Player.Position, E.Range, 40, Color.DeepPink);
                 }
-                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE != null)
+                else if (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1 && LuxE.Count > 0 && LuxE != null)
                 {
-                    Render.Circle(LuxE.ServerPosition, 330f, 40, Color.DeepPink);
+                    foreach (var luxe in LuxE)
+                    {
+                        if (luxe.CountEnemyHeroesInRange(330) != 0)
+                        {
+                            Render.Circle(luxe.ServerPosition, 330, 20, Color.Red);
+                        }
+                    }
                 }
             }
             if (R.Ready)

@@ -113,7 +113,7 @@
         {
             Vector2 maybeworks;
             var heropos = Render.WorldToScreen(Player.Position, out maybeworks);
-            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_tar_aoe_green.troy");
+            var LuxE = ObjectManager.Get<GameObject>().FirstOrDefault(o => o.IsValid && o.Name == "Lux_Base_E_mis.troy");
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 

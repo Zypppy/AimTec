@@ -104,14 +104,14 @@
         public  List<GameObject> LuxE = new List<GameObject>();
         private void LuxECreate(GameObject sender)
         {
-            if (sender.Name.Contains("Lux_Base_E_mis.troy"))
+            if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
             {
                 LuxE.Add(sender);
             }
         }
         private void LuxEDestroy(GameObject sender)
         {
-            if (sender.Name.Contains("Lux_Base_E_tar_nova.troy"))
+            if (sender.Name.Contains("Lux_Base_E_tar_aoe_green.troy"))
             {
                 LuxE.Remove(sender);
             }

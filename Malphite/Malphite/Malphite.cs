@@ -28,11 +28,11 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 625);
-            W = new Spell(SpellSlot.W, 400);
-            E = new Spell(SpellSlot.E, 400);
-            R = new Spell(SpellSlot.R, 1000);
-            R.SetSkillshot(0.325f, 160, 1700, false, SkillshotType.Circle);
+            Q = new Spell(SpellSlot.Q, 625f);//SeismicShard
+            W = new Spell(SpellSlot.W, 400f);//Obduracy
+            E = new Spell(SpellSlot.E, 400f);//Landslide
+            R = new Spell(SpellSlot.R, 1000f);//UFSlash
+            R.SetSkillshot(0f, 160f, 700f, false, SkillshotType.Circle);
         }
         public Malphite()
         {
@@ -108,7 +108,7 @@
 
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Q.Range, 40, Color.Azure);
+                Render.Circle(Player.Position, Q.Range, 40, Color.Aqua);
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {
@@ -116,11 +116,11 @@
             }
             if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
-                Render.Circle(Player.Position, E.Range, 40, Color.Azure);
+                Render.Circle(Player.Position, E.Range, 40, Color.Black);
             }
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
-                Render.Circle(Player.Position, R.Range, 40, Color.Azure);
+                Render.Circle(Player.Position, R.Range, 40, Color.Brown);
             }
             if (Menu["drawings"]["dmg"].Enabled)
             {
@@ -221,63 +221,81 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(R.Range);
+            
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            bool useR = Menu["combo"]["user"].Enabled;
-            float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-            var RPrediction = R.GetPrediction(target);
-
-            if (!target.IsValidTarget())
+            if (Q.Ready && useQ)
             {
-                return;
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
-            {
-                Q.Cast(target);
-            }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
-            {
-                W.Cast();
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
-            {
-                E.Cast();
-            }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
-            {
-                if (RPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target != null)
                 {
-                    R.Cast(RPrediction.CastPosition);
+                    Q.Cast(target);
+                }
+            }
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target != null)
+                {
+                    W.Cast();
+                }
+            }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            if (E.Ready && useE)
+            {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target != null)
+                {
+                    E.Cast();
+                }
+            }
+
+            bool useR = Menu["combo"]["user"].Enabled;
+            if (R.Ready && useR)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target != null && target.IsValidTarget(R.Range) && R.CastIfWillHit(target, Menu["combo"]["hitr"].As<MenuSlider>().Value - 1))
+                {
+                    R.Cast(target);
                 }
             }
         }
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
+            
             bool useQ = Menu["harass"]["useq"].Enabled;
             float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
+            {
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target != null)
+                {
+                    Q.Cast(target);
+                }
+            }
+
             bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
+            if (W.Ready && useW && Player.ManaPercent() >= manaW)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target != null)
+                {
+                    W.Cast();
+                }
+            }
+
             bool useE = Menu["harass"]["usee"].Enabled;
             float manaE = Menu["harass"]["manae"].As<MenuSlider>().Value;
-
-            if (!target.IsValidTarget())
+            if (E.Ready && useE && Player.ManaPercent() >= manaE)
             {
-                return;
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ)
-            {
-                Q.Cast(target);
-            }
-            if (W.Ready && useW && target.IsValidTarget(W.Range) && Player.ManaPercent() >= manaW)
-            {
-                W.Cast();
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE)
-            {
-                E.Cast();
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target != null)
+                {
+                    E.Cast();
+                }
             }
         }
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()

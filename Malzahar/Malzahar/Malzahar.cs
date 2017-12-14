@@ -201,7 +201,7 @@ namespace Malzahar
             bool CE = Menu["c"]["e"].Enabled;
             if (E.Ready && CE && !Player.HasBuff("malzaharrsound"))
             {
-                var t = GetBestEnemyHeroTargetInRange(Q.Range);
+                var t = GetBestEnemyHeroTargetInRange(E.Range);
                 if (t.IsValidTarget(E.Range) && t != null)
                 {
                     E.Cast(t);

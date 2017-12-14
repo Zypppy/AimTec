@@ -32,7 +32,7 @@
             W = new Spell(SpellSlot.W, 400f);//Obduracy
             E = new Spell(SpellSlot.E, 400f);//Landslide
             R = new Spell(SpellSlot.R, 1000f);//UFSlash
-            R.SetSkillshot(0f, 160f, 700f, false, SkillshotType.Circle);
+            R.SetSkillshot(0f, 160f, float.MaxValue, false, SkillshotType.Circle);
         }
         public Malphite()
         {

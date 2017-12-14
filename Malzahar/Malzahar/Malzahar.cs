@@ -165,21 +165,22 @@ namespace Malzahar
 
         private void Combo()
         {
-            var t = GetBestEnemyHeroTargetInRange(Q.Range);
-            if (!t.IsValidTarget())
-            {
-                return;
-            }
+            
 
             bool CQ = Menu["c"]["q"].Enabled;
             if (Q.Ready && CQ && !Player.HasBuff("malzaharrsound"))
             {
-               Q.Cast(t);
+                var t = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (t != null && t.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(t);
+                }
             }
 
             bool CW = Menu["c"]["w"].Enabled;
             if (W.Ready && CW && !Player.HasBuff("malzaharrsound"))
             {
+                var t = GetBestEnemyHeroTargetInRange(W.Range);
                 switch (Menu["c"]["wo"].As<MenuList>().Value)
                 {
                     case 0:
@@ -198,9 +199,13 @@ namespace Malzahar
             }
 
             bool CE = Menu["c"]["e"].Enabled;
-            if (E.Ready && CE && !Player.HasBuff("malzaharrsound") && t.IsValidTarget(E.Range))
+            if (E.Ready && CE && !Player.HasBuff("malzaharrsound"))
             {
-                E.Cast(t);
+                var t = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (t.IsValidTarget(E.Range) && t != null)
+                {
+                    E.Cast(t);
+                }
             }
         }
 

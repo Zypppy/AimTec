@@ -248,7 +248,7 @@
                         }
                         break;
                     case 2:
-                        if (!target.IsValidTarget(E.Range) && target != null && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                        if (!target.IsValidTarget(E.Range) || target == null && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             E.Cast();
                         }

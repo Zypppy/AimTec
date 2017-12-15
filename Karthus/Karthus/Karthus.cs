@@ -218,7 +218,7 @@
             if (Q.Ready && CQ)
             {
                 var target = GetBestEnemyHeroTargetInRange(Q.Range);
-                if (target.IsValidTarget(Q.Range) && !target.IsValidTarget())
+                if (target.IsValidTarget(Q.Range) && target != null)
                 {
                     Q.Cast(target);
                 }
@@ -228,7 +228,7 @@
             if (W.Ready && CW)
             {
                 var target = GetBestEnemyHeroTargetInRange(W.Range);
-                if (target.IsValidTarget(W.Range) && !target.IsValidTarget())
+                if (target.IsValidTarget(W.Range) && target != null)
                 {
                     W.Cast(target);
                 }
@@ -242,13 +242,13 @@
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 1:
-                        if (target.IsValidTarget(E.Range) && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
+                        if (target.IsValidTarget(E.Range) && target != null && Player.ManaPercent() >= ME && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 1)
                         {
                             E.Cast();
                         }
                         break;
                     case 2:
-                        if (!target.IsValidTarget(E.Range) && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
+                        if (!target.IsValidTarget(E.Range) && target != null && Player.SpellBook.GetSpell(SpellSlot.E).ToggleState == 2)
                         {
                             E.Cast();
                         }

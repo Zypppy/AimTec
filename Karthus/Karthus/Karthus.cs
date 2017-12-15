@@ -213,28 +213,32 @@
 
         private void Combo()
         {
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
-
+          
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && CQ)
             {
-                Q.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target.IsValidTarget(Q.Range) && !target.IsValidTarget())
+                {
+                    Q.Cast(target);
+                }
             }
 
             bool CW = Menu["c"]["w"].Enabled;
-            if (W.Ready && CW && target.IsValidTarget(W.Range))
+            if (W.Ready && CW)
             {
-                W.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target.IsValidTarget(W.Range) && !target.IsValidTarget())
+                {
+                    W.Cast(target);
+                }
             }
             
             bool CE = Menu["c"]["e"].Enabled;
             float ME = Menu["c"]["em"].As<MenuSlider>().Value;
             if (E.Ready && CE)
             {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
                 switch (Player.SpellBook.GetSpell(SpellSlot.E).ToggleState)
                 {
                     case 1:

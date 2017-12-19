@@ -30,11 +30,11 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 1775);
-            E = new Spell(SpellSlot.E, 700);
-            E.SetSkillshot(0.416f, 12f * 2 * (float)Math.PI / 180, 1500f, false, SkillshotType.Cone);
-            R = new Spell(SpellSlot.R, 650);
+            Q = new Spell(SpellSlot.Q, 300f);
+            W = new Spell(SpellSlot.W, 1500f);// MordekaiserCreepingDeathCast  MordekaiserCreepingDeath2
+            E = new Spell(SpellSlot.E, 700f);// MordekaiserSyphonOfDestruction
+            E.SetSkillshot(0.5f, 12f * 2 * (float)Math.PI / 180, 1500f, false, SkillshotType.Cone);
+            R = new Spell(SpellSlot.R, 650f);//MordekaiserChildrenOfTheGrave
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -241,60 +241,69 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useW = Menu["combo"]["usew"].Enabled;
-            bool useE = Menu["combo"]["usee"].Enabled;
-            var EPrediction = E.GetPrediction(target);
-            bool useR = Menu["combo"]["user"].Enabled;
-            float hpR = Menu["combo"]["userhp"].As<MenuSlider>().Value;
-
-            if (!target.IsValidTarget())
+            if (Q.Ready && useQ)
             {
-                return;
-            }
-            if (Q.Ready && target.IsValidTarget(Player.AttackRange + target.BoundingRadius) && useQ)
-            {
-                Q.Cast();
-            }
-            if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && target.IsValidTarget(W.Range) && Player.CountEnemyHeroesInRange(250) >= 1)
-            {
-                W.Cast();
-            }
-            if (E.Ready && target.IsValidTarget(E.Range) && useE)
-            {
-                if (EPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target != null && target.IsValidTarget(Player.AttackRange + target.BoundingRadius))
                 {
-                    E.Cast(EPrediction.CastPosition);
+                    Q.Cast();
                 }
             }
-            if (R.Ready && target.IsValidTarget(R.Range) && target.HealthPercent() < hpR)
+
+            bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "MordekaiserCreepingDeathCast" && Player.CountEnemyHeroesInRange(250) >= 1)
             {
-                R.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target.IsValidTarget(W.Range) && target != null)
+                {
+                    W.Cast();
+                }
+            }
+
+            bool useE = Menu["combo"]["usee"].Enabled;
+            if (E.Ready && useE)
+            {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target.IsValidTarget(E.Range) && target != null)
+                {
+                    E.Cast(target);
+                }
+            }
+            bool useR = Menu["combo"]["user"].Enabled;
+            float hpR = Menu["combo"]["userhp"].As<MenuSlider>().Value;
+            if (R.Ready && useR)
+            {
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
+                if (target.IsValidTarget(R.Range) && target != null && target.HealthPercent() < hpR)
+                {
+                    R.Cast(target);
+                }
             }
         }
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
+            
+
             bool useQ = Menu["harass"]["useq"].Enabled;
             float useQHP = Menu["harass"]["hpq"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && Player.HealthPercent() >= useQHP)
+            {
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target != null && target.IsValidTarget(Player.AttackRange + target.BoundingRadius))
+                {
+                    Q.Cast();
+                }
+            }
+
             bool useE = Menu["harass"]["usee"].Enabled;
             float useEHP = Menu["harass"]["hpe"].As<MenuSlider>().Value;
-            var EPrediction = E.GetPrediction(target);
-
-            if (!target.IsValidTarget())
+            if (E.Ready && useE && Player.HealthPercent() >= useEHP)
             {
-                return;
-            }
-            if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && target.IsValidTarget(Player.AttackRange + target.BoundingRadius))
-            {
-                Q.Cast();
-            }
-            if (E.Ready && Player.HealthPercent() >= useEHP && target.IsValidTarget(E.Range) && useE)
-            {
-                if (EPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target.IsValidTarget(E.Range) && target != null)
                 {
-                    E.Cast(EPrediction.CastPosition);
+                    E.Cast(target);
                 }
             }
         }
@@ -309,30 +318,34 @@
         }
         private void OnLaneClear()
         {
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(1500))
+            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                float useQHP = Menu["laneclear"]["hpq"].As<MenuSlider>().Value;
-                bool useW = Menu["laneclear"]["usew"].Enabled;
-                float useWHP = Menu["laneclear"]["hpw"].As<MenuSlider>().Value;
-                float minionsW = Menu["laneclear"]["minions"].As<MenuSlider>().Value;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
-                float useEHP = Menu["laneclear"]["hpe"].As<MenuSlider>().Value;
-                var EPrediction = E.GetPrediction(minion);
 
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
+
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                float useQHP = Menu["laneclear"]["hpq"].As<MenuSlider>().Value;
                 if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Player.AttackRange + minion.BoundingRadius))
                 {
                     Q.Cast();
                 }
-                if (W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2 && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(250, false, false, minion.ServerPosition)) >= minionsW)
+
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float useWHP = Menu["laneclear"]["hpw"].As<MenuSlider>().Value;
+                float minionsW = Menu["laneclear"]["minions"].As<MenuSlider>().Value;
+                if (W.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "MordekaiserCreepingDeathCast" && Player.HealthPercent() >= useWHP && minion.IsValidTarget(W.Range) && GameObjects.EnemyMinions.Count(h => h.IsValidTarget(250, false, false, minion.ServerPosition)) >= minionsW)
                 {
                     W.Cast();
                 }
-                if (E.Ready && Player.HealthPercent() >= useEHP && minion.IsValidTarget(E.Range))
+
+                
+                bool useE = Menu["laneclear"]["usee"].Enabled;
+                float useEHP = Menu["laneclear"]["hpe"].As<MenuSlider>().Value;
+                var EPrediction = E.GetPrediction(minion);
+                if (E.Ready && useE && Player.HealthPercent() >= useEHP && minion.IsValidTarget(E.Range))
                 {
                     if (EPrediction.HitChance >= HitChance.High)
                     {

@@ -36,13 +36,13 @@
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1600);
-            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1625, 1.4f);
-            Q.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false);
-            E = new Spell(SpellSlot.E, 925);
-            E.SetSkillshot(0.265f, 120f, 1500f, false, SkillshotType.Circle, false);
-            R = new Spell(SpellSlot.R, 1250);
-            R.SetSkillshot(0.251f, 120f, 1962f, false, SkillshotType.Line, false);
+            Q = new Spell(SpellSlot.Q, 1625f);
+            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1625, 1.3f);
+            Q.SetSkillshot(0.25f, 75f, 1900f, false, SkillshotType.Line, false);
+            E = new Spell(SpellSlot.E, 925f);
+            E.SetSkillshot(0.5f, 120f, 1500f, false, SkillshotType.Circle, false);
+            R = new Spell(SpellSlot.R, 1250f);
+            R.SetSkillshot(0.5f, 120f, 1200f, false, SkillshotType.Line, false);
 
 
         }
@@ -52,6 +52,7 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuList("qo", "Q Options", new[] { "Always", "Only When Out Of AA Range" }, 1));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "Enemies Around Target", 2, 1, 5));
@@ -113,6 +114,15 @@
         private void Game_OnUpdate()
         {
 
+            if (Q.IsCharging)
+            {
+                Orbwalker.AttackingEnabled = false;
+            }
+            if (!Q.IsCharging)
+            {
+                Orbwalker.AttackingEnabled = true;
+            }
+
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;
@@ -160,40 +170,46 @@
 
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(2000);
             bool useQ = Menu["combo"]["useq"].Enabled;
-            var QPrediction = Q.GetPrediction(target);
+            if (Q.Ready && useQ)
+            {
+                var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
+                switch (Menu["combo"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (target.IsValidTarget(Q.ChargedMaxRange) && target != null)
+                        {
+                            Q.Cast(target);
+                        }
+                        break;
+                    case 1:
+                        if (target.IsValidTarget(Q.ChargedMaxRange) && !target.IsValidAutoRange() && target != null)
+                        {
+                            Q.Cast(target);
+                        }
+                        break;
+                }
+            }
+
             bool useE = Menu["combo"]["usee"].Enabled;
-            var EPrediction = E.GetPrediction(target);
+            if (E.Ready && useE)
+            {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target.IsValidTarget(E.Range) && target != null)
+                {
+                    E.Cast(target);
+                }
+            }
+
             bool useR = Menu["combo"]["user"].Enabled;
-            var RPrediction = R.GetPrediction(target);
             float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-
-
-            if (!target.IsValidTarget())
+            if (R.Ready && useR)
             {
-                return;
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.ChargedMaxRange))
-            {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range))
-            {
-                if (EPrediction.HitChance >= HitChance.High)
-                {
-                    E.Cast(RPrediction.CastPosition);
-                }
-            }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && target.CountEnemyHeroesInRange(R.Width + 200) >= hitR)
-            {
-                if (RPrediction.HitChance >= HitChance.High)
-                {
-                    R.Cast(RPrediction.CastPosition);
-                }
+               var target = GetBestEnemyHeroTargetInRange(R.Range);
+               if (target.IsValidTarget(R.Range) && target.CountEnemyHeroesInRange(R.Width + 200) >= hitR && target != null)
+               {
+                   R.Cast(target);
+               }
             }
         }
         private void ManualR()
@@ -201,7 +217,7 @@
             var target = GetBestEnemyHeroTargetInRange(R.Range);
             Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
             var RPrediction = R.GetPrediction(target);
-            if (R.Ready && target.IsValidTarget(R.Range))
+            if (R.Ready && target.IsValidTarget(R.Range) && target != null)
             {
                 if (RPrediction.HitChance >= HitChance.High)
                 {
@@ -211,10 +227,9 @@
         }
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(2000);
+            var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
             bool useQ = Menu["harass"]["useq"].Enabled;
             float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
 
             if (!target.IsValidTarget())
             {
@@ -223,10 +238,7 @@
 
             if (Q.Ready && useQ && target.IsValidTarget(Q.ChargedMaxRange) && Player.ManaPercent() >= manaQ)
             {
-                if (QPrediction.HitChance >= HitChance.High)
-                {
-                    Q.Cast(QPrediction.CastPosition);
-                }
+                Q.Cast(target);
             }
         }
     }

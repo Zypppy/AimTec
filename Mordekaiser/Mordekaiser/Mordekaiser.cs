@@ -123,7 +123,7 @@
 
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Player.AttackRange, 40, Color.Crimson);
+                Render.Circle(Player.Position, Q.Range, 40, Color.Crimson);
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready && Player.GetSpell(SpellSlot.W).ToggleState != 2)
             {
@@ -245,7 +245,7 @@
             if (Q.Ready && useQ)
             {
                 var target = GetBestEnemyHeroTargetInRange(Q.Range);
-                if (target != null && target.IsValidTarget(Player.AttackRange + target.BoundingRadius))
+                if (target != null && target.IsValidTarget(Q.Range))
                 {
                     Q.Cast();
                 }
@@ -328,7 +328,7 @@
 
                 bool useQ = Menu["laneclear"]["useq"].Enabled;
                 float useQHP = Menu["laneclear"]["hpq"].As<MenuSlider>().Value;
-                if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Player.AttackRange + minion.BoundingRadius))
+                if (Q.Ready && Player.HealthPercent() >= useQHP && useQ && minion.IsValidTarget(Q.Range))
                 {
                     Q.Cast();
                 }

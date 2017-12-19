@@ -37,7 +37,7 @@
 
         {
             Q = new Spell(SpellSlot.Q, 1600);
-            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1625, 1.5f);
+            Q.SetCharged("VarusQ", "VarusQLaunch", 900, 1625, 1.4f);
             Q.SetSkillshot(0.25f, 75f, 1500f, false, SkillshotType.Line, false);
             E = new Spell(SpellSlot.E, 925);
             E.SetSkillshot(0.265f, 120f, 1500f, false, SkillshotType.Circle, false);

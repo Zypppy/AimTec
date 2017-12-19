@@ -29,12 +29,12 @@
         public static Spell Q, W, E, R;
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1200);
-            W = new Spell(SpellSlot.W, 900);
-            E = new Spell(SpellSlot.E, 800);
-            R = new Spell(SpellSlot.R, 625);
-            Q.SetSkillshot(0.1515f, 70f, 1198f, true, SkillshotType.Line, false);
-            W.SetSkillshot(0.672f, 279f, float.MaxValue, false, SkillshotType.Circle, false);
+            Q = new Spell(SpellSlot.Q, 1300f);
+            Q.SetSkillshot(0.5f, 70f, 1200f, true, SkillshotType.Line, false);
+            W = new Spell(SpellSlot.W, 900f);
+            W.SetSkillshot(0.5f, 280f, float.MaxValue, false, SkillshotType.Circle, false);
+            E = new Spell(SpellSlot.E, 800f);
+            R = new Spell(SpellSlot.R, 625f);
         }
 
         public Morgana()
@@ -44,6 +44,7 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
+                ComboMenu.Add(new MenuList("wo", "W Options", new [] {"Always", "Hard CC Targets" }, 1));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("hitr", "Min enemies to hit with R", 1, 1, 5));
 
@@ -206,40 +207,48 @@
 
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            bool useQ = Menu["combo"]["useq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                switch (Menu["combo"]["wo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (target.IsValidTarget(W.Range) && target != null)
+                        {
+                            W.Cast(target);
+                        }
+                        break;
+                    case 1:
+                        if (target.IsValidTarget(W.Range) && target != null && target.HasBuffOfType(BuffType.Charm) ||
+                            target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Snare) ||
+                            target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Suppression) ||
+                            target.HasBuffOfType(BuffType.Taunt))
+                        {
+                            W.Cast(target);
+                        }
+                        break;
+                }
+            }
+
+            bool useQ = Menu["combo"]["useq"].Enabled;
+            if (Q.Ready && useQ)
+            {
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target.IsValidTarget(Q.Range) && target != null)
+                {
+                    Q.Cast(target);
+                }
+            }
+
             bool useR = Menu["combo"]["user"].Enabled;
             float hitR = Menu["combo"]["hitr"].As<MenuSlider>().Value;
-            var QPrediction = Q.GetPrediction(target);
-            var WPrediction = W.GetPrediction(target);
-
-            if (!target.IsValidTarget())
+            if (useR && Player.CountEnemyHeroesInRange(R.Range - 150) >= hitR && R.Ready)
             {
-                return;
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range))
-            {
-                if (QPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
+                if (target.IsValidTarget(R.Range - 50) && target != null)
                 {
-                    Q.Cast(QPrediction.CastPosition);
-                }
-            }
-            if (W.Ready && useW && target.IsValidTarget(W.Range))
-            {
-                if (WPrediction.HitChance >= HitChance.Medium)
-                {
-                    W.Cast(WPrediction.CastPosition);
-                }
-            }
-            if (useR)
-            {
-                if (R.Ready && target.IsValidTarget(R.Range - 50))
-                {
-                    if (target != null && Player.CountEnemyHeroesInRange(R.Range - 150) >= hitR)
-                    {                     
-                     R.Cast();                     
-                    }
+                    R.Cast();
                 }
             }
         }

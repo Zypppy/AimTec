@@ -30,7 +30,7 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 500f);
+            Q = new Spell(SpellSlot.Q, 300f);
             W = new Spell(SpellSlot.W, 1000f);// MordekaiserCreepingDeathCast  MordekaiserCreepingDeath2
             E = new Spell(SpellSlot.E, 700f);// MordekaiserSyphonOfDestruction
             E.SetSkillshot(0.5f, 12f * 2 * (float)Math.PI / 180, 1500f, false, SkillshotType.Cone);

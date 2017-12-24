@@ -550,7 +550,7 @@
                         }
                     }
                     bool useE = Menu["jungleclear"]["usejce"].Enabled;
-                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(EC.Range))
+                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && EC.Ready && minion.IsValidTarget(EC.Range))
                     {
                         EC.Cast(minion);
                     }

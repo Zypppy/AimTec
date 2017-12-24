@@ -391,10 +391,6 @@
                         {
                             WC.Cast(WCougar);
                         }
-                        else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && WCougar.IsValidTarget(WCL.Range) && WCougar.HasBuff("NidaleePassiveHunted"))
-                        {
-                            WCL.Cast(WCougar);
-                        }
                         break;
                 }
             }

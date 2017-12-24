@@ -439,21 +439,21 @@
                 switch (Menu["combo"]["ro"].As<MenuList>().Value)
                 {
                     case 0:
-                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.IsValidTarget(rangeR))
+                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.IsValidTarget(WC.Range))
                         {
                             R.Cast();
                         }
-                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && RTarget.IsValidTarget(rangeR))
+                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && RTarget.IsValidTarget(QH.Range))
                         {
                             R.Cast();
                         }
                         break;
                     case 1:
-                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(rangeR))
+                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(WCL.Range))
                         {
                             R.Cast();
                         }
-                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(rangeR))
+                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(QH.Range))
                         {
                             R.Cast();
                         }

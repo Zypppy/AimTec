@@ -438,6 +438,10 @@
                         {
                             R.Cast();
                         }
+                        else if (R.Ready && !RTarget.IsValidTarget(WCL.Range))
+                        {
+                            R.Cast();
+                        }
                         break;
                 }
             }

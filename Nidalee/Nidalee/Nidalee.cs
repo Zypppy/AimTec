@@ -438,7 +438,7 @@
                         {
                             R.Cast();
                         }
-                        else if (R.Ready && !RTarget.IsValidTarget(WCL.Range))
+                        else if (R.Ready && !RTarget.IsValidTarget(WCL.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "JavelinToss")
                         {
                             R.Cast();
                         }

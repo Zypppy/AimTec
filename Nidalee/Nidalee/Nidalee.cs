@@ -50,17 +50,14 @@
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuList("qo", "Q Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
                 ComboMenu.Add(new MenuBool("usew", "Use W"));
                 ComboMenu.Add(new MenuList("wo", "W Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));
                 ComboMenu.Add(new MenuBool("usee", "Use E"));
                 ComboMenu.Add(new MenuList("eo", "E Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
                 ComboMenu.Add(new MenuSlider("useeh", "Health To Use Human E", 30, 0, 100));
                 ComboMenu.Add(new MenuSlider("useehm", "Mana To Use Human Use E", 70, 0, 100));
-                //ComboMenu.Add(new MenuBool("usece", "Use Cougar E"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
-                ComboMenu.Add(new MenuList("ro", "R Options", new[] { "Always", "Only When Target Has Buff"}, 0));
+                ComboMenu.Add(new MenuList("ro", "R Options", new[] { "Always"}, 0));
                 ComboMenu.Add(new MenuSlider("userr", "Use R Target in Range", 400, 0, 1400));
             }
             Menu.Add(ComboMenu);
@@ -74,10 +71,8 @@
             {
                 JungleClear.Add(new MenuBool("usejq", "Use Human Q in Jungle"));
                 JungleClear.Add(new MenuList("qo", "Q Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //JungleClear.Add(new MenuBool("usejcq", "Use Cougar Q in Jungle"));
                 JungleClear.Add(new MenuBool("usejw", "Use Human W in Jungle"));
                 JungleClear.Add(new MenuList("wo", "W Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //JungleClear.Add(new MenuBool("usejcw", "Use Cougar W in Jungle"));
                 JungleClear.Add(new MenuBool("usejce", "Use Cougar E in Jungle"));
                 JungleClear.Add(new MenuBool("usejr", "Use R in Jungle"));
                 JungleClear.Add(new MenuList("ro", "R Options", new[] { "Always", "Only When Monster Has Buff" }, 0));
@@ -101,14 +96,10 @@
             {
                 DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
                 DrawMenu.Add(new MenuList("qdo", "Q Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //DrawMenu.Add(new MenuBool("drawq2", "Draw Cougar Q Range"));
                 DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawMenu.Add(new MenuList("wdo", "W Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //DrawMenu.Add(new MenuBool("draww2", "Draw Cougar W Range"));
-                //DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
                 DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawMenu.Add(new MenuList("edo", "E Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
-                //DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
                 DrawMenu.Add(new MenuBool("drawflee", "Draw Free Circle Around Cursor"));
             }
@@ -391,6 +382,10 @@
                         {
                             WC.Cast(WCougar);
                         }
+                        else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && WCougar.IsValidTarget(WCL.Range) && WCougar.HasBuff("NidaleePassiveHunted"))
+                        {
+                            WCL.Cast(WCougar);
+                        }
                         break;
                 }
             }
@@ -440,16 +435,6 @@
                             R.Cast();
                         }
                         else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && RTarget.IsValidTarget(QH.Range))
-                        {
-                            R.Cast();
-                        }
-                        break;
-                    case 1:
-                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(WCL.Range))
-                        {
-                            R.Cast();
-                        }
-                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(QH.Range))
                         {
                             R.Cast();
                         }

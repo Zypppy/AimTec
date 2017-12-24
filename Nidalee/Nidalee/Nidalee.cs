@@ -48,16 +48,20 @@
             Orbwalker.Attach(Menu);
             var ComboMenu = new Menu("combo", "Combo");
             {
-                ComboMenu.Add(new MenuBool("useq", "Use Human Q"));
-                ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
-                ComboMenu.Add(new MenuBool("usew", "Use Human W"));
-                ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));
-                ComboMenu.Add(new MenuBool("usee", "Use Human E"));
+                ComboMenu.Add(new MenuBool("useq", "Use Q"));
+                ComboMenu.Add(new MenuList("qo", "Q Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //ComboMenu.Add(new MenuBool("usecq", "Use Cougar Q"));
+                ComboMenu.Add(new MenuBool("usew", "Use W"));
+                ComboMenu.Add(new MenuList("wo", "W Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //ComboMenu.Add(new MenuBool("usecw", "Use Cougar W"));
+                ComboMenu.Add(new MenuBool("usee", "Use E"));
+                ComboMenu.Add(new MenuList("eo", "E Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
                 ComboMenu.Add(new MenuSlider("useeh", "Health To Use Human E", 30, 0, 100));
                 ComboMenu.Add(new MenuSlider("useehm", "Mana To Use Human Use E", 70, 0, 100));
-                ComboMenu.Add(new MenuBool("usece", "Use Cougar E"));
-                ComboMenu.Add(new MenuBool("user", "Use R To Switch Forms"));
-                ComboMenu.Add(new MenuSlider("userr", "Use R If Target Is In Range", 400, 0, 1400));
+                //ComboMenu.Add(new MenuBool("usece", "Use Cougar E"));
+                ComboMenu.Add(new MenuBool("user", "Use R"));
+                ComboMenu.Add(new MenuList("ro", "R Options", new[] { "Always", "Only When Target Has Buff"}, 0));
+                ComboMenu.Add(new MenuSlider("userr", "Use R Target in Range", 400, 0, 1400));
             }
             Menu.Add(ComboMenu);
             var HarassMenu = new Menu("harass", "Harass");
@@ -66,17 +70,20 @@
                 HarassMenu.Add(new MenuSlider("mana", "Mana Manager", 50));
             }
             Menu.Add(HarassMenu);
-            var JunglCelear = new Menu("jungleclear", "Jungle Clear");
+            var JungleClear = new Menu("jungleclear", "Jungle Clear");
             {
-                JunglCelear.Add(new MenuBool("usejq", "Use Human Q in Jungle"));
-                JunglCelear.Add(new MenuBool("usejcq", "Use Cougar Q in Jungle"));
-                JunglCelear.Add(new MenuBool("usejw", "Use Human W in Jungle"));
-                JunglCelear.Add(new MenuBool("usejcw", "Use Cougar W in Jungle"));
-                JunglCelear.Add(new MenuBool("usejce", "Use Cougar E in Jungle"));
-                JunglCelear.Add(new MenuBool("usejr", "Use R in Jungle"));
-                JunglCelear.Add(new MenuSlider("manaj", "Mana Manager For Jungle", 50));
+                JungleClear.Add(new MenuBool("usejq", "Use Human Q in Jungle"));
+                JungleClear.Add(new MenuList("qo", "Q Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //JungleClear.Add(new MenuBool("usejcq", "Use Cougar Q in Jungle"));
+                JungleClear.Add(new MenuBool("usejw", "Use Human W in Jungle"));
+                JungleClear.Add(new MenuList("wo", "W Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //JungleClear.Add(new MenuBool("usejcw", "Use Cougar W in Jungle"));
+                JungleClear.Add(new MenuBool("usejce", "Use Cougar E in Jungle"));
+                JungleClear.Add(new MenuBool("usejr", "Use R in Jungle"));
+                JungleClear.Add(new MenuList("ro", "R Options", new[] { "Always", "Only When Monster Has Buff" }, 0));
+                JungleClear.Add(new MenuSlider("manaj", "Mana Manager For Jungle", 50));
             }
-            Menu.Add(JunglCelear);
+            Menu.Add(JungleClear);
             var KSMenu = new Menu("killsteal", "Killsteal");
             {
                 KSMenu.Add(new MenuBool("kq", "Killsteal with Human Q"));
@@ -92,13 +99,16 @@
             Menu.Add(miscmenu);
             var DrawMenu = new Menu("drawings", "Drawings");
             {
-                DrawMenu.Add(new MenuBool("drawq", "Draw Human Q Range"));
-                DrawMenu.Add(new MenuBool("drawq2", "Draw Cougar Q Range"));
-                DrawMenu.Add(new MenuBool("draww", "Draw Human W Range"));
-                DrawMenu.Add(new MenuBool("draww2", "Draw Cougar W Range"));
-                DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
-                DrawMenu.Add(new MenuBool("drawe", "Draw Human E Range"));
-                DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
+                DrawMenu.Add(new MenuBool("drawq", "Draw Q Range"));
+                DrawMenu.Add(new MenuList("qdo", "Q Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //DrawMenu.Add(new MenuBool("drawq2", "Draw Cougar Q Range"));
+                DrawMenu.Add(new MenuBool("draww", "Draw W Range"));
+                DrawMenu.Add(new MenuList("wdo", "W Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //DrawMenu.Add(new MenuBool("draww2", "Draw Cougar W Range"));
+                //DrawMenu.Add(new MenuBool("draww3", "Draw Cougar W Long Range"));
+                DrawMenu.Add(new MenuBool("drawe", "Draw E Range"));
+                DrawMenu.Add(new MenuList("edo", "E Drawing Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
+                //DrawMenu.Add(new MenuBool("drawe2", "Draw Cougar E Range"));
                 DrawMenu.Add(new MenuBool("drawr", "Draw R Range"));
                 DrawMenu.Add(new MenuBool("drawflee", "Draw Free Circle Around Cursor"));
             }
@@ -125,35 +135,89 @@
             var xaOffset = (int)maybeworks.X;
             var yaOffset = (int)maybeworks.Y;
 
-            if (Menu["drawings"]["drawq"].Enabled && QH.Ready)
+            if (Menu["drawings"]["drawq"].Enabled)
             {
-                Render.Circle(Player.Position, QH.Range, 40, Color.Indigo);
+                switch (Menu["drawings"]["qdo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss")
+                        {
+                            Render.Circle(Player.Position, QH.Range, 40, Color.Indigo);
+                        }
+                        else if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown")
+                        {
+                            Render.Circle(Player.Position, QC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 1:
+                        if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss")
+                        {
+                            Render.Circle(Player.Position, QH.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 2:
+                        if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown")
+                        {
+                            Render.Circle(Player.Position, QC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                }
             }
-            if (Menu["drawings"]["drawq2"].Enabled && QH.Ready)
+            if (Menu["drawings"]["draww"].Enabled)
             {
-                Render.Circle(Player.Position, QC.Range, 40, Color.Indigo);
+                switch (Menu["drawings"]["wdo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack")
+                        {
+                            Render.Circle(Player.Position, WH.Range, 40, Color.Indigo);
+                        }
+                        else if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce")
+                        {
+                            Render.Circle(Player.Position, WC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 1:
+                        if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack")
+                        {
+                            Render.Circle(Player.Position, WH.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 2:
+                        if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce")
+                        {
+                            Render.Circle(Player.Position, WC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                }
             }
-
-            if (Menu["drawings"]["draww"].Enabled && WH.Ready)
+            if (Menu["drawings"]["drawe"].Enabled)
             {
-                Render.Circle(Player.Position, WH.Range, 40, Color.Fuchsia);
-            }
-            if (Menu["drawings"]["draww2"].Enabled && WH.Ready)
-            {
-                Render.Circle(Player.Position, WC.Range, 40, Color.Fuchsia);
-            }
-            if (Menu["drawings"]["draww3"].Enabled && WH.Ready)
-            {
-                Render.Circle(Player.Position, WCL.Range, 40, Color.Fuchsia);
-            }
-
-            if (Menu["drawings"]["drawe"].Enabled && EH.Ready)
-            {
-                Render.Circle(Player.Position, EH.Range, 40, Color.DeepPink);
-            }
-            if (Menu["drawings"]["drawe2"].Enabled && EH.Ready)
-            {
-                Render.Circle(Player.Position, EC.Range, 40, Color.DeepPink);
+                switch (Menu["drawings"]["edo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (EH.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge")
+                        {
+                            Render.Circle(Player.Position, EH.Range, 40, Color.Indigo);
+                        }
+                        else if (EC.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe")
+                        {
+                            Render.Circle(Player.Position, EC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 1:
+                        if (EH.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge")
+                        {
+                            Render.Circle(Player.Position, EH.Range, 40, Color.Indigo);
+                        }
+                        break;
+                    case 2:
+                        if (EC.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe")
+                        {
+                            Render.Circle(Player.Position, EC.Range, 40, Color.Indigo);
+                        }
+                        break;
+                }
             }
             float range = Menu["combo"]["userr"].As<MenuSlider>().Value;
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
@@ -170,7 +234,7 @@
         private void Game_OnUpdate()
         {
 
-            if (Player.IsDead || MenuGUI.IsChatOpen())
+            if (Player.IsDead || MenuGUI.IsChatOpen() || Player.IsRecalling())
             {
                 return;
             }
@@ -223,38 +287,6 @@
                 Flee();
             }
         }
-
-
-        public static List<Obj_AI_Minion> GetAllGenericMinionsTargets()
-        {
-            return GetAllGenericMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetAllGenericMinionsTargetsInRange(float range)
-        {
-            return GetEnemyLaneMinionsTargetsInRange(range).Concat(GetGenericJungleMinionsTargetsInRange(range)).ToList();
-        }
-
-        public static List<Obj_AI_Base> GetAllGenericUnitTargets()
-        {
-            return GetAllGenericUnitTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Base> GetAllGenericUnitTargetsInRange(float range)
-        {
-            return GameObjects.EnemyHeroes.Where(h => h.IsValidTarget(range)).Concat<Obj_AI_Base>(GetAllGenericMinionsTargetsInRange(range)).ToList();
-        }
-
-        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
-        {
-            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
-        {
-            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
-        }
-
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
             bool ignoreShields = false)
         {
@@ -299,59 +331,134 @@
 
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(QH.Range);
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
+            
             bool useQ = Menu["combo"]["useq"].Enabled;
-            if (QH.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && target.IsValidTarget(QH.Range))
+            if (useQ)
             {
-                QH.Cast(target);
-            }
-            bool useQ2 = Menu["combo"]["usecq"].Enabled;
-            if (QC.Ready && useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && target.IsValidTarget(QC.Range))
-            {
-                QC.Cast();
+                var QHuman = GetBestEnemyHeroTargetInRange(QH.Range);
+                var QCougar = GetBestEnemyHeroTargetInRange(QC.Range);
+                switch (Menu["combo"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && QHuman.IsValidTarget(QH.Range))
+                        {
+                            QH.Cast(QHuman);
+                        }
+                        else if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && QCougar.IsValidTarget(QC.Range))
+                        {
+                            QC.Cast();
+                        }
+                        break;
+                    case 1:
+                        if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && QHuman.IsValidTarget(QH.Range))
+                        {
+                            QH.Cast(QHuman);
+                        }
+                        break;
+                    case 2:
+                        if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && QCougar.IsValidTarget(QC.Range))
+                        {
+                            QC.Cast();
+                        }
+                        break;
+                }
             }
             bool useW = Menu["combo"]["usew"].Enabled;
-            if (WH.Ready && useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && target.IsValidTarget(WH.Range))
+            if (useW)
             {
-                WH.Cast(target);
+                var WHuman = GetBestEnemyHeroTargetInRange(WH.Range);
+                var WCougar = GetBestEnemyHeroTargetInRange(WC.Range);
+                switch (Menu["combo"]["wo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && WHuman.IsValidTarget(WH.Range))
+                        {
+                            WH.Cast(WHuman);
+                        }
+                        else if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && WCougar.IsValidTarget(WC.Range))
+                        {
+                            WC.Cast(WCougar);
+                        }
+                        break;
+                    case 1:
+                        if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && WHuman.IsValidTarget(WH.Range))
+                        {
+                            WH.Cast(WHuman);
+                        }
+                        break;
+                    case 2:
+                        if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && WCougar.IsValidTarget(WC.Range))
+                        {
+                            WC.Cast(WCougar);
+                        }
+                        else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && WCougar.IsValidTarget(WCL.Range) && WCougar.HasBuff("NidaleePassiveHunted"))
+                        {
+                            WCL.Cast(WCougar);
+                        }
+                        break;
+                }
             }
-            bool useW2 = Menu["combo"]["usecw"].Enabled;
-            if (WC.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.IsValidTarget(WC.Range))
-            {
-                WC.Cast(target);
-            }
-            if (WCL.Ready && useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && target.HasBuff("NidaleePassiveHunted") && Player.HasBuff("NidaleePassiveHunting") && target.IsValidTarget(WCL.Range))
-            {
-                WCL.Cast(target);
-            }
+            
             bool useE = Menu["combo"]["usee"].Enabled;
             float hpe = Menu["combo"]["useeh"].As<MenuSlider>().Value;
             float manae = Menu["combo"]["useehm"].As<MenuSlider>().Value;
-            if (EH.Ready && useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.ManaPercent() >= manae && Player.HealthPercent() <= hpe)
+            if (useE)
             {
-                EH.Cast(Player);
+                var ECougar = GetBestEnemyHeroTargetInRange(EC.Range);
+                switch (Menu["combo"]["eo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (EH.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.ManaPercent() >= manae && Player.HealthPercent() <= hpe)
+                        {
+                            EH.Cast(Player);
+                        }
+                        else if (EC.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && ECougar.IsValidTarget(EC.Range))
+                        {
+                            EC.Cast(ECougar);
+                        }
+                        break;
+                    case 1:
+                        if (EH.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "PrimalSurge" && Player.ManaPercent() >= manae && Player.HealthPercent() <= hpe)
+                        {
+                            EH.Cast(Player);
+                        }
+                        break;
+                    case 2:
+                        if (EC.Ready && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && ECougar.IsValidTarget(EC.Range))
+                        {
+                            EC.Cast(ECougar);
+                        }
+                        break;
+                }
             }
-            bool useE2 = Menu["combo"]["usece"].Enabled;
-            if (EC.Ready && useE2 && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && target.IsValidTarget(EC.Range))
-            {
-                EC.Cast(target);
-            }
-
             bool useR = Menu["combo"]["user"].Enabled;
             float rangeR = Menu["combo"]["userr"].As<MenuSlider>().Value;
-            if (R.Ready && QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" &&
-                target.IsValidTarget(QH.Range) && useR)
+            if (useR)
             {
-                R.Cast();
-            }
-            if (R.Ready && QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" &&
-                target.IsValidTarget(rangeR))
-            {
-                R.Cast();
+                var RTarget = GetBestEnemyHeroTargetInRange(rangeR);
+                switch (Menu["combo"]["ro"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.IsValidTarget(rangeR))
+                        {
+                            R.Cast();
+                        }
+                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && RTarget.IsValidTarget(rangeR))
+                        {
+                            R.Cast();
+                        }
+                        break;
+                    case 1:
+                        if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(rangeR))
+                        {
+                            R.Cast();
+                        }
+                        else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !RTarget.HasBuff("NidaleePassiveHunted") && RTarget.IsValidTarget(rangeR))
+                        {
+                            R.Cast();
+                        }
+                        break;
+                }
             }
         }
         private void OnHarass()
@@ -385,58 +492,108 @@
 
         private void Jungle()
         {
-
-            bool useQ = Menu["jungleclear"]["usejq"].Enabled;
-            bool useQ2 = Menu["jungleclear"]["usejcq"].Enabled;
-            bool useW = Menu["jungleclear"]["usejw"].Enabled;
-            bool useW2 = Menu["jungleclear"]["usejcw"].Enabled;
-            bool useE = Menu["jungleclear"]["usejce"].Enabled;
-            bool useR = Menu["jungleclear"]["usejr"].Enabled;
-            float manapercent = Menu["jungleclear"]["manaj"].As<MenuSlider>().Value;
-
             foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(QH.Range)).ToList())
             {
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget() || minion == null)
                 {
                     return;
                 }
 
+                float manapercent = Menu["jungleclear"]["manaj"].As<MenuSlider>().Value;
                 if (Player.ManaPercent() >= manapercent)
                 {
-                    if (useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QH.Range) && minion != null)
+                    bool useQ = Menu["jungleclear"]["usejq"].Enabled;
+                    if (useQ)
                     {
-                        QH.CastOnUnit(minion);
-                    }
-                    if (useQ2 && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QC.Range) && minion != null)
-                    {
-                        QC.Cast();
-                    }
-                    if (useW && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(WH.Range) && minion != null)
-                    {
-                        WH.CastOnUnit(minion);
-                    }
-                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WC.Range) && minion != null)
-                    {
-                        WC.CastOnUnit(minion);
-                    }
-                    if (useW2 && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(WCL.Range) && minion != null)
-                    {
-                        WCL.CastOnUnit(minion);
-                    }
-                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(EC.Range) && minion != null)
-                    {
-                        EC.CastOnUnit(minion);
-                    }
-                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QH.Range) && minion != null)
-                    {
+                        switch (Menu["jungleclear"]["qo"].As<MenuList>().Value)
                         {
-                            R.Cast();
+                            case 0:
+                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QH.Range))
+                                {
+                                    QH.Cast(minion);
+                                }
+                                else if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QC.Range))
+                                {
+                                    QC.Cast();
+                                }
+                                break;
+                            case 1:
+                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QH.Range))
+                                {
+                                    QH.Cast(minion);
+                                }
+                                break;
+                            case 2:
+                                if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QC.Range))
+                                {
+                                    QC.Cast();
+                                }
+                                break;
                         }
                     }
-                    if (R.Ready && useR && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QC.Range) && minion != null)
+                    bool useW = Menu["jungleclear"]["usejw"].Enabled;
+                    if (useW)
                     {
+                        switch (Menu["jungleclear"]["wo"].As<MenuList>().Value)
                         {
-                            R.Cast();
+                            case 0:
+                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(WH.Range))
+                                {
+                                    WH.Cast(minion);
+                                }
+                                else if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WC.Range))
+                                {
+                                    WC.Cast(minion);
+                                }
+                                break;
+                            case 1:
+                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(WH.Range))
+                                {
+                                    WH.Cast(minion);
+                                }
+                                break;
+                            case 2:
+                                if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WC.Range))
+                                {
+                                    WC.Cast(minion);
+                                }
+                                else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WCL.Range) && minion.HasBuff("NidaleePassiveHunted"))
+                                {
+                                    WCL.Cast(minion);
+                                }
+                                break;
+                        }
+                    }
+                    bool useE = Menu["jungleclear"]["usejce"].Enabled;
+                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && minion.IsValidTarget(EC.Range))
+                    {
+                        EC.Cast(minion);
+                    }
+                    bool useR = Menu["jungleclear"]["usejr"].Enabled;
+                    if (useR)
+                    {
+                        switch (Menu["combo"]["ro"].As<MenuList>().Value)
+                        {
+                            case 0:
+                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QC.Range))
+                                {
+                                    R.Cast();
+                                }
+                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QH.Range))
+                                {
+                                    R.Cast();
+                                }
+                                break;
+                            case 1:
+                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(WCL.Range))
+                                {
+                                    R.Cast();
+                                }
+                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(QC.Range))
+                                {
+                                    R.Cast();
+                                }
+                                break;
                         }
                     }
                 }

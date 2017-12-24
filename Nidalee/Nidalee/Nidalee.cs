@@ -75,7 +75,7 @@
                 JungleClear.Add(new MenuList("wo", "W Options", new[] { "Both Forms", "Only Human", "Only Cougar" }, 0));
                 JungleClear.Add(new MenuBool("usejce", "Use Cougar E in Jungle"));
                 JungleClear.Add(new MenuBool("usejr", "Use R in Jungle"));
-                JungleClear.Add(new MenuList("ro", "R Options", new[] { "Always", "Only When Monster Has Buff" }, 0));
+                JungleClear.Add(new MenuList("ro", "R Options", new[] { "Always" }, 0));
                 JungleClear.Add(new MenuSlider("manaj", "Mana Manager For Jungle", 50));
             }
             Menu.Add(JungleClear);
@@ -569,13 +569,7 @@
                                 {
                                     R.Cast();
                                 }
-                                break;
-                            case 1:
-                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && jungle.HasBuff("NidaleePassiveHunted") && jungle.IsValidTarget(WCL.Range))
-                                {
-                                    R.Cast();
-                                }
-                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !jungle.HasBuff("NidaleePassiveHunted") && jungle.IsValidTarget(QC.Range))
+                                else if (R.Ready && !jungle.IsValidTarget(WCL.Range) && Player.SpellBook.GetSpell(SpellSlot.Q).Name != "JavelinToss" || jungle == null)
                                 {
                                     R.Cast();
                                 }

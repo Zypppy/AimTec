@@ -475,11 +475,12 @@
             return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
         }
 
+
         private void Jungle()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(QH.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(QH.Range)).ToList())
             {
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget() || minion == null)
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
@@ -493,23 +494,23 @@
                         switch (Menu["jungleclear"]["qo"].As<MenuList>().Value)
                         {
                             case 0:
-                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QH.Range))
+                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && jungle.IsValidTarget(QH.Range))
                                 {
-                                    QH.Cast(minion);
+                                    QH.Cast(jungle);
                                 }
-                                else if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QC.Range))
+                                else if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && jungle.IsValidTarget(QC.Range))
                                 {
                                     QC.Cast();
                                 }
                                 break;
                             case 1:
-                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QH.Range))
+                                if (QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && jungle.IsValidTarget(QH.Range))
                                 {
-                                    QH.Cast(minion);
+                                    QH.Cast(jungle);
                                 }
                                 break;
                             case 2:
-                                if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QC.Range))
+                                if (QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && jungle.IsValidTarget(QC.Range))
                                 {
                                     QC.Cast();
                                 }
@@ -522,37 +523,37 @@
                         switch (Menu["jungleclear"]["wo"].As<MenuList>().Value)
                         {
                             case 0:
-                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(WH.Range))
+                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && jungle.IsValidTarget(WH.Range))
                                 {
-                                    WH.Cast(minion);
+                                    WH.Cast(jungle);
                                 }
-                                else if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WC.Range))
+                                else if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && jungle.IsValidTarget(WC.Range))
                                 {
-                                    WC.Cast(minion);
+                                    WC.Cast(jungle);
                                 }
                                 break;
                             case 1:
-                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && minion.IsValidTarget(WH.Range))
+                                if (WH.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Bushwhack" && jungle.IsValidTarget(WH.Range))
                                 {
-                                    WH.Cast(minion);
+                                    WH.Cast(jungle);
                                 }
                                 break;
                             case 2:
-                                if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WC.Range))
+                                if (WC.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && jungle.IsValidTarget(WC.Range))
                                 {
-                                    WC.Cast(minion);
+                                    WC.Cast(jungle);
                                 }
-                                else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && minion.IsValidTarget(WCL.Range) && minion.HasBuff("NidaleePassiveHunted"))
+                                else if (WCL.Ready && Player.SpellBook.GetSpell(SpellSlot.W).Name == "Pounce" && jungle.IsValidTarget(WCL.Range) && jungle.HasBuff("NidaleePassiveHunted"))
                                 {
-                                    WCL.Cast(minion);
+                                    WCL.Cast(jungle);
                                 }
                                 break;
                         }
                     }
                     bool useE = Menu["jungleclear"]["usejce"].Enabled;
-                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && EC.Ready && minion.IsValidTarget(EC.Range))
+                    if (useE && Player.SpellBook.GetSpell(SpellSlot.E).Name == "Swipe" && EC.Ready && jungle.IsValidTarget(EC.Range))
                     {
-                        EC.Cast(minion);
+                        EC.Cast(jungle);
                     }
                     bool useR = Menu["jungleclear"]["usejr"].Enabled;
                     if (useR)
@@ -560,21 +561,21 @@
                         switch (Menu["combo"]["ro"].As<MenuList>().Value)
                         {
                             case 0:
-                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.IsValidTarget(QC.Range))
+                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && jungle.IsValidTarget(QC.Range))
                                 {
                                     R.Cast();
                                 }
-                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && minion.IsValidTarget(QH.Range))
+                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && jungle.IsValidTarget(QH.Range))
                                 {
                                     R.Cast();
                                 }
                                 break;
                             case 1:
-                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(WCL.Range))
+                                if (R.Ready && !QH.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "JavelinToss" && jungle.HasBuff("NidaleePassiveHunted") && jungle.IsValidTarget(WCL.Range))
                                 {
                                     R.Cast();
                                 }
-                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !minion.HasBuff("NidaleePassiveHunted") && minion.IsValidTarget(QC.Range))
+                                else if (R.Ready && !QC.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "Takedown" && !jungle.HasBuff("NidaleePassiveHunted") && jungle.IsValidTarget(QC.Range))
                                 {
                                     R.Cast();
                                 }

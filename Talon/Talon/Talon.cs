@@ -45,7 +45,7 @@
             Orbwalker.Attach(Menu);
             var Combo = new Menu("combo", "Combo");
             {
-                Combo.Add(new MenuBool("useq2", "Use Q"));
+                Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("user", "Use R :"));
@@ -58,7 +58,7 @@
             Menu.Add(Combo);
             var Harass = new Menu("harass", "Harass");
             {
-                Harass.Add(new MenuBool("useq2", "Use Standart Q"));
+                Harass.Add(new MenuBool("useq", "Use Standart Q"));
                 Harass.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 Harass.Add(new MenuSlider("manaq", "Harass Q Mana", 60, 0, 100));
                 Harass.Add(new MenuBool("usew", "Use W"));

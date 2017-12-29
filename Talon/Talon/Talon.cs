@@ -261,17 +261,17 @@
             bool useQ = Menu["combo"]["useq"].Enabled;
             if (Q.Ready && useQ)
             {
+                var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
+                var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
                 switch (Menu["combo"]["qo"].As<MenuList>().Value)
                 {
                     case 0:
-                        var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
                         if (targetq2.IsValidTarget(Q2.Range) && targetq2 != null)
                         {
                             Q2.Cast(targetq2);
                         }
                         break;
                     case 1:
-                        var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
                         if (targetq.IsValidTarget(Q.Range) && targetq != null)
                         {
                             Q.Cast(targetq);
@@ -280,7 +280,6 @@
                 }
             }
             
-
             bool useW = Menu["combo"]["usew"].Enabled;
             if (W.Ready && useW)
             {

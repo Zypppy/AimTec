@@ -29,11 +29,11 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 230f);
-            Q2 = new Spell(SpellSlot.Q, 500f);
+            Q = new Spell(SpellSlot.Q, 200f);
+            Q2 = new Spell(SpellSlot.Q, 575f);
             W = new Spell(SpellSlot.W, 800f);
+            W.SetSkillshot(0.5f, 75f, 2500f, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 550f);
-            W.SetSkillshot(0.502f, 75f, 2343f, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerDot")
                 Ignite = new Spell(SpellSlot.Summoner1, 600);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerDot")
@@ -45,8 +45,8 @@
             Orbwalker.Attach(Menu);
             var Combo = new Menu("combo", "Combo");
             {
-                Combo.Add(new MenuBool("useq2", "Use Standart Q"));
-                Combo.Add(new MenuBool("useq", "Use Melee Q"));
+                Combo.Add(new MenuBool("useq2", "Use Q"));
+                Combo.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("user", "Use R :"));
                 Combo.Add(new MenuSlider("usercount", "Use R If Enemies >=", 3, 1, 5));
@@ -59,7 +59,7 @@
             var Harass = new Menu("harass", "Harass");
             {
                 Harass.Add(new MenuBool("useq2", "Use Standart Q"));
-                Harass.Add(new MenuBool("useq", "Use Melee Q"));
+                Harass.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 Harass.Add(new MenuSlider("manaq", "Harass Q Mana", 60, 0, 100));
                 Harass.Add(new MenuBool("usew", "Use W"));
                 Harass.Add(new MenuSlider("manaw", "harass W Mana", 60, 0, 100));
@@ -69,7 +69,7 @@
             var LaneClear = new Menu("laneclear", "Lane Clear");
             {
                 LaneClear.Add(new MenuBool("useq2", "Use Standart Q"));
-                LaneClear.Add(new MenuBool("useq", "Use Melee Q"));
+                LaneClear.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 LaneClear.Add(new MenuSlider("manaq", "Lane Clear Q Mana", 60, 0, 100));
                 LaneClear.Add(new MenuBool("usew", "Use W"));
                 LaneClear.Add(new MenuSlider("manaw", "Lane Clear W Mana", 60, 0, 100));
@@ -78,7 +78,7 @@
             var JungleClear = new Menu("jungleclear", "Jungle Clear");
             {
                 JungleClear.Add(new MenuBool("useq2", "Use Standart Q"));
-                JungleClear.Add(new MenuBool("useq", "Use Melee Q"));
+                JungleClear.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 JungleClear.Add(new MenuSlider("manaq", "Jungle Clear Q Mana", 60, 0, 100));
                 JungleClear.Add(new MenuBool("usew", "Use W"));
                 JungleClear.Add(new MenuSlider("manaw", "Jungle Clear W Mana", 60, 0, 100));
@@ -92,8 +92,8 @@
             Menu.Add(Killsteal);
             var Drawings = new Menu("drawings", "Drawings");
             {
-                Drawings.Add(new MenuBool("drawq2", "Draw Standart Q"));
-                Drawings.Add(new MenuBool("drawq", "Draw Melee Q"));
+                Drawings.Add(new MenuBool("drawq2", "Draw Q"));
+                Drawings.Add(new MenuList("qo", "Q Drawing Options", new[] { "Draw Extended Q", "Draw Short Q", "Draw Both Q's" }, 0));
                 Drawings.Add(new MenuBool("draww", "Draw W"));
                 Drawings.Add(new MenuBool("drawr", "Draw R"));
                 Drawings.Add(new MenuBool("drawdmg", "Draw DMG"));
@@ -132,13 +132,21 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["drawq2"].Enabled && Q2.Ready)
+            if (Menu["drawings"]["drawq2"].Enabled && Q.Ready)
             {
-                Render.Circle(Player.Position, Q2.Range, 40, Color.Azure);
-            }
-            if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
-            {
-                Render.Circle(Player.Position, Q.Range, 40, Color.Beige);
+                switch (Menu["drawings"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        Render.Circle(Player.Position, Q2.Range, 40, Color.Azure);
+                        break;
+                    case 1:
+                        Render.Circle(Player.Position, Q.Range, 40, Color.Beige);
+                        break;
+                    case 2:
+                        Render.Circle(Player.Position, Q2.Range, 40, Color.Azure);
+                        Render.Circle(Player.Position, Q.Range, 40, Color.Beige);
+                        break;
+                }
             }
             if (Menu["drawings"]["draww"].Enabled && W.Ready)
             {

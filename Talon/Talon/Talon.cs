@@ -265,14 +265,14 @@
                 {
                     case 0:
                         var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
-                        if (targetq2.IsValidTarget(Q2.Range))
+                        if (targetq2.IsValidTarget(Q2.Range) && targetq2 != null)
                         {
                             Q2.Cast(targetq2);
                         }
                         break;
                     case 1:
                         var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
-                        if (targetq.IsValidTarget(Q.Range))
+                        if (targetq.IsValidTarget(Q.Range) && targetq != null)
                         {
                             Q.Cast(targetq);
                         }
@@ -285,7 +285,7 @@
             if (W.Ready && useW)
             {
                 var targetw = GetBestEnemyHeroTargetInRange(W.Range);
-                if (targetw.IsValidTarget(W.Range))
+                if (targetw.IsValidTarget(W.Range) && targetw != null)
                 {
                     W.Cast(targetw);
                 }
@@ -298,11 +298,11 @@
             if (R.Ready)
             {
                 var target = GetBestEnemyHeroTargetInRange(R.Range);
-                if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= hitR)
+                if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= hitR && target != null)
                 {
                     R.Cast();
                 }
-                else if (useRKill && target.IsValidTarget(R.Range) && target.HealthPercent() <= hpRtarget)
+                else if (useRKill && target.IsValidTarget(R.Range) && target.HealthPercent() <= hpRtarget && target != null)
                 {
                     R.Cast();
                 }
@@ -314,7 +314,7 @@
             {
                 var target = GetBestEnemyHeroTargetInRange(400);
                 Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
-                if (UseTiamat && Tiamat.Ready && target.IsValidTarget(Tiamat.Range))
+                if (UseTiamat && Tiamat.Ready && target.IsValidTarget(Tiamat.Range) && target != null)
                 {
                     Tiamat.Cast();
                 }
@@ -325,7 +325,7 @@
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
             Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
-            if (R.Ready && target.IsValidTarget(1500))
+            if (R.Ready && target.IsValidTarget(1500) && target != null)
             {
                 R.Cast();
             }

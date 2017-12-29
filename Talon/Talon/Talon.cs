@@ -68,7 +68,7 @@
             Menu.Add(Harass);
             var LaneClear = new Menu("laneclear", "Lane Clear");
             {
-                LaneClear.Add(new MenuBool("useq2", "Use Standart Q"));
+                LaneClear.Add(new MenuBool("useq", "Use Standart Q"));
                 LaneClear.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 LaneClear.Add(new MenuSlider("manaq", "Lane Clear Q Mana", 60, 0, 100));
                 LaneClear.Add(new MenuBool("usew", "Use W"));
@@ -77,7 +77,7 @@
             Menu.Add(LaneClear);
             var JungleClear = new Menu("jungleclear", "Jungle Clear");
             {
-                JungleClear.Add(new MenuBool("useq2", "Use Standart Q"));
+                JungleClear.Add(new MenuBool("useq", "Use Standart Q"));
                 JungleClear.Add(new MenuList("qo", "Q Options", new[] { "Use Extended Q", "Use Short Q" }, 0));
                 JungleClear.Add(new MenuSlider("manaq", "Jungle Clear Q Mana", 60, 0, 100));
                 JungleClear.Add(new MenuBool("usew", "Use W"));
@@ -92,7 +92,7 @@
             Menu.Add(Killsteal);
             var Drawings = new Menu("drawings", "Drawings");
             {
-                Drawings.Add(new MenuBool("drawq2", "Draw Q"));
+                Drawings.Add(new MenuBool("drawq", "Draw Q"));
                 Drawings.Add(new MenuList("qo", "Q Drawing Options", new[] { "Draw Extended Q", "Draw Short Q", "Draw Both Q's" }, 0));
                 Drawings.Add(new MenuBool("draww", "Draw W"));
                 Drawings.Add(new MenuBool("drawr", "Draw R"));
@@ -132,7 +132,7 @@
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
 
-            if (Menu["drawings"]["drawq2"].Enabled && Q.Ready)
+            if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
                 switch (Menu["drawings"]["qo"].As<MenuList>().Value)
                 {
@@ -380,29 +380,38 @@
         {
             foreach (var minion in GetEnemyLaneMinionsTargetsInRange(W.Range))
             {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                bool useQ2 = Menu["laneclear"]["useq2"].Enabled;
-                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["laneclear"]["usew"].Enabled;
-                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
-                var WPrediction = W.GetPrediction(minion);
                 if (!minion.IsValidTarget())
                 {
                     return;
                 }
-                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
+
+                bool useQ = Menu["laneclear"]["useq"].Enabled;
+                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
                 {
-                    Q.Cast(minion);
-                }
-                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
-                {
-                    Q2.Cast(minion);
-                }
-                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
-                {
-                    if (WPrediction.HitChance >= HitChance.Medium)
+                    switch (Menu["laneclear"]["qo"].As<MenuList>().Value)
                     {
-                        W.Cast(WPrediction.CastPosition);
+                        case 0:
+                            if (minion.IsValidTarget(Q2.Range))
+                            {
+                                Q2.Cast(minion);
+                            }
+                            break;
+                        case 1:
+                            if (minion.IsValidTarget(Q.Range))
+                            {
+                                Q.Cast(minion);
+                            }
+                            break;
+                    }
+                }
+                bool useW = Menu["laneclear"]["usew"].Enabled;
+                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
+                if (W.Ready && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (minion.IsValidTarget(W.Range))
+                    {
+                        W.Cast(minion);
                     }
                 }
             }
@@ -419,31 +428,41 @@
         }
         private void OnJungleClear()
         {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
+            foreach (var jungle in GameObjects.Jungle.Where(m => m.IsValidTarget(W.Range)).ToList())
             {
-                bool useQ = Menu["jungleclear"]["useq"].Enabled;
-                bool useQ2 = Menu["jungleclear"]["useq2"].Enabled;
-                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["jungleclear"]["usew"].Enabled;
-                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
-                var WPrediction = W.GetPrediction(minion);
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
+                if (!jungle.IsValidTarget() || !jungle.IsValidSpellTarget())
                 {
                     return;
                 }
-                if (Q.Ready && minion.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
+
+                bool useQ = Menu["jungleclear"]["useq"].Enabled;
+                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
+                if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
                 {
-                    Q.Cast(minion);
-                }
-                if (Q.Ready && minion.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
-                {
-                    Q2.Cast(minion);
-                }
-                if (W.Ready && minion.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
-                {
-                    if (WPrediction.HitChance >= HitChance.Medium)
+                    switch (Menu["laneclear"]["qo"].As<MenuList>().Value)
                     {
-                        W.Cast(WPrediction.CastPosition);
+                        case 0:
+                            if (jungle.IsValidTarget(Q2.Range))
+                            {
+                                Q2.Cast(jungle);
+                            }
+                            break;
+                        case 1:
+                            if (jungle.IsValidTarget(Q.Range))
+                            {
+                                Q.Cast(jungle);
+                            }
+                            break;
+                    }
+                }
+
+                bool useW = Menu["jungleclear"]["usew"].Enabled;
+                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
+                if (W.Ready && useW && Player.ManaPercent() >= manaW)
+                {
+                    if (jungle.IsValidTarget(W.Range))
+                    {
+                        W.Cast(jungle);
                     }
                 }
             }

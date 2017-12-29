@@ -258,38 +258,46 @@
         }
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(900);
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useq2"].Enabled;
+            if (Q.Ready && useQ)
+            {
+                switch (Menu["combo"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
+                        if (targetq2.IsValidTarget(Q2.Range))
+                        {
+                            Q2.Cast(targetq2);
+                        }
+                        break;
+                    case 1:
+                        var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
+                        if (targetq.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(targetq);
+                        }
+                        break;
+                }
+            }
+            
+
             bool useW = Menu["combo"]["usew"].Enabled;
+            if (W.Ready && useW)
+            {
+                var targetw = GetBestEnemyHeroTargetInRange(W.Range);
+                if (targetw.IsValidTarget(W.Range))
+                {
+                    W.Cast(targetw);
+                }
+            }
+
             bool useR = Menu["combo"]["user"].Enabled;
             bool useRKill = Menu["combo"]["userkill"].Enabled;
             float hitR = Menu["combo"]["usercount"].As<MenuSlider>().Value;
             float hpRtarget = Menu["combo"]["enemyhpr"].As<MenuSlider>().Value;
-            var WPrediction = W.GetPrediction(target);
-            bool UseTiamat = Menu["combo"]["tiamat"].Enabled;
-
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ)
-            {
-                Q.Cast(target);
-            }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2)
-            {
-                Q2.Cast(target);
-            }
-            if (W.Ready && target.IsValidTarget(W.Range) && useW)
-            {
-                if (WPrediction.HitChance >= HitChance.Medium)
-                {
-                    W.Cast(WPrediction.CastPosition);
-                }
-            }
             if (R.Ready)
             {
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
                 if (useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= hitR)
                 {
                     R.Cast();
@@ -299,9 +307,12 @@
                     R.Cast();
                 }
             }
+
+            bool UseTiamat = Menu["combo"]["tiamat"].Enabled;
             var ItemTiamatHydra = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "ItemTiamatCleave" || o.SpellData.Name == "ItemTitanicHydraCleave");
             if (ItemTiamatHydra != null)
             {
+                var target = GetBestEnemyHeroTargetInRange(400);
                 Spell Tiamat = new Spell(ItemTiamatHydra.Slot, 400);
                 if (UseTiamat && Tiamat.Ready && target.IsValidTarget(Tiamat.Range))
                 {
@@ -309,6 +320,7 @@
                 }
             }
         }
+
         private void ManualR()
         {
             var target = GetBestEnemyHeroTargetInRange(1500);
@@ -318,35 +330,44 @@
                 R.Cast();
             }
         }
+
         private void OnHarass()
         {
-            var target = GetBestEnemyHeroTargetInRange(W.Range);
             bool useQ = Menu["harass"]["useq"].Enabled;
-            bool useQ2 = Menu["harass"]["useq2"].Enabled;
             float manaQ = Menu["harass"]["manaq"].As<MenuSlider>().Value;
+            if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
+            {
+                switch (Menu["combo"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
+                        if (targetq2.IsValidTarget(Q2.Range))
+                        {
+                            Q2.Cast(targetq2);
+                        }
+                        break;
+                    case 1:
+                        var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
+                        if (targetq.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(targetq);
+                        }
+                        break;
+                }
+            }
+            
             bool useW = Menu["harass"]["usew"].Enabled;
             float manaW = Menu["harass"]["manaw"].As<MenuSlider>().Value;
-            var WPrediction = W.GetPrediction(target);
-            if (!target.IsValidTarget())
+            if (W.Ready && useW && Player.ManaPercent() >= manaW)
             {
-                return;
-            }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.ManaPercent() >= manaQ)
-            {
-                Q.Cast(target);
-            }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQ2 && Player.ManaPercent() >= manaQ)
-            {
-                Q2.Cast(target);
-            }
-            if (W.Ready && target.IsValidTarget(W.Range) && useW && Player.ManaPercent() >= manaW)
-            {
-                if (WPrediction.HitChance >= HitChance.Medium)
+                var targetw = GetBestEnemyHeroTargetInRange(W.Range);
+                if (targetw.IsValidTarget(W.Range))
                 {
-                    W.Cast(WPrediction.CastPosition);
+                    W.Cast(targetw);
                 }
             }
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
@@ -387,6 +408,7 @@
                 }
             }
         }
+
         public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
         {
             return GetGenericJungleMinionsTargetsInRange(float.MaxValue);

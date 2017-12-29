@@ -29,7 +29,7 @@
 
         public void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 230f);
+            Q = new Spell(SpellSlot.Q, 225f);
             Q2 = new Spell(SpellSlot.Q, 500f);
             W = new Spell(SpellSlot.W, 800f);
             W.SetSkillshot(0.5f, 75f, 2500f, false, SkillshotType.Line);

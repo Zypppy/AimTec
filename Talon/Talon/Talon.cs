@@ -439,7 +439,7 @@
                 float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
                 if (Q.Ready && useQ && Player.ManaPercent() >= manaQ)
                 {
-                    switch (Menu["laneclear"]["qo"].As<MenuList>().Value)
+                    switch (Menu["jungleclear"]["qo"].As<MenuList>().Value)
                     {
                         case 0:
                             if (jungle.IsValidTarget(Q2.Range))

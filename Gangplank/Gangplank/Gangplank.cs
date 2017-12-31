@@ -66,7 +66,7 @@
                 Misc.Add(new MenuSlider("autowmana", "Auto W Mana % >=", 60, 0, 100));
             }
             Menu.Add(Misc);
-            var Cleanse = new Menu("c", "Cleanse W");
+            var Cleanse = new Menu("cl", "Cleanse W");
             {
                 Cleanse.Add(new MenuBool("qss", "Cleanse Enabled"));
                 Cleanse.Add(new MenuSlider("qsshp", "When HP % <=", 20, 0, 100));

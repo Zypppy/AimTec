@@ -220,7 +220,7 @@
 
         private void AutoExplode()
         {
-            if (Menu["misc"]["autobe"].Enabled)
+            if (Menu["m"]["autobe"].Enabled)
             {
                 if (Keg.Count > 0)
                 {
@@ -233,8 +233,8 @@
                                 if (minion.IsValidTarget(Q.Range) && minion.Name == "Barrel")
                                 {
                                     var target = GetBestEnemyHeroTargetInRange(E.Range);
-                                    float EHit = Menu["misc"]["autob"].As<MenuSlider>().Value;
-                                    if (target != null && Barrel != null && Q.Ready && target.Distance(Barrel) < 400 && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
+                                    float EHit = Menu["m"]["autob"].As<MenuSlider>().Value;
+                                    if (target != null && Barrel != null && minion != null && Q.Ready && target.Distance(Barrel) < 400 && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
                                     {
                                         Q.Cast(minion);
                                     }

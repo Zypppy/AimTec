@@ -157,13 +157,13 @@
                     {
                         if (Barrel != null)
                         {
-                            if (Barrel.CountEnemyHeroesInRange(400) != 0)
+                            if (Barrel.CountEnemyHeroesInRange(350) != 0)
                             {
-                                Render.Circle(Barrel.ServerPosition, 400, 40, Color.Green);
+                                Render.Circle(Barrel.ServerPosition, 350, 40, Color.Green);
                             }
-                            if (Barrel.CountEnemyHeroesInRange(400) == 0)
+                            if (Barrel.CountEnemyHeroesInRange(350) == 0)
                             {
-                                Render.Circle(Barrel.ServerPosition, 400, 40, Color.Red);
+                                Render.Circle(Barrel.ServerPosition, 350, 40, Color.Red);
                             }
                         }
                     }
@@ -228,17 +228,11 @@
                     {
                         if (Barrel != null)
                         {
-                            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(Q.Range))
+                            var target = GetBestEnemyHeroTargetInRange(E.Range);
+                            float EHit = Menu["m"]["autob"].As<MenuSlider>().Value;
+                            if (target != null && Barrel != null && Q.Ready && target.Distance(Barrel) < 400 && Player.Distance(Barrel) <= Q.Range)
                             {
-                                if (minion.IsValidTarget(Q.Range) && minion.Name == "Barrel")
-                                {
-                                    var target = GetBestEnemyHeroTargetInRange(E.Range);
-                                    float EHit = Menu["m"]["autob"].As<MenuSlider>().Value;
-                                    if (target != null && Barrel != null && minion != null && Q.Ready && target.Distance(Barrel) < 400 && minion.IsValidTarget(Q.Range) && Player.GetSpellDamage(minion, SpellSlot.Q) >= minion.Health)
-                                    {
-                                        Q.Cast(minion);
-                                    }
-                                }
+                                Q.Cast(Barrel.Position);
                             }
                         }
                     }

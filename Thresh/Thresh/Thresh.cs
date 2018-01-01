@@ -60,7 +60,6 @@ namespace Thresh
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuSlider("qrange", "Q Range Slider", 900, 0, 1100));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
-                ComboMenu.Add(new MenuSlider("dontq2", "Dont Dive Into >= Enemies", 1, 0, 5));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
@@ -202,7 +201,7 @@ namespace Thresh
                 {
                     Q.Cast(targetq);
                 }
-                if (targetq2.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && targetq2.HasBuff("ThreshQ") && !R.CastIfWillHit(targetq2, Menu["combo"]["dontq2"].As<MenuSlider>().Value - 1))
+                if (targetq2.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && targetq2.HasBuff("ThreshQ"))
                 {
                     Q2.Cast();
                 }
@@ -215,7 +214,7 @@ namespace Thresh
                 var target = GetBestEnemyHeroTargetInRange(W.Range);
                 if (target.IsValidTarget(W.Range))
                 {
-                    W.Cast(Player);
+                    W.Cast(Player.ServerPosition);
                 }
             }
 

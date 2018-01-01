@@ -42,6 +42,7 @@
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
                 Combo.Add(new MenuBool("usew", "Use W"));
+                Combo.Add(new MenuSlider("whp", "Use W Health <=", 20, 0, 100));
                 Combo.Add(new MenuBool("usee", "Use E"));
                 Combo.Add(new MenuBool("user", "Use R"));
                 Combo.Add(new MenuList("cs", "Combo Settings", new[] { "TigerCombo", "PhoenixCombo" }, 1));
@@ -159,6 +160,7 @@
         {
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
+            float WHP = Menu["combo"]["whp"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
             bool useR = Menu["combo"]["user"].Enabled;
 
@@ -209,6 +211,13 @@
                             R.Cast();
                         }
                         break;
+                }
+            }
+            if (useW && Player.Distance(target) < 1000)
+            {
+                if (Player.HealthPercent() <= WHP && !Player.HasBuff("udyrmonkeyagilitybuff"))
+                {
+                    W.Cast();
                 }
             }
         }

@@ -31,21 +31,20 @@ namespace Thresh
 
         public static Obj_AI_Hero Player = ObjectManager.GetLocalPlayer();
 
-        public static Spell Q, FQ, Q2, W, E, R, Flash;
+        public static Spell Q, Q2, W, E, R, Flash;
 
         public void LoadSpells()
 
         {
-            Q = new Spell(SpellSlot.Q, 1100);
-            FQ = new Spell(SpellSlot.Q, 1100);
-            Q2 = new Spell(SpellSlot.Q, 5000);
-            W = new Spell(SpellSlot.W, 1000);
-            E = new Spell(SpellSlot.E, 450);
+            Q = new Spell(SpellSlot.Q, 1100f); // ThreshQ  ThreshQLeap
+            Q.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
+            Q2 = new Spell(SpellSlot.Q, 2000f);
+            Q2.SetSkillshot(0f, 1000f, 3000f, false, SkillshotType.Circle);
+            W = new Spell(SpellSlot.W, 950f);
+            W.SetSkillshot(0f, 120f, 800f, false, SkillshotType.Circle);
+            E = new Spell(SpellSlot.E, 450f);
+            E.SetSkillshot(0.222f, 110f, 2000f, false, SkillshotType.Line);
             R = new Spell(SpellSlot.R, 400);
-            Q.SetSkillshot(0.5f, 70f, 1906f, true, SkillshotType.Line);
-            W.SetSkillshot(0.265f, 120f, 1752f, false, SkillshotType.Circle);
-            FQ.SetSkillshot(0.5f, 60f, 1900f, true, SkillshotType.Line);
-            E.SetSkillshot(0.125f, 110f, 2000f, false, SkillshotType.Line);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner1).SpellData.Name == "SummonerFlash")
                 Flash = new Spell(SpellSlot.Summoner1, 425);
             if (Player.SpellBook.GetSpell(SpellSlot.Summoner2).SpellData.Name == "SummonerFlash")
@@ -61,12 +60,10 @@ namespace Thresh
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
                 ComboMenu.Add(new MenuSlider("qrange", "Q Range Slider", 900, 0, 1100));
                 ComboMenu.Add(new MenuBool("useq2", "Use Second Q"));
+                ComboMenu.Add(new MenuSlider("dontq2", "Dont Dive Into >= Enemies", 1, 0, 5));
                 ComboMenu.Add(new MenuBool("usewself", "Use W Self"));
                 ComboMenu.Add(new MenuSlider("wshp", "Self W If Hp % <", 50, 0, 100));
-                //ComboMenu.Add(new MenuBool("usewally", "Use W Ally"));
-                //ComboMenu.Add(new MenuSlider("wahp", "Ally W If Hp % <", 50, 0, 100));
                 ComboMenu.Add(new MenuBool("usee", "Use E Push"));
-                //ComboMenu.Add(new MenuBool("usee2", "Use E Pull"));
                 ComboMenu.Add(new MenuBool("user", "Use R"));
                 ComboMenu.Add(new MenuSlider("usere", "Use R If Enemy >", 3, 1, 5));
 
@@ -83,8 +80,6 @@ namespace Thresh
             var miscmenu = new Menu("misc", "Misc");
             {
                 miscmenu.Add(new MenuBool("autoq", "Auto Q on CC"));
-                //miscmenu.Add(new MenuBool("flashq", "Flash Q BROKEN AFK"));
-                //miscmenu.Add(new MenuKeyBind("flashqkey", "Flash Q Key:", KeyCode.T, KeybindType.Press));
             }
             Menu.Add(miscmenu);
             var DrawingsMenu = new Menu("drawings", "Drawings");
@@ -93,7 +88,6 @@ namespace Thresh
                 DrawingsMenu.Add(new MenuBool("draww", "Draw W Range"));
                 DrawingsMenu.Add(new MenuBool("drawe", "Draw E Range"));
                 DrawingsMenu.Add(new MenuBool("drawr", "Draw R Range"));
-                DrawingsMenu.Add(new MenuBool("drawfq", "Draw Flash Q Range"));
             }
             Menu.Add(DrawingsMenu);
             EGap.Gapcloser.Attach(Menu, "E Anti-GapClose");
@@ -138,11 +132,8 @@ namespace Thresh
             {
                 Render.Circle(Player.Position, R.Range, 40, Color.Aquamarine);
             }
-            if (Menu["drawings"]["drawfq"].Enabled && Q.Ready && Flash.Ready && Flash != null)
-            {
-                Render.Circle(Player.Position, Q.Range + 410, 40, Color.AntiqueWhite);
-            }
         }
+
         private void Game_OnUpdate()
         {
             if (Player.IsDead || MenuGUI.IsChatOpen())
@@ -160,30 +151,27 @@ namespace Thresh
                 case OrbwalkingMode.Laneclear:
                     break;
             }
+
             if (Menu["misc"]["autoq"].Enabled && Q.Ready && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
             {
+                float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
                 foreach (var target in GameObjects.EnemyHeroes.Where(
                     t => (t.HasBuffOfType(BuffType.Charm) || t.HasBuffOfType(BuffType.Stun) ||
                           t.HasBuffOfType(BuffType.Fear) || t.HasBuffOfType(BuffType.Snare) ||
                           t.HasBuffOfType(BuffType.Taunt) || t.HasBuffOfType(BuffType.Knockback) ||
-                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(Q.Range) &&
+                          t.HasBuffOfType(BuffType.Suppression)) && t.IsValidTarget(QRange) &&
                          !Invulnerable.Check(t, DamageType.Magical)))
                 {
 
                     Q.Cast(target);
                 }
             }
-            //if (Menu["misc"]["flashqkey"].Enabled)
-            //{
-                //FlashQ();
-            //}
         }
 
-            public static Obj_AI_Hero GetBestEnemyHeroTarget()
+        public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
         }
-
         public static Obj_AI_Hero GetBestEnemyHeroTargetInRange(float range)
         {
             var ts = TargetSelector.Implementation;
@@ -192,14 +180,12 @@ namespace Thresh
             {
                 return target;
             }
-
             var firstTarget = ts.GetOrderedTargets(range)
                 .FirstOrDefault(t => t.IsValidTarget() && !Invulnerable.Check(t));
             if (firstTarget != null)
             {
                 return firstTarget;
             }
-
             return null;
         }
 
@@ -208,47 +194,50 @@ namespace Thresh
             bool useQ = Menu["combo"]["useq"].Enabled;
             float QRange = Menu["combo"]["qrange"].As<MenuSlider>().Value;
             bool useQGap = Menu["combo"]["useq2"].Enabled;
+            if (Q.Ready)
+            {
+                var targetq = GetBestEnemyHeroTargetInRange(QRange);
+                var targetq2 = GetBestEnemyHeroTargetInRange(Q2.Range);
+                if (targetq.IsValidTarget(QRange) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+                {
+                    Q.Cast(targetq);
+                }
+                if (targetq2.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && targetq2.HasBuff("ThreshQ") && !R.CastIfWillHit(targetq2, Menu["combo"]["dontq2"].As<MenuSlider>().Value - 1))
+                {
+                    Q2.Cast();
+                }
+            }
+            
             bool useWself = Menu["combo"]["usewself"].Enabled;
             float WSHP = Menu["combo"]["wshp"].As<MenuSlider>().Value;
-            //bool useWAlly = Menu["combo"]["usewally"].Enabled;
-            //float WAHP = Menu["combo"]["wahp"].As<MenuSlider>().Value;
+            if (W.Ready && useWself && Player.HealthPercent() <= WSHP)
+            {
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target.IsValidTarget(W.Range))
+                {
+                    W.Cast(Player);
+                }
+            }
+
             bool useE = Menu["combo"]["usee"].Enabled;
-            //bool useE2 = Menu["combo"]["usee2"].Enabled;
+            if (E.Ready && useE)
+            {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
+                {
+                    E.Cast(target);
+                }
+            }
+
             bool useR = Menu["combo"]["user"].Enabled;
             float REnemies = Menu["combo"]["usere"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            var QPrediction = Q.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
-
-            if (!target.IsValidTarget())
+            if (R.Ready && useR && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
             {
-                return;
-            }
-            if (Q.Ready && target.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
-            {
-               if (QPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
+                if (target.IsValidTarget(R.Range))
                 {
-                    Q.Cast(QPrediction.CastPosition);
+                    R.Cast();
                 }
-            }
-            if (Q.Ready && target.IsValidTarget(Q2.Range) && useQGap && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQLeap" && target.HasBuff("ThreshQ"))
-            {
-                Q2.Cast();
-            }
-            if (W.Ready && useWself && Player.HealthPercent() <= WSHP && target.IsValidTarget(W.Range))
-            {
-                W.Cast(Player.ServerPosition);
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
-            {
-                if (EPrediction.HitChance >= HitChance.Medium)
-                {
-                    E.Cast(QPrediction.CastPosition);
-                }
-            }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && Player.CountEnemyHeroesInRange(R.Range) >= REnemies)
-            {
-               R.Cast();
             }
         }
 
@@ -256,48 +245,25 @@ namespace Thresh
         {
             bool useQ = Menu["harass"]["useq"].Enabled;
             float useQMana = Menu["harass"]["manaq"].As<MenuSlider>().Value;
-            bool useE = Menu["harass"]["usee"].Enabled;
-            float useEMana = Menu["harass"]["manae"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
-            var QPrediction = Q.GetPrediction(target);
-            var EPrediction = E.GetPrediction(target);
-
-            if (!target.IsValidTarget())
+            if (Q.Ready && useQ && Player.ManaPercent() >= useQMana)
             {
-                return;
-            }
-            if (E.Ready && useE && target.IsValidTarget(E.Range) && Player.ManaPercent() >= useEMana)
-            {
-                if (EPrediction.HitChance >= HitChance.High)
+                var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (targetq.IsValidTarget(Q.Range) && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                 {
-                    E.Cast(EPrediction.CastPosition);
+                    Q.Cast(targetq);
                 }
             }
-            if (Q.Ready && useQ && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && target.IsValidTarget(Q.Range) && Player.ManaPercent() >= useQMana)
+
+            bool useE = Menu["harass"]["usee"].Enabled;
+            float useEMana = Menu["harass"]["manae"].As<MenuSlider>().Value;
+            if (E.Ready && useE && Player.ManaPercent() >= useEMana)
             {
-                if (QPrediction.HitChance >= HitChance.High)
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
+                if (target.IsValidTarget(E.Range) && !target.HasBuff("ThreshQ"))
                 {
-                    Q.Cast(QPrediction.CastPosition);
+                    E.Cast(target);
                 }
             }
         }
-        //private void FlashQ()
-        //{
-        //    Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);
-        //    var target = GetBestEnemyHeroTargetInRange(Q.Range + 410);
-        //    bool useQFlash = Menu["misc"]["flashq"].Enabled;
-
-//    if (!target.IsValidTarget())
-//            {
- //               return;
-  //          }
-    //        if (Q.Ready && Flash.Ready && Flash != null && target.IsValidTarget() && Player.SpellBook.GetSpell(SpellSlot.Q).Name == "ThreshQ" && useQFlash && target.Distance(Player) < Q.Range + 410)
-      //      {
-        //        if (Flash.Cast(target))
-          //      {
-            //        FQ.Cast(target);
-              //  }
-           // }
-       // }
     }
 }

@@ -47,34 +47,6 @@
                 Combo.Add(new MenuList("cs", "Combo Settings", new[] { "TigerCombo", "PhoenixCombo" }, 1));
             }
             Menu.Add(Combo);
-            var LaneClear = new Menu("laneclear", "Lane Clear");
-            {
-                LaneClear.Add(new MenuBool("useq", "Use Q"));
-                LaneClear.Add(new MenuSlider("manaq", "Mana Q", 60, 0, 100));
-                LaneClear.Add(new MenuBool("usew", "Use W"));
-                LaneClear.Add(new MenuSlider("manaw", "Mana W", 60, 0, 100));
-                LaneClear.Add(new MenuBool("usewhp", "Enable W HP Check"));
-                LaneClear.Add(new MenuSlider("hpw", "W Health % <=", 60, 0, 100));
-                LaneClear.Add(new MenuBool("usee", "Use E"));
-                LaneClear.Add(new MenuSlider("manae", "Mana E", 60, 0, 100));
-                LaneClear.Add(new MenuBool("user", "Use R"));
-                LaneClear.Add(new MenuSlider("manar", "Mana R", 60, 0, 100));
-            }
-            Menu.Add(LaneClear);
-            var JungleClear = new Menu("jungleclear", "Jungle Clear");
-            {
-                JungleClear.Add(new MenuBool("useq", "Use Q"));
-                JungleClear.Add(new MenuSlider("manaq", "Mana Q", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usew", "Use W"));
-                JungleClear.Add(new MenuSlider("manaw", "Mana W", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usewhp", "Enable W HP Check"));
-                JungleClear.Add(new MenuSlider("hpw", "W Health % <=", 60, 0, 100));
-                JungleClear.Add(new MenuBool("usee", "Use E"));
-                JungleClear.Add(new MenuSlider("manae", "Mana E", 60, 0, 100));
-                JungleClear.Add(new MenuBool("user", "Use R"));
-                JungleClear.Add(new MenuSlider("manar", "Mana R", 60, 0, 100));
-            }
-            Menu.Add(JungleClear);
             var Misc = new Menu("misc", "Misc");
             {
                 Misc.Add(new MenuBool("fleee", "Use E To Flee"));
@@ -154,8 +126,6 @@
                 case OrbwalkingMode.Mixed:
                     break;
                 case OrbwalkingMode.Laneclear:
-                    OnLaneClear();
-                    OnJungleClear();
                     break;
             }
             if (Menu["misc"]["key"].Enabled)
@@ -209,7 +179,7 @@
                                 E.Cast();
                             }
                         }
-                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixActivation") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
+                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixStance") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
                         {
                             R.Cast();
                         }
@@ -234,7 +204,7 @@
                         {
                             Q.Cast();
                         }
-                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixActivation") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
+                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixStance") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
                         {
                             R.Cast();
                         }
@@ -242,113 +212,7 @@
                 }
             }
         }
-
-        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
-        {
-            return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargetsInRange(float range)
-        {
-            return GameObjects.EnemyMinions.Where(m => m.IsValidTarget(range)).ToList();
-        }
-        private void OnLaneClear()
-        {
-            foreach (var minion in GetEnemyLaneMinionsTargetsInRange(E.Range))
-            {
-                bool useQ = Menu["laneclear"]["useq"].Enabled;
-                float manaQ = Menu["laneclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["laneclear"]["usew"].Enabled;
-                bool useWHP = Menu["laneclear"]["usewhp"].Enabled;
-                float hpW = Menu["laneclear"]["hpw"].As<MenuSlider>().Value;
-                float manaW = Menu["laneclear"]["manaw"].As<MenuSlider>().Value;
-                bool useE = Menu["laneclear"]["usee"].Enabled;
-                float manaE = Menu["laneclear"]["manae"].As<MenuSlider>().Value;
-                bool useR = Menu["laneclear"]["user"].Enabled;
-                float manaR = Menu["laneclear"]["manar"].As<MenuSlider>().Value;
-
-                if (!minion.IsValidTarget())
-                {
-                    return;
-                }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ && !R.Ready && !Player.HasBuff("UdyrPhoenixStance") && !Player.HasBuff("UdyrBearStance"))
-                {
-                    Q.Cast();
-                }
-                if (W.Ready && Player.ManaPercent() >= manaW)
-                {
-                    if (useW && minion.IsValidTarget(W.Range) && !Player.HasBuff("UdyrTurtleStance"))
-                    {
-                        W.Cast();
-                    }
-                    else if (useWHP && minion.IsValidTarget(W.Range) && Player.HealthPercent() <= hpW && !Player.HasBuff("UdyrTurtleStance"))
-                    {
-                        W.Cast();
-                    }
-                }
-                if (E.Ready && useE && minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && !Player.HasBuff("UdyrTigerStance") && !Player.HasBuff("UdyrPhoenixStance"))
-                {
-                    E.Cast();
-                }
-                if (R.Ready && useR && minion.IsValidTarget(R.Range) && Player.ManaPercent() >= manaR && !Player.HasBuff("UdyrPhoenixStance"))
-                {
-                    R.Cast();
-                }
-            }
-        }
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargets()
-        {
-            return GetGenericJungleMinionsTargetsInRange(float.MaxValue);
-        }
-
-        public static List<Obj_AI_Minion> GetGenericJungleMinionsTargetsInRange(float range)
-        {
-            return GameObjects.Jungle.Where(m => !GameObjects.JungleSmall.Contains(m) && m.IsValidTarget(range)).ToList();
-        }
-        private void OnJungleClear()
-        {
-            foreach (var minion in GameObjects.Jungle.Where(m => m.IsValidTarget(E.Range)).ToList())
-            {
-                bool useQ = Menu["jungleclear"]["useq"].Enabled;
-                float manaQ = Menu["jungleclear"]["manaq"].As<MenuSlider>().Value;
-                bool useW = Menu["jungleclear"]["usew"].Enabled;
-                bool useWHP = Menu["jungleclear"]["usewhp"].Enabled;
-                float hpW = Menu["jungleclear"]["hpw"].As<MenuSlider>().Value;
-                float manaW = Menu["jungleclear"]["manaw"].As<MenuSlider>().Value;
-                bool useE = Menu["jungleclear"]["usee"].Enabled;
-                float manaE = Menu["jungleclear"]["manae"].As<MenuSlider>().Value;
-                bool useR = Menu["jungleclear"]["user"].Enabled;
-                float manaR = Menu["jungleclear"]["manar"].As<MenuSlider>().Value;
-
-                if (!minion.IsValidTarget() || !minion.IsValidSpellTarget())
-                {
-                    return;
-                }
-                if (Q.Ready && useQ && minion.IsValidTarget(Q.Range) && Player.ManaPercent() >= manaQ && !R.Ready && !Player.HasBuff("UdyrPhoenixStance") && !Player.HasBuff("UdyrBearStance"))
-                {
-                    Q.Cast();
-                }
-                if (W.Ready && Player.ManaPercent() >= manaW)
-                {
-                    if (useW && minion.IsValidTarget(W.Range) && !Player.HasBuff("UdyrTurtleStance"))
-                    {
-                        W.Cast();
-                    }
-                    else if (useWHP && minion.IsValidTarget(W.Range) && Player.HealthPercent() <= hpW && !Player.HasBuff("UdyrTurtleStance"))
-                    {
-                        W.Cast();
-                    }
-                }
-                if (E.Ready && useE && minion.IsValidTarget(E.Range) && Player.ManaPercent() >= manaE && !Player.HasBuff("UdyrTigerStance") && !Player.HasBuff("UdyrPhoenixStance"))
-                {
-                    E.Cast();
-                }
-                if (R.Ready && useR && minion.IsValidTarget(R.Range) && Player.ManaPercent() >= manaR && !Player.HasBuff("UdyrPhoenixStance"))
-                {
-                    R.Cast();
-                }
-            }
-        }
+        
         private void Flee()
         {
             Player.IssueOrder(OrderType.MoveTo, Game.CursorPos);

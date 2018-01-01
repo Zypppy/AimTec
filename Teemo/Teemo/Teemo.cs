@@ -46,11 +46,11 @@
             var ComboMenu = new Menu("combo", "Combo");
             {
                 ComboMenu.Add(new MenuBool("useq", "Use Q"));
-                ComboMenu.Add(new MenuBool("useqa", "Use Q AA Range"));
+                ComboMenu.Add(new MenuList("qo", "Q Options", new[] { "Normal", "Only AA Range" }, 1));
                 ComboMenu.Add(new MenuBool("usew", "Use W In Combo"));
                 ComboMenu.Add(new MenuSlider("minmanaw", "Minimum Mana To Use W", 50, 0, 100));
-                //ComboMenu.Add(new MenuBool("user", "Use R"));
-                //ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
+                ComboMenu.Add(new MenuBool("user", "Use R"));
+                ComboMenu.Add(new MenuSlider("minr", "Min Stacks to Use R", 0, 0, 3));
             }
             Menu.Add(ComboMenu);
 
@@ -107,6 +107,7 @@
             LoadSpells();
             Console.WriteLine("Teemo by Zypppy - Loaded");
         }
+
         private static int IgniteDamages
         {
             get
@@ -116,6 +117,7 @@
                 return Hello[Player.Level - 1];
             }
         }
+
         private void OnGapcloser(Obj_AI_Hero target, QGap.GapcloserArgs Args)
         {
             if (target != null && Args.EndPosition.Distance(Player) < Q.Range && Q.Ready && target.IsDashing() && target.IsValidTarget(Q.Range))
@@ -125,6 +127,7 @@
 
             }
         }
+
         private void Render_OnPresent()
         {
             Vector2 maybeworks;
@@ -145,7 +148,6 @@
 
         private void Game_OnUpdate()
         {
-
             if (Player.IsDead || MenuGUI.IsChatOpen())
             {
                 return;
@@ -163,7 +165,6 @@
 
             }
             Killsteal();
-
             if (R.Ready && Menu["misc"]["autor"].Enabled)
             {
                 foreach (var target in GameObjects.EnemyHeroes.Where(
@@ -180,7 +181,6 @@
             {
                 R.Range = 150f + 250f * Player.SpellBook.GetSpell(SpellSlot.R).Level - 1;
             }
-
         }
 
         public static Obj_AI_Hero GetBestKillableHero(Spell spell, DamageType damageType = DamageType.True,
@@ -237,40 +237,49 @@
         {
 
             bool useQ = Menu["combo"]["useq"].Enabled;
-            bool useQ2 = Menu["combo"]["useqa"].Enabled;
+            if (useQ && Q.Ready)
+            {
+                var targetq = GetBestEnemyHeroTargetInRange(Q.Range);
+                var targetq2 = GetBestEnemyHeroTargetInRange(Player.AttackRange);
+                switch (Menu["combo"]["qo"].As<MenuList>().Value)
+                {
+                    case 0:
+                        if (targetq.IsValidTarget(Q.Range) && Menu["qwhitelist"][targetq.ChampionName.ToLower()].As<MenuBool>().Enabled)
+                        {
+                            Q.Cast(targetq);
+                        }
+                        break;
+                    case 1:
+                        if (targetq2.IsValidTarget(Player.AttackRange) && Menu["qwhitelist"][targetq2.ChampionName.ToLower()].As<MenuBool>().Enabled)
+                        {
+                            Q.Cast(targetq2);
+                        }
+                        break;
+                }
+            }
+
             bool useW = Menu["combo"]["usew"].Enabled;
-            //bool useR = Menu["combo"]["user"].Enabled;
-            //float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
             float manaw = Menu["combo"]["minmanaw"].As<MenuSlider>().Value;
-            var target = GetBestEnemyHeroTargetInRange(Q.Range);
-
-            if (!target.IsValidTarget())
+            if (W.Ready && useW && manaw <= Player.ManaPercent())
             {
-                return;
-            }
-            if (Q.Ready)
-            {
-                if (useQ && target.IsValidTarget(Q.Range) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
+                var target = GetBestEnemyHeroTargetInRange(Q.Range);
+                if (target.IsValidTarget(Q.Range))
                 {
-                    Q.Cast(target);
-                }
-                else if (useQ2 && target.IsValidTarget(Player.AttackRange + target.BoundingRadius) && Menu["qwhitelist"][target.ChampionName.ToLower()].As<MenuBool>().Enabled)
-                {
-                    Q.Cast(target);
+                    W.Cast();
                 }
             }
-            if (W.Ready && useW && target.IsValidTarget(Q.Range) && manaw <= Player.ManaPercent())
-            {
-                W.Cast();
-            }
 
-            //if (R.Ready && useR && Player.GetSpell(SpellSlot.R).Ammo >= rstacks && target.IsValidTarget(R.Range))
-            //{
-            //    if (target != null)
-            //    {
-            //        R.Cast(target);
-            //    }
-            // }
+            bool useR = Menu["combo"]["user"].Enabled;
+            float rstacks = Menu["combo"]["minr"].As<MenuSlider>().Value;
+            if (R.Ready && useR)
+            {
+                var target = GetBestEnemyHeroTargetInRange(R.Range);
+                if (target.IsValidTarget(R.Range) && Player.GetSpell(SpellSlot.R).Ammo >= rstacks)
+                {
+                    R.Cast(target);
+                }
+            }
+            
             var ItemCutlass = Player.SpellBook.Spells.Where(o => o != null && o.SpellData != null).FirstOrDefault(o => o.SpellData.Name == "BilgewaterCutlass");
             if (ItemCutlass != null)
             {
@@ -279,7 +288,6 @@
                 {
                     var Enemies = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Cutlass.Range, true) && !t.IsInvulnerable);
                     foreach (var enemy in Enemies.Where(e =>
-                            // TODO: CHANGE LOGICS
                             e.Health <= Player.Health && Player.CountEnemyHeroesInRange(1000) <= 1 ||
                             e.IsFacing(Player) && e.Health >= Player.Health &&
                             Player.CountEnemyHeroesInRange(1000) <= 1 ||
@@ -290,7 +298,6 @@
                             e.TotalAttackDamage >= Player.TotalAttackDamage &&
                             Player.CountEnemyHeroesInRange(1000) <= 3))
                     {
-
                         Cutlass.Cast(enemy);
                     }
                 }

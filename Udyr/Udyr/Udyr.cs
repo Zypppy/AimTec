@@ -31,7 +31,7 @@
         {
             Q = new Spell(SpellSlot.Q, Player.AttackRange * 2);
             W = new Spell(SpellSlot.W, Player.AttackRange * 2);
-            E = new Spell(SpellSlot.E, 600);
+            E = new Spell(SpellSlot.E, Player.AttackRange * 2);
             R = new Spell(SpellSlot.R, Player.AttackRange * 2);
             
         }
@@ -41,12 +41,10 @@
             var Combo = new Menu("combo", "Combo");
             {
                 Combo.Add(new MenuBool("useq", "Use Q"));
-                Combo.Add(new MenuBool("usew", "Use W Always"));
-                Combo.Add(new MenuBool("usewhp", "Enable W HP Check"));
-                Combo.Add(new MenuSlider("hpw", "Use W When Health % <=", 30, 0, 100));
+                Combo.Add(new MenuBool("usew", "Use W"));
                 Combo.Add(new MenuBool("usee", "Use E"));
-                Combo.Add(new MenuSlider("rangee", "Use E Range", 600, 0, 1500));
                 Combo.Add(new MenuBool("user", "Use R"));
+                Combo.Add(new MenuList("cs", "Combo Settings", new[] { "TigerCombo", "PhoenixCombo" }, 1));
             }
             Menu.Add(Combo);
             var LaneClear = new Menu("laneclear", "Lane Clear");
@@ -135,7 +133,7 @@
             }
             if (Menu["drawings"]["drawe"].Enabled && E.Ready)
             {
-                Render.Circle(Player.Position, Menu["combo"]["rangee"].As<MenuSlider>().Value, 40, Color.BlueViolet);
+                Render.Circle(Player.Position, E.Range, 40, Color.BlueViolet);
             }
             if (Menu["drawings"]["drawr"].Enabled && R.Ready)
             {
@@ -165,6 +163,7 @@
                 Flee();
             }
         }
+
         public static Obj_AI_Hero GetBestEnemyHeroTarget()
         {
             return GetBestEnemyHeroTargetInRange(float.MaxValue);
@@ -185,46 +184,65 @@
             }
             return null;
         }
+
         private void OnCombo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
             bool useQ = Menu["combo"]["useq"].Enabled;
             bool useW = Menu["combo"]["usew"].Enabled;
-            bool useWHP = Menu["combo"]["usewhp"].Enabled;
-            float hpW = Menu["combo"]["hpw"].As<MenuSlider>().Value;
             bool useE = Menu["combo"]["usee"].Enabled;
-            float rangeE = Menu["combo"]["rangee"].As<MenuSlider>().Value;
             bool useR = Menu["combo"]["user"].Enabled;
 
-            if (!target.IsValidTarget())
+            var target = GetBestEnemyHeroTargetInRange(Player.AttackRange + 800);
+            if (target.IsValidTarget())
             {
-                return;
-            }
-            if (Q.Ready && useQ && target.IsValidTarget(Q.Range) && !R.Ready && !Player.HasBuff("UdyrPhoenixStance") && !Player.HasBuff("UdyrBearStance"))
-            {
-                Q.Cast();
-            }
-            if (W.Ready)
-            {
-                if (useW && target.IsValidTarget(W.Range) && !Player.HasBuff("UdyrTurtleStance"))
+                switch (Menu["combo"]["cs"].As<MenuList>().Value)
                 {
-                    W.Cast();
+                    case 0:
+                        if (useE && E.Ready)
+                        {
+                            if (Player.Distance(target) > E.Range)
+                            {
+                                E.Cast();
+                            }
+                            else if (Player.Distance(target) <= E.Range && !target.HasBuff("udyrbearstuncheck"))
+                            {
+                                E.Cast();
+                            }
+                        }
+                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixActivation") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
+                        {
+                            R.Cast();
+                        }
+                        if (useQ && Q.Ready && Player.Distance(target) <= Q.Range && target.HasBuff("udyrbearstuncheck"))
+                        {
+                            Q.Cast();
+                        }
+                        break;
+                    case 1:
+                        if (useE && E.Ready)
+                        {
+                            if (Player.Distance(target) > E.Range)
+                            {
+                                E.Cast();
+                            }
+                            else if (Player.Distance(target) <= E.Range && !target.HasBuff("udyrbearstuncheck"))
+                            {
+                                E.Cast();
+                            }
+                        }
+                        if (useQ && Q.Ready && Player.Distance(target) <= Q.Range && target.HasBuff("udyrbearstuncheck"))
+                        {
+                            Q.Cast();
+                        }
+                        if (useR && R.Ready && !Player.HasBuff("UdyrPhoenixActivation") && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
+                        {
+                            R.Cast();
+                        }
+                        break;
                 }
-                else if (useWHP && target.IsValidTarget(W.Range) && Player.HealthPercent() <= hpW && !Player.HasBuff("UdyrTurtleStance"))
-                {
-                    W.Cast();
-                }
             }
-            if (E.Ready && useE && target.IsValidTarget(rangeE))
-            {
-                E.Cast();
-            }
-            if (R.Ready && useR && target.IsValidTarget(R.Range) && !Player.HasBuff("UdyrPhoenixStance"))
-            {
-                R.Cast();
-            }
-
         }
+
         public static List<Obj_AI_Minion> GetEnemyLaneMinionsTargets()
         {
             return GetEnemyLaneMinionsTargetsInRange(float.MaxValue);

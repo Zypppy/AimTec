@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-
     using Aimtec;
     using Aimtec.SDK.Prediction.Health;
     using Aimtec.SDK.Damage;
@@ -16,7 +15,6 @@
     using Aimtec.SDK.Util.Cache;
     using Aimtec.SDK.Prediction.Skillshots;
     using Aimtec.SDK.Util;
-
     using Spell = Aimtec.SDK.Spell;
     using Aimtec.SDK.Events;
 
@@ -33,8 +31,8 @@
             W = new Spell(SpellSlot.W, Player.AttackRange * 2);
             E = new Spell(SpellSlot.E, Player.AttackRange * 2);
             R = new Spell(SpellSlot.R, Player.AttackRange * 2);
-            
         }
+
         public Udyr()
         {
             Orbwalker.Attach(Menu);
@@ -70,6 +68,7 @@
             LoadSpells();
             Console.WriteLine("Udyr by Zypppy - Loaded");
         }
+
         private static int IgniteDamages
         {
             get
@@ -79,6 +78,7 @@
                 return Hello[Player.Level - 1];
             }
         }
+
         public static readonly List<string> SpecialChampions = new List<string> { "Annie", "Jhin" };
         public static int SxOffset(Obj_AI_Hero target)
         {
@@ -88,13 +88,13 @@
         {
             return SpecialChampions.Contains(target.ChampionName) ? 3 : 20;
         }
+
         private void Render_OnPresent()
         {
             Vector2 mymom;
             var heropos = Render.WorldToScreen(Player.Position, out mymom);
             var xaOffset = (int)mymom.X;
             var yaOffset = (int)mymom.Y;
-
 
             if (Menu["drawings"]["drawq"].Enabled && Q.Ready)
             {
@@ -113,6 +113,7 @@
                 Render.Circle(Player.Position, R.Range, 40, Color.Chocolate);
             }
         }
+
         private void Game_OnUpdate()
         {
             if (Player.IsDead || MenuGUI.IsChatOpen())

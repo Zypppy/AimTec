@@ -347,44 +347,47 @@
 
         private void Combo()
         {
-            var target = GetBestEnemyHeroTargetInRange(1500);
-            if (!target.IsValidTarget())
-            {
-                return;
-            }
-
             bool CQ = Menu["c"]["q"].Enabled;
-            if (Q.Ready && CQ && target.IsValidTarget(Q.ChargedMaxRange) && !Player.HasBuff("XerathLocusOfPower2"))
+            if (Q.Ready && CQ && !Player.HasBuff("XerathLocusOfPower2"))
             {
-                Q.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
+                if (target.IsValidTarget(Q.ChargedMaxRange) && target != null)
+                {
+                    Q.Cast(target);
+                }
             }
 
             bool CW = Menu["c"]["w"].Enabled;
-            if (W.Ready && CW && target.IsValidTarget(W.Range) && !Player.HasBuff("XerathLocusOfPower2"))
+            if (W.Ready && CW && !Player.HasBuff("XerathLocusOfPower2"))
             {
-                W.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target.IsValidTarget(W.Range) && target != null)
+                {
+                    W.Cast(target);
+                }
             }
 
             bool CE = Menu["c"]["e"].Enabled;
 
             if (E.Ready && CE && !Player.HasBuff("XerathLocusOfPower2"))
             {
+                var target = GetBestEnemyHeroTargetInRange(E.Range);
                 switch (Menu["c"]["eo"].As<MenuList>().Value)
                 {
                     case 0:
-                        if (target.IsValidTarget(E.Range))
+                        if (target.IsValidTarget(E.Range) && target != null)
                         {
                             E.Cast(target);
                         }
                         break;
                     case 1:
-                        if (target.IsValidTarget(E.Range) && target.HasBuffOfType(BuffType.Slow))
+                        if (target.IsValidTarget(E.Range) && target != null && target.HasBuffOfType(BuffType.Slow))
                         {
                             E.Cast(target);
                         }
                         break;
                     case 2:
-                        if (target.IsValidTarget(E.Range) && target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Suppression) || target.HasBuffOfType(BuffType.Taunt))
+                        if (target.IsValidTarget(E.Range) && target != null && target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Suppression) || target.HasBuffOfType(BuffType.Taunt))
                         {
                             E.Cast(target);
                         }
@@ -392,6 +395,7 @@
                 }
             }
         }
+
         private void Ultimate()
         {
             var target = GetBestEnemyHeroTargetInRange(R.Range);
@@ -405,24 +409,29 @@
                 R.Cast(target);
             }
         }
+
         private void Harass()
         {
-            var target = GetBestEnemyHeroTargetInRange(1800);
-            if (!target.IsValidSpellTarget())
-            {
-                return;
-            }
+            
             bool HQ = Menu["h"]["q"].Enabled;
             float MQ = Menu["h"]["qm"].As<MenuSlider>().Value;
-            if (Q.Ready && HQ && Player.ManaPercent() > MQ && target.IsValidTarget(Q.Range))
+            if (Q.Ready && HQ && Player.ManaPercent() > MQ)
             {
-                Q.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(Q.ChargedMaxRange);
+                if (target.IsValidTarget(Q.ChargedMaxRange) && target != null)
+                {
+                    Q.Cast(target);
+                }
             }
             bool HW = Menu["h"]["w"].Enabled;
             float MW = Menu["h"]["wm"].As<MenuSlider>().Value;
-            if (W.Ready && HW && Player.ManaPercent() >= MW && target.IsValidTarget(W.Range))
+            if (W.Ready && HW && Player.ManaPercent() >= MW)
             {
-                W.Cast(target);
+                var target = GetBestEnemyHeroTargetInRange(W.Range);
+                if (target.IsValidTarget(W.Range) && target != null)
+                {
+                    W.Cast(target);
+                }
             }
         }
     }
